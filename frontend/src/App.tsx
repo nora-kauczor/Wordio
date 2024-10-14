@@ -8,7 +8,10 @@ import {useState} from "react";
 
 function App() {
 const [vocabs, setVocabs] = useState([])
-
+// function getVocabsOfToday: sollte man die request nicht eher aus der komponente stellen?
+// auf alle fälle macht es mehr sinn, wenn der state in der komponente gespeichert wird (zumindest zum jetzigen stand)
+    // d.h. ich lade das imme rjeweils nur, wenn diese seite aufgerufen wird
+    // function getAllVocabs
 
   return (
     <>
