@@ -1,4 +1,4 @@
-import '/ReviewPage.css'
+import './ReviewPage.css'
 import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {

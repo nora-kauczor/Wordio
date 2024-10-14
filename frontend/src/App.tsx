@@ -5,6 +5,7 @@ import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
 import CalendarPage
     from "./pages/CalendarPage/CalendarPage.tsx";
 import {useState} from "react";
+import axios from "axios";
 
 function App() {
 const [vocabs, setVocabs] = useState([])
@@ -12,6 +13,10 @@ const [vocabs, setVocabs] = useState([])
 // auf alle fälle macht es mehr sinn, wenn der state in der komponente gespeichert wird (zumindest zum jetzigen stand)
     // d.h. ich lade das imme rjeweils nur, wenn diese seite aufgerufen wird
     // function getAllVocabs
+
+    axios.get("/api/vocab")
+        .then(response => console.log(response.data))
+        .catch(error => console.error(error))
 
   return (
     <>

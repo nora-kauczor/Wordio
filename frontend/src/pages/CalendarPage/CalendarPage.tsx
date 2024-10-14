@@ -1,4 +1,4 @@
-import '/CalendarPage.css'
+import './CalendarPage.css'
 import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
