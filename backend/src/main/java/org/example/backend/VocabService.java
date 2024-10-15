@@ -19,4 +19,8 @@ public class VocabService {
                 vocabDTO.info(), vocabDTO.language(), vocabDTO.reviewDates());
         return vocabRepo.save(newVocab);
     }
+
+    public Vocab getVocab(String id){
+        return vocabRepo.findById(id).orElseThrow();
+    }
 }
