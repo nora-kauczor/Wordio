@@ -4,14 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -60,6 +62,25 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @DirtiesContext
+    @Test
+    void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
+        VocabDTO testDTO = new VocabDTO("la prueba", "test",
+                "", "Spanish", List.of());
+        mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+{ "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish", "reviewDates":[]}
+"""))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+{ "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish", "reviewDates":[]}
+"""))
+                .andExpect(jsonPath("$._id").isNotEmpty());
+
+    }
 @DirtiesContext
     @Test
     void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {

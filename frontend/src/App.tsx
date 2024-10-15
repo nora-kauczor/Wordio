@@ -10,6 +10,7 @@ import CalendarPage
     from "./pages/CalendarPage/CalendarPage.tsx";
 import axios from "axios";
 import {useEffect} from "react";
+import Form from "./components/Form/Form.tsx";
 
 function App() {
 
@@ -19,12 +20,15 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    useEffect(() => {
-        getVocab("670bc0ba64630f6a589cd2bf")
-    }, []);
+    // useEffect(() => {
+    //     getVocab("670bc0ba64630f6a589cd2bf")
+    // }, []);
+
+
 
     return (
         <>
+            <Form/>
             <BrowserRouter>
             <Routes>
                 <Route path={"/"} element={<HomePage/>}></Route>

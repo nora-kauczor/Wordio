@@ -9,7 +9,7 @@ export default function CalendarPage( ){
 
     function getAllVocabs() {
         axios.get("/api/vocab")
-            .then(response => setVocabs(response.data))
+            .then(response => console.log(response.data))
             .catch(error => console.error(error))
     }
 

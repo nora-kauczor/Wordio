@@ -19,6 +19,12 @@ public class VocabService {
         return vocabRepo.findById(id).orElseThrow();
     }
 
+    public Vocab createVocab(VocabDTO vocabDTO){
+        Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
+                vocabDTO.info(), vocabDTO.language(), vocabDTO.reviewDates());
+        return vocabRepo.save(newVocab);
+    }
+
     public String deleteVocab(String id){
        if ( !vocabRepo.existsById(id)) {throw new NoSuchElementException();
        }
