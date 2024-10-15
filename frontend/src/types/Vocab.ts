@@ -1,5 +1,5 @@
 export type Vocab = {
-    id: string,
+    id: string | null,
     word: string,
     translation: string,
     info: string,
