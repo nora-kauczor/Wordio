@@ -1,6 +1,6 @@
 package org.example.backend;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public record VocabDTO(
@@ -8,6 +8,6 @@ public record VocabDTO(
         String translation,
         String info,
         String language,
-        List<Date> reviewDates) {
+        List<LocalDate> reviewDates) {
 }
 
