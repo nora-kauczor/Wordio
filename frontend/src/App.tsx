@@ -20,9 +20,15 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    // useEffect(() => {
-    //     getVocab("670bc0ba64630f6a589cd2bf")
-    // }, []);
+    useEffect(() => {
+        getVocab("670bc0ba64630f6a589cd2bf")
+    }, []);
+
+    function deleteVocab(_id:string):void{
+        axios.delete(`api/vocab/${_id}`)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
 
 
 
