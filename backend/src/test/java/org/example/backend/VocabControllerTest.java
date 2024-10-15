@@ -1,0 +1,40 @@
+package org.example.backend;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class VocabControllerTest {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @Autowired
+    private VocabRepo vocabRepo;
+
+    @DirtiesContext
+    @Test
+    void getAllVocabs() throws Exception {
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+        vocabRepo.save(testVocab);
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [{"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish", "reviewDates":[]}]
+                        """));
+    }
+}
