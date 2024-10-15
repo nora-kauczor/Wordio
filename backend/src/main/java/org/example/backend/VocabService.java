@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -22,5 +23,12 @@ public class VocabService {
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), vocabDTO.language(), vocabDTO.reviewDates());
         return vocabRepo.save(newVocab);
+    }
+
+    public String deleteVocab(String id){
+       if ( !vocabRepo.existsById(id)) {throw new NoSuchElementException();
+       }
+        vocabRepo.deleteById(id);
+        return "Vocab successfully deleted.";
     }
 }

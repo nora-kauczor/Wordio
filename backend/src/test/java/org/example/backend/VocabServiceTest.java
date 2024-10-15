@@ -55,4 +55,28 @@ class VocabServiceTest {
         assertEquals(expected, actual);
         verify(mockVocabRepo).save(any(Vocab.class));
     }
+
+
+    @Test
+    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId(){
+        when(mockVocabRepo.existsById("000")).thenReturn(true);
+        vocabService.deleteVocab("000");
+        verify(mockVocabRepo).deleteById("000");
+    }
+
+    @Test
+    void deleteVocab_shouldReturnString_whenCalledWithId(){
+        when(mockVocabRepo.existsById("000")).thenReturn(true);
+        String expected = "Vocab successfully deleted.";
+        String actual = vocabService.deleteVocab("000");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void deleteVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId(){
+        assertThrows(NoSuchElementException.class, () -> vocabService.deleteVocab("000"));
+       verify(mockVocabRepo).existsById("000");
+    }
+
+
 }
