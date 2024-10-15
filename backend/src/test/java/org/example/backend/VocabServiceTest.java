@@ -37,7 +37,7 @@ class VocabServiceTest {
     }
 
     @Test
-    void getVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistantId() {
+    void getVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
         when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
         assertThrows(NoSuchElementException.class, () -> mockVocabRepo.findById("000"));
         verify(mockVocabRepo).findById("000");

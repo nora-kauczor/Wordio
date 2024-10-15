@@ -1,12 +1,11 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/vocab")
@@ -23,5 +22,11 @@ public class VocabController {
     @GetMapping("/{_id}")
     public Vocab getVocab(@PathVariable String _id){
         return vocabService.getVocab(_id);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public ErrorMessage handleElementNotFoundException(){
+        return new ErrorMessage("No matches for given ID.");
     }
 }

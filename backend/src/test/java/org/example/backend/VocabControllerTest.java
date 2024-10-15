@@ -52,4 +52,13 @@ class VocabControllerTest {
                                           "info":"", "language":"Spanish", "reviewDates":[]}
                         """));
     }
+
+    @DirtiesContext
+    @Test
+    void getVocab_ShouldTriggerNotFoundStatus_whenCalledWithNonexistentID() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/000"))
+                .andExpect(status().isNotFound());
+    }
+
+
 }
