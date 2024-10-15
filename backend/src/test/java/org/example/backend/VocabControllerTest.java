@@ -60,5 +60,22 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+@DirtiesContext
+    @Test
+    void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {
+    Vocab testVocab = new Vocab("000", "la prueba", "test",
+            "", "Spanish", List.of());
+    vocabRepo.save(testVocab);
+    mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("Vocab successfully deleted."));
+}
+
+    @DirtiesContext
+    @Test
+    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithNonexistentID() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
+                .andExpect(status().isNotFound());
+    }
 
 }

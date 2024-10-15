@@ -25,9 +25,9 @@ public class VocabController {
     }
 
 
-    @DeleteMapping
-    public void deleteVocab(String _id){
-        vocabService.deleteVocab(_id);
+    @DeleteMapping("/{_id}")
+    public String deleteVocab(@PathVariable String _id){
+       return vocabService.deleteVocab(_id);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
