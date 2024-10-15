@@ -17,4 +17,10 @@ public class VocabService {
     public Vocab getVocab(String id){
         return vocabRepo.findById(id).orElseThrow();
     }
+
+    public Vocab createVocab(VocabDTO vocabDTO){
+        Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
+                vocabDTO.info(), vocabDTO.language(), vocabDTO.reviewDates());
+        return vocabRepo.save(newVocab);
+    }
 }
