@@ -24,6 +24,12 @@ public class VocabController {
         return vocabService.getVocab(_id);
     }
 
+
+    @DeleteMapping
+    public void deleteVocab(String _id){
+        vocabService.deleteVocab(_id);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
     public ErrorMessage handleElementNotFoundException(){
