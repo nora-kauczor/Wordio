@@ -42,4 +42,17 @@ class VocabServiceTest {
         assertThrows(NoSuchElementException.class, () -> mockVocabRepo.findById("000"));
         verify(mockVocabRepo).findById("000");
     }
+
+
+    @Test
+    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId(){
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+
+        mockVocabRepo.save(testVocab);
+        vocabService.deleteVocab("000");
+        assertFalse(mockVocabRepo.existsById("000"));
+        verify(mockVocabRepo).deleteById("000");
+    }
+
 }

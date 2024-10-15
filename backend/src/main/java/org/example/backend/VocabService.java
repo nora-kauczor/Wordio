@@ -17,4 +17,8 @@ public class VocabService {
     public Vocab getVocab(String id){
         return vocabRepo.findById(id).orElseThrow();
     }
+
+    public void deleteVocab(String id){
+        vocabRepo.deleteById(id);
+    }
 }
