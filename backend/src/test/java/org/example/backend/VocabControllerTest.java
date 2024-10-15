@@ -6,10 +6,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -65,8 +63,6 @@ class VocabControllerTest {
     @DirtiesContext
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
-        VocabDTO testDTO = new VocabDTO("la prueba", "test",
-                "", "Spanish", List.of());
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -79,6 +75,24 @@ class VocabControllerTest {
                                           "info":"", "language":"Spanish", "reviewDates":[]}
 """))
                 .andExpect(jsonPath("$._id").isNotEmpty());
+
+    }
+
+
+    @DirtiesContext
+    @Test
+    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                { "_id":"000","word":"la prueba", "translation":"test",
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[]}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+{ "_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"added infotext", "language":"Spanish", "reviewDates":[]}
+"""));
 
     }
 

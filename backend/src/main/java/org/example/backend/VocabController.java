@@ -29,6 +29,11 @@ public class VocabController {
         return vocabService.createVocab(vocabDTO);
     }
 
+    @PutMapping
+    public Vocab editVocab(@RequestBody Vocab editedVocab){
+        return vocabService.editVocab(editedVocab);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
     public ErrorMessage handleElementNotFoundException(){
