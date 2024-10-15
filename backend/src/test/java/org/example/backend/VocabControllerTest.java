@@ -26,7 +26,7 @@ class VocabControllerTest {
 
     @DirtiesContext
     @Test
-    void getAllVocabs() throws Exception {
+    void getAllVocabs_ShouldReturnAllVocabs_whenCalled() throws Exception {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", "Spanish", List.of());
         vocabRepo.save(testVocab);
@@ -35,6 +35,21 @@ class VocabControllerTest {
                 .andExpect(content().json("""
                         [{"_id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish", "reviewDates":[]}]
+                        """));
+    }
+
+
+    @DirtiesContext
+    @Test
+    void getVocab_shouldReturnSpecificVocab_whenCalledWithItsId() throws Exception {
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+        vocabRepo.save(testVocab);
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/000"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish", "reviewDates":[]}
                         """));
     }
 }
