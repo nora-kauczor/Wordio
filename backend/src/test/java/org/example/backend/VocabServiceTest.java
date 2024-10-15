@@ -3,6 +3,8 @@ package org.example.backend;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,7 +19,27 @@ class VocabServiceTest {
                 "", "Spanish", List.of());
         List<Vocab> testListOfVocabs = List.of(testVocab);
         when(mockVocabRepo.findAll()).thenReturn(testListOfVocabs);
-        assertEquals(testListOfVocabs, vocabService.getAllVocabs());
+        List<Vocab> expected = testListOfVocabs;
+        List<Vocab> actual = vocabService.getAllVocabs();
+        assertEquals(expected, actual);
         verify(mockVocabRepo).findAll();
+    }
+
+    @Test
+    void getVocab_shouldReturnSpecificVocab_whenCalledWithItsId() {
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
+        Optional<Vocab> expected = Optional.of(testVocab);
+        Optional<Vocab> actual = mockVocabRepo.findById("000");
+        assertEquals(expected, actual);
+        verify(mockVocabRepo).findById("000");
+    }
+
+    @Test
+    void getVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistantId() {
+        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
+        assertThrows(NoSuchElementException.class, () -> mockVocabRepo.findById("000"));
+        verify(mockVocabRepo).findById("000");
     }
 }
