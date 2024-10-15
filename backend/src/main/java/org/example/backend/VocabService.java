@@ -23,4 +23,9 @@ public class VocabService {
                 vocabDTO.info(), vocabDTO.language(), vocabDTO.reviewDates());
         return vocabRepo.save(newVocab);
     }
+
+    public Vocab editVocab(Vocab editedVocab){
+        return vocabRepo.save(editedVocab);
+    }
+
 }
