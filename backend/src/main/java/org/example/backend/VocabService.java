@@ -13,4 +13,8 @@ public class VocabService {
     public List<Vocab> getAllVocabs() {
         return vocabRepo.findAll();
     }
+
+    public Vocab getVocab(String id){
+        return vocabRepo.findById(id).orElseThrow();
+    }
 }
