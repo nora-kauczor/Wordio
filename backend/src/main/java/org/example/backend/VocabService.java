@@ -29,7 +29,6 @@ public class VocabService {
         return vocabRepo.save(editedVocab);
     }
 
-
     public String deleteVocab(String id){
        if ( !vocabRepo.existsById(id)) {throw new NoSuchElementException();
        }

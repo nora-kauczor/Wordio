@@ -67,10 +67,6 @@ class VocabServiceTest {
         verify(mockVocabRepo).save(editedVocab);
     }
 
-
-
-
-
     @Test
     void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId(){
         when(mockVocabRepo.existsById("000")).thenReturn(true);

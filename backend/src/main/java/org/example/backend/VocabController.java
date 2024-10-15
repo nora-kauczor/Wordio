@@ -34,7 +34,6 @@ public class VocabController {
         return vocabService.editVocab(editedVocab);
     }
 
-
     @DeleteMapping("/{_id}")
     public String deleteVocab(@PathVariable String _id){
        return vocabService.deleteVocab(_id);

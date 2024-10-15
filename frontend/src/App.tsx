@@ -11,21 +11,39 @@ import CalendarPage
 import axios from "axios";
 import {useEffect} from "react";
 import Form from "./components/Form/Form.tsx";
+import {Vocab} from "./types/Vocab.ts";
 
 function App() {
 
-    function getVocab(_id:string):void{
+    function getVocab(_id: string): void {
         axios.get(`api/vocab/${_id}`)
             .then(response => console.log(response.data))
             .catch(error => console.error(error))
     }
 
+    const editedVocab: Vocab = {
+        _id: '670bc0ba64630f6a589cd2bf',
+        word: 'hola',
+        translation: 'hello',
+        info: 'added text',
+        language: 'Spanish',
+        reviewDates: []
+    }
+
     useEffect(() => {
+        editVocab(editedVocab)
         getVocab("670bc0ba64630f6a589cd2bf")
     }, []);
 
-    function deleteVocab(_id:string):void{
+    function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
+
+
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab`, editedVocab)
             .then(response => console.log(response.data))
             .catch(error => console.error(error))
     }
@@ -36,11 +54,14 @@ function App() {
         <>
             <Form/>
             <BrowserRouter>
-            <Routes>
-                <Route path={"/"} element={<HomePage/>}></Route>
-                <Route path={"/calendar"} element={<CalendarPage />}></Route>
-                <Route path={"/review"} element={<ReviewPage/>}></Route>
-            </Routes>
+                <Routes>
+                    <Route path={"/"}
+                           element={<HomePage/>}></Route>
+                    <Route path={"/calendar"} element={
+                        <CalendarPage/>}></Route>
+                    <Route path={"/review"}
+                           element={<ReviewPage/>}></Route>
+                </Routes>
             </BrowserRouter>
         </>
     )
