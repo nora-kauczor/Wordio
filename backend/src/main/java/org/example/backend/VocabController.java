@@ -29,6 +29,10 @@ public class VocabController {
         return vocabService.createVocab(vocabDTO);
     }
 
+    @PutMapping("/{_id}")
+    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id){
+        return vocabService.editVocab(editedVocab);
+    }
 
     @DeleteMapping("/{_id}")
     public String deleteVocab(@PathVariable String _id){
