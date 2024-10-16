@@ -3,6 +3,7 @@ package org.example.backend;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -10,6 +11,17 @@ import java.util.NoSuchElementException;
 @Service
 public class VocabService {
     private final VocabRepo vocabRepo;
+
+    public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
+        LocalDate today = LocalDate.now();
+        List<Vocab> todaysVocabs = vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.reviewDates() != null && vocab.reviewDates().contains(today))
+                .toList();
+        if (todaysVocabs.isEmpty()) {
+            throw new NoVocabsForTodayException();
+        }
+        return todaysVocabs;
+    }
 
     public List<Vocab> getAllVocabs() {
         return vocabRepo.findAll();

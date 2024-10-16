@@ -2,6 +2,8 @@ package org.example.backend;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -12,6 +14,37 @@ import static org.mockito.Mockito.*;
 class VocabServiceTest {
     private final VocabRepo mockVocabRepo = mock(VocabRepo.class);
     private final VocabService vocabService = new VocabService(mockVocabRepo);
+
+
+    @Test
+    void getTodaysVocabs_shouldReturnTodaysVocabs_whenCalled() throws NoVocabsForTodayException {
+        LocalDate today = LocalDate.now();
+        List<LocalDate> datesContainingToday = new ArrayList<>(List.of(today));
+        Vocab vocab1 = new Vocab("111", "la prueba", "test",
+                "", "Spanish", datesContainingToday);
+        Vocab vocab2 = new Vocab("222", "el libro", "book",
+                "", "Spanish", datesContainingToday);
+        Vocab vocab3 = new Vocab("333", "la casa", "house",
+                "", "Spanish", List.of());
+        List<Vocab> testListOfVocabs = List.of(vocab1, vocab2, vocab3);
+        when(mockVocabRepo.findAll()).thenReturn(testListOfVocabs);
+        List<Vocab> expected = new ArrayList<>(List.of(vocab1, vocab2));
+        List<Vocab> actual = vocabService.getTodaysVocabs();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getTodaysVocabs_shouldThrowNoVocabsForTodayException_whenNoReviewDateMatchesToday() {
+        Vocab vocab1 = new Vocab("111", "la prueba", "test",
+                "", "Spanish", List.of());
+        Vocab vocab2 = new Vocab("222", "el libro", "book",
+                "", "Spanish", List.of());
+        Vocab vocab3 = new Vocab("333", "la casa", "house",
+                "", "Spanish", List.of());
+        List<Vocab> testListOfVocabs = List.of(vocab1, vocab2, vocab3);
+        when(mockVocabRepo.findAll()).thenReturn(testListOfVocabs);
+        assertThrows(NoVocabsForTodayException.class, () -> vocabService.getTodaysVocabs());
+    }
 
     @Test
     void getAllVocabs_ShouldReturnAllVocabs_whenCalled() {
@@ -77,14 +110,14 @@ class VocabServiceTest {
     }
 
     @Test
-    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId(){
+    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId() {
         when(mockVocabRepo.existsById("000")).thenReturn(true);
         vocabService.deleteVocab("000");
         verify(mockVocabRepo).deleteById("000");
     }
 
     @Test
-    void deleteVocab_shouldReturnString_whenCalledWithId(){
+    void deleteVocab_shouldReturnString_whenCalledWithId() {
         when(mockVocabRepo.existsById("000")).thenReturn(true);
         String expected = "Vocab successfully deleted.";
         String actual = vocabService.deleteVocab("000");
@@ -92,9 +125,9 @@ class VocabServiceTest {
     }
 
     @Test
-    void deleteVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId(){
+    void deleteVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
         assertThrows(NoSuchElementException.class, () -> vocabService.deleteVocab("000"));
-       verify(mockVocabRepo).existsById("000");
+        verify(mockVocabRepo).existsById("000");
     }
 
 

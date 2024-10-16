@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/api/vocab")
@@ -13,6 +15,11 @@ import java.util.NoSuchElementException;
 public class VocabController {
 
     private final VocabService vocabService;
+
+    @GetMapping("/today")
+    public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
+        return vocabService.getTodaysVocabs();
+    }
 
     @GetMapping
     public List<Vocab> getAllVocabs(){
@@ -43,5 +50,11 @@ public class VocabController {
     @ExceptionHandler(NoSuchElementException.class)
     public ErrorMessage handleElementNotFoundException(){
         return new ErrorMessage("No matches for given ID.");
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(NoVocabsForTodayException.class)
+    public ErrorMessage handleNoVocabsForTodayException(){
+        return new ErrorMessage("No vocabulary for today.");
     }
 }

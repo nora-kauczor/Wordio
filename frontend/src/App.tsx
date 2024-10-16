@@ -30,10 +30,10 @@ function App() {
         reviewDates: []
     }
 
-    useEffect(() => {
-        editVocab(editedVocab)
-        getVocab("670bc0ba64630f6a589cd2bf")
-    }, []);
+    // useEffect(() => {
+    //     editVocab(editedVocab)
+    //     getVocab("670bc0ba64630f6a589cd2bf")
+    // }, []);
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
