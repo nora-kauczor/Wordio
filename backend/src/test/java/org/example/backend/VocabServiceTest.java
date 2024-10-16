@@ -76,6 +76,25 @@ class VocabServiceTest {
         verify(mockVocabRepo).save(any(Vocab.class));
     }
 
+    @Test
+    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() {
+        Vocab editedVocab = new Vocab("000", "la prueba", "test",
+                "added infotext", "Spanish", List.of());
+        when(mockVocabRepo.save(editedVocab)).thenReturn(editedVocab);
+        when(mockVocabRepo.existsById("000")).thenReturn(true);
+        Vocab expected = editedVocab;
+        Vocab actual = vocabService.editVocab(expected);
+        assertEquals(expected, actual);
+        verify(mockVocabRepo).save(editedVocab);
+    }
+
+    @Test
+    void editVocab_shouldThrowNoSuchElementException_whenCalledWithVocabWithNonexistentId() {
+        Vocab testVocab = new Vocab("ID that is not in the DB", "la prueba", "test",
+                "", "Spanish", List.of());
+        assertThrows(NoSuchElementException.class, () -> vocabService.editVocab(testVocab));
+        verify(mockVocabRepo).existsById("ID that is not in the DB");
+    }
 
     @Test
     void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId() {
