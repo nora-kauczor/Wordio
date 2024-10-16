@@ -1,1 +1,14 @@
-#backlog-page { display: flex;}
+#backlog-page {
+    display: flex;
+}
+
+#backlog-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.backlog-list-item {
+    display: flex;
+    justify-content: space-between;
+}
