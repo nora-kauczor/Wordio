@@ -17,7 +17,7 @@ public class VocabController {
     private final VocabService vocabService;
 
     @GetMapping("/today")
-    public List<Vocab> getTodaysVocabs(){
+    public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
         return vocabService.getTodaysVocabs();
     }
 

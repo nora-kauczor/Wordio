@@ -17,7 +17,7 @@ class VocabServiceTest {
 
 
     @Test
-    void getTodaysVocabs_shouldReturnTodaysVocabs_whenCalled() {
+    void getTodaysVocabs_shouldReturnTodaysVocabs_whenCalled() throws NoVocabsForTodayException {
         LocalDate today = LocalDate.now();
         List<LocalDate> datesContainingToday = new ArrayList<>(List.of(today));
         Vocab vocab1 = new Vocab("111", "la prueba", "test",
@@ -31,6 +31,19 @@ class VocabServiceTest {
         List<Vocab> expected = new ArrayList<>(List.of(vocab1, vocab2));
         List<Vocab> actual = vocabService.getTodaysVocabs();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getTodaysVocabs_shouldThrowNoVocabsForTodayException_whenNoReviewDateMatchesToday() {
+        Vocab vocab1 = new Vocab("111", "la prueba", "test",
+                "", "Spanish", List.of());
+        Vocab vocab2 = new Vocab("222", "el libro", "book",
+                "", "Spanish", List.of());
+        Vocab vocab3 = new Vocab("333", "la casa", "house",
+                "", "Spanish", List.of());
+        List<Vocab> testListOfVocabs = List.of(vocab1, vocab2, vocab3);
+        when(mockVocabRepo.findAll()).thenReturn(testListOfVocabs);
+        assertThrows(NoVocabsForTodayException.class, () -> vocabService.getTodaysVocabs());
     }
 
     @Test

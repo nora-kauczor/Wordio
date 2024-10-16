@@ -4,8 +4,6 @@ import {useEffect, useState} from "react";
 import {Vocab} from "../../types/Vocab.ts";
 
 
-
-
 export default function ReviewPage(){
 const [todaysVocabs, setTodaysVocabs] = useState([]);
 
@@ -20,11 +18,18 @@ const [todaysVocabs, setTodaysVocabs] = useState([]);
 
     function getTodaysVocabs():void{
         axios.get(`api/vocab/today`)
-            .then(response => setTodaysVocabs(response.data))
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
+
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
             .catch(error => console.error(error))
     }
 
     useEffect(() => {
+        editVocab(vocabWithTodaysDate)
         getTodaysVocabs()
     }, []);
 

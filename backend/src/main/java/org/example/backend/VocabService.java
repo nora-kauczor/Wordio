@@ -13,10 +13,14 @@ import java.util.stream.Collectors;
 public class VocabService {
     private final VocabRepo vocabRepo;
 
-    public List<Vocab> getTodaysVocabs(){
+    public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
         LocalDate today = LocalDate.now();
-        return vocabRepo.findAll().stream().filter(vocab -> vocab
-                .reviewDates().contains(today)).collect(Collectors.toList());
+        List<Vocab> todaysVocabs = vocabRepo.findAll().stream().filter(vocab -> vocab
+                .reviewDates().contains(today)).toList();
+        if (todaysVocabs.isEmpty()) {
+            throw new NoVocabsForTodayException();
+        }
+        return todaysVocabs;
     }
 
     public List<Vocab> getAllVocabs() {
