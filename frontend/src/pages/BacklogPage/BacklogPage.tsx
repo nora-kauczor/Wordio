@@ -20,16 +20,17 @@ export default function BacklogPage(props: Readonly<Props>) {
 
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate('/review');
-    };
+    // const handleClick = () => {
+    //     navigate('/review');
+    // };
 
     return (<div id={"backlog-page"}>
         <p>{introduction}</p>
         <ul id={"backlog-list"}>
             {props.vocabs.map(vocab => <li key={vocab._id}
                                            className={"backlog-list-item"}
-            onClick={handleClick}>
+            // onClick={handleClick}
+            >
                 <p>{vocab.word}</p>
                 <p>{vocab.translation}</p>
             </li>)}

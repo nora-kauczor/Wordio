@@ -51,24 +51,25 @@ function App() {
 
     return (
         <>
-            {useForm && <Form/>}
             <BrowserRouter>
+                {useForm && <Form/>}
+                <NavBar setUseForm={setUseForm}/>
                 <Routes>
                     <Route path={"/"}
                            element={<HomePage/>}></Route>
-                    <Route path={"/calendar"} element={
-                        <CalendarPage vocabs={vocabs}/>}></Route>
+                    {vocabs.length > 0 &&   <Route path={"/calendar"} element={
+                        <CalendarPage
+                            vocabs={vocabs}/>}></Route>}
                     <Route path={"/review"}
                            element={<ReviewPage/>}></Route>
-                    <Route path={"/backlog"}
-                           element={<BacklogPage
-                               vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
-                           deleteVocab={deleteVocab}
-                           />}></Route>
+                    {vocabs.length > 0 && <Route path={"/backlog"}
+                            element={<BacklogPage
+                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
+                                deleteVocab={deleteVocab}
+                            />}></Route>}
                 </Routes>
             </BrowserRouter>
-            <p>hi</p>
-            <NavBar setUseForm={setUseForm}/>
+
         </>
     )
 }
