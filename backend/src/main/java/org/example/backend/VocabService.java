@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -15,8 +14,9 @@ public class VocabService {
 
     public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
         LocalDate today = LocalDate.now();
-        List<Vocab> todaysVocabs = vocabRepo.findAll().stream().filter(vocab -> vocab
-                .reviewDates().contains(today)).toList();
+        List<Vocab> todaysVocabs = vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.reviewDates() != null && vocab.reviewDates().contains(today))
+                .toList();
         if (todaysVocabs.isEmpty()) {
             throw new NoVocabsForTodayException();
         }

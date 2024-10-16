@@ -23,6 +23,12 @@ export default function Form() {
             .catch(error => console.log(error))
     }
 
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
+
     return (
         <form id={"form"} onSubmit={handleSubmit}>
             <label>Word</label>
