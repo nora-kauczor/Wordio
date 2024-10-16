@@ -51,4 +51,10 @@ public class VocabController {
     public ErrorMessage handleElementNotFoundException(){
         return new ErrorMessage("No matches for given ID.");
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(NoVocabsForTodayException.class)
+    public ErrorMessage handleNoVocabsForTodayException(){
+        return new ErrorMessage("No vocabulary for today.");
+    }
 }

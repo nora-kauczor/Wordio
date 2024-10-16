@@ -56,6 +56,15 @@ class VocabControllerTest {
 
     @DirtiesContext
     @Test
+    void getTodaysVocabs_throws204_whenCalledOnADayWithoutAnyVocabs() throws Exception
+    {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/today"))
+                .andExpect(status().isNoContent());
+    }
+
+
+    @DirtiesContext
+    @Test
     void getAllVocabs_ShouldReturnAllVocabs_whenCalled() throws Exception {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", "Spanish", List.of());
