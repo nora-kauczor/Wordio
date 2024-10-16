@@ -14,7 +14,14 @@ import static org.mockito.Mockito.*;
 class VocabServiceTest {
     private final VocabRepo mockVocabRepo = mock(VocabRepo.class);
     private final VocabService vocabService = new VocabService(mockVocabRepo);
-
+//
+//    @Test
+//    void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId(){
+//        Vocab testVocab = new Vocab("000", "la prueba", "test",
+//                "", "Spanish", List.of());
+//        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
+//assertTrue();
+//    }
 
     @Test
     void getTodaysVocabs_shouldReturnTodaysVocabs_whenCalled() throws NoVocabsForTodayException {
