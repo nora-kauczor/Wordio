@@ -6,11 +6,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -25,6 +25,34 @@ class VocabControllerTest {
 
     @Autowired
     private VocabRepo vocabRepo;
+
+    @DirtiesContext
+    @Test
+    void getTodaysVocabs_shouldReturnTodaysVocabs_whenCalled() throws Exception {
+        LocalDate today = LocalDate.now();
+        List<LocalDate> datesContainingToday = new ArrayList<>(List.of(today));
+        Vocab vocab1 = new Vocab("111", "la prueba", "test",
+                "", "Spanish", datesContainingToday);
+        Vocab vocab2 = new Vocab("222", "el libro", "book",
+                "", "Spanish", datesContainingToday);
+        Vocab vocab3 = new Vocab("333", "la casa", "house",
+                "", "Spanish", List.of());
+        vocabRepo.save(vocab1);
+        vocabRepo.save(vocab2);
+        vocabRepo.save(vocab3);
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/today"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [{"_id":"111", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"},
+                  {"_id":"222", "word":"el libro", "translation":"book",
+                                          "info":"", "language":"Spanish"}
+]
+                        """))
+                .andExpect(jsonPath("$[0].reviewDates").isNotEmpty())
+                .andExpect(jsonPath("$[1].reviewDates").isNotEmpty());
+    }
+
 
     @DirtiesContext
     @Test
@@ -65,32 +93,31 @@ class VocabControllerTest {
     @DirtiesContext
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
-        VocabDTO testDTO = new VocabDTO("la prueba", "test",
-                "", "Spanish", List.of());
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-{ "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish", "reviewDates":[]}
-"""))
+                                { "word":"la prueba", "translation":"test",
+                                                                          "info":"", "language":"Spanish", "reviewDates":[]}
+                                """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-{ "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish", "reviewDates":[]}
-"""))
+                        { "word":"la prueba", "translation":"test",
+                                                                  "info":"", "language":"Spanish", "reviewDates":[]}
+                        """))
                 .andExpect(jsonPath("$._id").isNotEmpty());
 
     }
-@DirtiesContext
+
+    @DirtiesContext
     @Test
     void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {
-    Vocab testVocab = new Vocab("000", "la prueba", "test",
-            "", "Spanish", List.of());
-    vocabRepo.save(testVocab);
-    mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
-            .andExpect(status().isOk())
-            .andExpect(content().string("Vocab successfully deleted."));
-}
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+        vocabRepo.save(testVocab);
+        mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Vocab successfully deleted."));
+    }
 
     @DirtiesContext
     @Test

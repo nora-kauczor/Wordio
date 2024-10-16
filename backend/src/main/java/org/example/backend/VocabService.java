@@ -15,7 +15,7 @@ public class VocabService {
 
     public List<Vocab> getTodaysVocabs(){
         LocalDate today = LocalDate.now();
-        return getAllVocabs().stream().filter(vocab -> vocab
+        return vocabRepo.findAll().stream().filter(vocab -> vocab
                 .reviewDates().contains(today)).collect(Collectors.toList());
     }
 

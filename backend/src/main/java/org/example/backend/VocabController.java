@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/api/vocab")
@@ -13,6 +15,11 @@ import java.util.NoSuchElementException;
 public class VocabController {
 
     private final VocabService vocabService;
+
+    @GetMapping("/today")
+    public List<Vocab> getTodaysVocabs(){
+        return vocabService.getTodaysVocabs();
+    }
 
     @GetMapping
     public List<Vocab> getAllVocabs(){
