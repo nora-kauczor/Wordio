@@ -12,10 +12,16 @@ import java.util.NoSuchElementException;
 public class VocabService {
     private final VocabRepo vocabRepo;
 
+    public Vocab activateVocab(String _id) {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+        vocab.reviewDates = vocab.generateDates(LocalDate.now());
+        return vocab;
+    }
+
     public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
         LocalDate today = LocalDate.now();
         List<Vocab> todaysVocabs = vocabRepo.findAll().stream()
-                .filter(vocab -> vocab.reviewDates() != null && vocab.reviewDates().contains(today))
+                .filter(vocab -> vocab.reviewDates != null && vocab.reviewDates.contains(today))
                 .toList();
         if (todaysVocabs.isEmpty()) {
             throw new NoVocabsForTodayException();
@@ -38,7 +44,7 @@ public class VocabService {
     }
 
     public Vocab editVocab(Vocab editedVocab) {
-        if (!vocabRepo.existsById(editedVocab._id())) {
+        if (!vocabRepo.existsById(editedVocab._id)) {
             throw new NoSuchElementException();
         }
         return vocabRepo.save(editedVocab);

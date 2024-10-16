@@ -1,21 +1,15 @@
 import './CalendarPage.css'
-import axios from "axios";
-import {useEffect, useState} from "react";
+import {Vocab} from "../../types/Vocab.ts";
+
+type Props = {
+    vocabs:Vocab[]
+}
 
 
 
-export default function CalendarPage( ){
-    const [vocabs, setVocabs] = useState([])
+export default function CalendarPage(props:Readonly<Props>){
 
-    function getAllVocabs() {
-        axios.get("/api/vocab")
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
 
-    useEffect(() => {
-        getAllVocabs()
-    }, []);
 
     return(
         <div id={"calendar-page"}>
