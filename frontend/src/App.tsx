@@ -14,9 +14,11 @@ import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
 import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
+import NavBar from "./components/NavBar/NavBar.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
+    const [useForm, setUseForm] = useState<boolean>(false)
 
     function getAllVocabs() {
         axios.get("/api/vocab")
@@ -49,7 +51,7 @@ function App() {
 
     return (
         <>
-            <Form/>
+            {useForm && <Form/>}
             <BrowserRouter>
                 <Routes>
                     <Route path={"/"}
@@ -65,6 +67,8 @@ function App() {
                            />}></Route>
                 </Routes>
             </BrowserRouter>
+            <p>hi</p>
+            <NavBar setUseForm={setUseForm}/>
         </>
     )
 }
