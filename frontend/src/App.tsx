@@ -9,11 +9,24 @@ import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
 import CalendarPage
     from "./pages/CalendarPage/CalendarPage.tsx";
 import axios from "axios";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
+import BacklogPage
+    from "./pages/BacklogPage/BacklogPage.tsx";
 
 function App() {
+    const [vocabs, setVocabs] = useState<Vocab[]>([])
+
+    function getAllVocabs() {
+        axios.get("/api/vocab")
+            .then(response => setVocabs(response.data))
+            .catch(error => console.error(error))
+    }
+
+    useEffect(() => {
+        getAllVocabs()
+    }, []);
 
     function getVocab(_id: string): void {
         axios.get(`api/vocab/${_id}`)
@@ -21,19 +34,6 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    const editedVocab: Vocab = {
-        _id: '670bc0ba64630f6a589cd2bf',
-        word: 'hola',
-        translation: 'hello!!!!!!!',
-        info: 'newly added text',
-        language: 'Spanish',
-        reviewDates: []
-    }
-
-    // useEffect(() => {
-    //     editVocab(editedVocab)
-    //     getVocab("670bc0ba64630f6a589cd2bf")
-    // }, []);
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -41,14 +41,11 @@ function App() {
             .catch(error => console.error(error))
     }
 
-
     function editVocab(editedVocab: Vocab): void {
         axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
             .then(response => console.log(response.data))
             .catch(error => console.error(error))
     }
-
-
 
     return (
         <>
@@ -58,9 +55,14 @@ function App() {
                     <Route path={"/"}
                            element={<HomePage/>}></Route>
                     <Route path={"/calendar"} element={
-                        <CalendarPage/>}></Route>
+                        <CalendarPage vocabs={vocabs}/>}></Route>
                     <Route path={"/review"}
                            element={<ReviewPage/>}></Route>
+                    <Route path={"/backlog"}
+                           element={<BacklogPage
+                               vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
+                           deleteVocab={deleteVocab}
+                           />}></Route>
                 </Routes>
             </BrowserRouter>
         </>
