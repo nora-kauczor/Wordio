@@ -16,6 +16,11 @@ public class VocabController {
 
     private final VocabService vocabService;
 
+    @GetMapping("/activate/{_id}")
+    public Vocab activateVocab(@PathVariable String _id){
+       return vocabService.activateVocab(_id);
+    }
+
     @GetMapping("/today")
     public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
         return vocabService.getTodaysVocabs();

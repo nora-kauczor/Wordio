@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -25,6 +25,28 @@ class VocabControllerTest {
 
     @Autowired
     private VocabRepo vocabRepo;
+
+    @DirtiesContext
+    @Test
+    void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/000"))
+                .andExpect(status().isNotFound());
+    }
+
+    @DirtiesContext
+    @Test
+    void  activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", Collections.emptyList());
+        vocabRepo.save(testVocab);
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/000"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"}
+                        """))
+                .andExpect(jsonPath("$.reviewDates").isNotEmpty());
+    }
 
     @DirtiesContext
     @Test
