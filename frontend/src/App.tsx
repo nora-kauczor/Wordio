@@ -25,7 +25,7 @@ function App() {
         _id: '670bc0ba64630f6a589cd2bf',
         word: 'hola',
         translation: 'hello',
-        info: 'added text',
+        info: 'newly added text',
         language: 'Spanish',
         reviewDates: []
     }
@@ -33,7 +33,7 @@ function App() {
     useEffect(() => {
         editVocab(editedVocab)
         getVocab("670bc0ba64630f6a589cd2bf")
-    }, []);
+    }, [editedVocab]);
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -43,7 +43,7 @@ function App() {
 
 
     function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab`, editedVocab)
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
             .then(response => console.log(response.data))
             .catch(error => console.error(error))
     }

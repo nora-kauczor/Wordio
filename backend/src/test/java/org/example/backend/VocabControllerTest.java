@@ -84,7 +84,7 @@ class VocabControllerTest {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", "Spanish", List.of());
         vocabRepo.save(testVocab);
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"000","word":"la prueba", "translation":"test",
@@ -101,10 +101,10 @@ class VocabControllerTest {
     @DirtiesContext
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/nonexistent-id")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "_id":"ID that is not in the DB","word":"la prueba", "translation":"test",
+                                { "_id":"nonexistent-id","word":"la prueba", "translation":"test",
                                                                           "info":"added infotext", "language":"Spanish", "reviewDates":[]}
                                 """))
                 .andExpect(status().isNotFound());

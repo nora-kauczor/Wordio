@@ -29,7 +29,7 @@ public class VocabController {
         return vocabService.createVocab(vocabDTO);
     }
 
-    @PutMapping
+    @PutMapping("/{_id}")
     public Vocab editVocab(@RequestBody Vocab editedVocab){
         return vocabService.editVocab(editedVocab);
     }
