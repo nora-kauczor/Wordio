@@ -3,10 +3,7 @@ package org.example.backend;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -14,14 +11,21 @@ import static org.mockito.Mockito.*;
 class VocabServiceTest {
     private final VocabRepo mockVocabRepo = mock(VocabRepo.class);
     private final VocabService vocabService = new VocabService(mockVocabRepo);
-//
-//    @Test
-//    void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId(){
-//        Vocab testVocab = new Vocab("000", "la prueba", "test",
-//                "", "Spanish", List.of());
-//        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
-//assertTrue();
-//    }
+
+    @Test
+    void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
+        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
+        assertThrows(NoSuchElementException.class, () -> mockVocabRepo.findById("000"));
+    }
+
+    @Test
+    void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId(){
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", Collections.emptyList());
+        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
+        vocabService.activateVocab("000");
+        verify(mockVocabRepo).findById("000");
+    }
 
     @Test
     void getTodaysVocabs_shouldReturnTodaysVocabs_whenCalled() throws NoVocabsForTodayException {
