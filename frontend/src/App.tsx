@@ -24,7 +24,7 @@ function App() {
     const editedVocab: Vocab = {
         _id: '670bc0ba64630f6a589cd2bf',
         word: 'hola',
-        translation: 'hello',
+        translation: 'hello!!!!!!!',
         info: 'newly added text',
         language: 'Spanish',
         reviewDates: []
@@ -33,7 +33,7 @@ function App() {
     useEffect(() => {
         editVocab(editedVocab)
         getVocab("670bc0ba64630f6a589cd2bf")
-    }, [editedVocab]);
+    }, []);
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)

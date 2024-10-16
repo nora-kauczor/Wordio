@@ -30,7 +30,7 @@ public class VocabController {
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody Vocab editedVocab){
+    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id){
         return vocabService.editVocab(editedVocab);
     }
 
