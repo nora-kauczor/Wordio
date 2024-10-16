@@ -55,7 +55,7 @@ class VocabControllerTest {
 
     @DirtiesContext
     @Test
-    void getVocab_ShouldTriggerNotFoundStatus_whenCalledWithNonexistentID() throws Exception {
+    void getVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/000"))
                 .andExpect(status().isNotFound());
     }
@@ -81,6 +81,9 @@ class VocabControllerTest {
     @DirtiesContext
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws Exception {
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+        vocabRepo.save(testVocab);
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -97,6 +100,18 @@ class VocabControllerTest {
 
     @DirtiesContext
     @Test
+    void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                { "_id":"ID that is not in the DB","word":"la prueba", "translation":"test",
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[]}
+                                """))
+                .andExpect(status().isNotFound());
+    }
+
+    @DirtiesContext
+    @Test
     void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", "Spanish", List.of());
@@ -108,7 +123,7 @@ class VocabControllerTest {
 
     @DirtiesContext
     @Test
-    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithNonexistentID() throws Exception {
+    void deleteVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
                 .andExpect(status().isNotFound());
     }
