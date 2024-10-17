@@ -1,42 +1,40 @@
 import './CalendarPage.css'
 import {Vocab} from "../../types/Vocab.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import CalendarDay
+    from "../../components/CalendarDay/CalendarDay.tsx";
+import {
+    getDateAsString
+} from "../../utils/getDateAsString.ts";
 
 type Props = {
-    vocabs:Vocab[]
+    vocabs: Vocab[]
 }
 
 
+export default function CalendarPage(props: Readonly<Props>) {
+    const [days, setDays] = useState<string[]>([])
 
-
-export default function CalendarPage(props:Readonly<Props>){
-const [month, setMonth] = useState()
-    function getDaysInMonth(year, month) {
-        // month is 0-indexed in JavaScript Date (0 = January, 11 = December)
-        let date = new Date(year, month, 1);
-        let days = [];
-
-        // Loop until the month changes
-        while (date.getMonth() === month) {
-            // Push the current date to the array
+    function generateDays(): string[] {
+        const today = new Date()
+        const currentMonth = today.getMonth()
+        const currentYear = today.getFullYear()
+        let date: Date = new Date(currentYear, currentMonth, 1);
+        let days: Date[] = []
+        while (date.getMonth() === currentMonth) {
             days.push(new Date(date));
-            // Move to the next day
-            date.setDate(date.getDate() + 1);
+            date.setDate(date.getDate() + 1)
         }
-
-        return days;
+        return  days.map(day => getDateAsString(day))
     }
 
-// Example usage
-    let year = 2024;
-    let month = 9; // October (0-indexed: 9 = October)
+    useEffect(() => {
+        setDays(generateDays());
+    }, []);
 
-    let daysInMonth = getDaysInMonth(year, month);
-    daysInMonth.forEach(day => console.log(day.toDateString()));
-
-    return(
+    return (
         <div id={"calendar-page"}>
-            {daysInMonth.map(day => <CalendarDay day={day} />)}
+            {days.map(day => <CalendarDay day={day}/>)}
         </div>
     )
 }
