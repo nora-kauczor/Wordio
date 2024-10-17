@@ -21,11 +21,6 @@ public class VocabController {
        return vocabService.activateVocab(_id);
     }
 
-    @GetMapping("/today")
-    public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
-        return vocabService.getTodaysVocabs();
-    }
-
     @GetMapping
     public List<Vocab> getAllVocabs(){
         return vocabService.getAllVocabs();
@@ -56,10 +51,5 @@ public class VocabController {
     public ErrorMessage handleElementNotFoundException(){
         return new ErrorMessage("No matches for given ID.");
     }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ExceptionHandler(NoVocabsForTodayException.class)
-    public ErrorMessage handleNoVocabsForTodayException(){
-        return new ErrorMessage("No vocabulary for today.");
-    }
+    
 }

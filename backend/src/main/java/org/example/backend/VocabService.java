@@ -15,18 +15,7 @@ public class VocabService {
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         vocab.reviewDates = vocab.generateDates(LocalDate.now());
-        return vocab;
-    }
-
-    public List<Vocab> getTodaysVocabs() throws NoVocabsForTodayException {
-        LocalDate today = LocalDate.now();
-        List<Vocab> todaysVocabs = vocabRepo.findAll().stream()
-                .filter(vocab -> vocab.reviewDates != null && vocab.reviewDates.contains(today))
-                .toList();
-        if (todaysVocabs.isEmpty()) {
-            throw new NoVocabsForTodayException();
-        }
-        return todaysVocabs;
+        return vocabRepo.save(vocab);
     }
 
     public List<Vocab> getAllVocabs() {
