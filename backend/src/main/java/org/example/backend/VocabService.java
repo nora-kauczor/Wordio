@@ -15,7 +15,7 @@ public class VocabService {
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         vocab.reviewDates = vocab.generateDates(LocalDate.now());
-        return vocab;
+        return vocabRepo.save(vocab);
     }
 
     public List<Vocab> getAllVocabs() {
