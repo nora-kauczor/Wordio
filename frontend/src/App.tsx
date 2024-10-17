@@ -1,6 +1,5 @@
 import './App.css'
 import {
-    BrowserRouter,
     Route,
     Routes
 } from "react-router-dom";
@@ -49,28 +48,30 @@ function App() {
             .catch(error => console.error(error))
     }
 
+    console.log(vocabs)
     return (
-        <>
-            <BrowserRouter>
-                {useForm && <Form/>}
-                <NavBar setUseForm={setUseForm}/>
-                <Routes>
-                    <Route path={"/"}
-                           element={<HomePage/>}></Route>
-                    {vocabs.length > 0 &&   <Route path={"/calendar"} element={
+        <div id={"app"}>
+            {useForm && <Form/>}
+            <NavBar setUseForm={setUseForm}/>
+            <Routes>
+                <Route path={"/"}
+                       element={<HomePage/>}></Route>
+                {vocabs.length > 0 &&
+                    <Route path={"/calendar"} element={
                         <CalendarPage
                             vocabs={vocabs}/>}></Route>}
-                    <Route path={"/review"}
-                           element={<ReviewPage/>}></Route>
-                    {vocabs.length > 0 && <Route path={"/backlog"}
-                            element={<BacklogPage
-                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
-                                deleteVocab={deleteVocab}
-                            />}></Route>}
-                </Routes>
-            </BrowserRouter>
+                <Route path={"/review"}
+                       element={<ReviewPage/>}></Route>
+                {vocabs.length > 0 &&
+                    <Route path={"/backlog"}
+                           element={<BacklogPage
+                               vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
+                               deleteVocab={deleteVocab}
+                           />}></Route>}
+            </Routes>
 
-        </>
+
+        </div>
     )
 }
 

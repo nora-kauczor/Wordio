@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-
+import './NavBar.css'
 type Props = {
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
