@@ -63,17 +63,6 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    useEffect(() => {
-        activateVocab("670bc0ba64630f6a589cd2d4")
-    }, []);
-
-    function getVocabLocally(_id:string):Vocab {
-        const vocabsToSearch: Vocab[] = vocabs
-        return vocabsToSearch.find(vocab => vocab._id === _id)
-    }
-
-    console.log(getVocabLocally("670bc0ba64630f6a589cd2d4"))
-
     return (
         <div id={"app"}>
             {useForm && <Form/>}
