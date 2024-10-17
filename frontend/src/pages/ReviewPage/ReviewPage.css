@@ -1,1 +1,1 @@
-#review-page {display: flex;}
+#review-page {display: flex; flex-direction: column;}
