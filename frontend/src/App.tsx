@@ -48,7 +48,6 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    console.log(vocabs)
     return (
         <div id={"app"}>
             {useForm && <Form/>}
