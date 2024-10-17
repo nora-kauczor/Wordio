@@ -1,6 +1,5 @@
 import './App.css'
 import {
-    BrowserRouter,
     Route,
     Routes
 } from "react-router-dom";
@@ -14,9 +13,11 @@ import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
 import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
+import NavBar from "./components/NavBar/NavBar.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
+    const [useForm, setUseForm] = useState<boolean>(false)
 
     function getAllVocabs() {
         axios.get("/api/vocab")
@@ -48,24 +49,28 @@ function App() {
     }
 
     return (
-        <>
-            <Form/>
-            <BrowserRouter>
-                <Routes>
-                    <Route path={"/"}
-                           element={<HomePage/>}></Route>
+        <div id={"app"}>
+            {useForm && <Form/>}
+            <NavBar setUseForm={setUseForm}/>
+            <Routes>
+                <Route path={"/"}
+                       element={<HomePage/>}></Route>
+                {vocabs.length > 0 &&
                     <Route path={"/calendar"} element={
-                        <CalendarPage vocabs={vocabs}/>}></Route>
-                    <Route path={"/review"}
-                           element={<ReviewPage/>}></Route>
+                        <CalendarPage
+                            vocabs={vocabs}/>}></Route>}
+                <Route path={"/review"}
+                       element={<ReviewPage/>}></Route>
+                {vocabs.length > 0 &&
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
-                           deleteVocab={deleteVocab}
-                           />}></Route>
-                </Routes>
-            </BrowserRouter>
-        </>
+                               deleteVocab={deleteVocab}
+                           />}></Route>}
+            </Routes>
+
+
+        </div>
     )
 }
 
