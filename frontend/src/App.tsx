@@ -64,7 +64,13 @@ function App() {
             .catch(error => console.error(error))
     }
 
+const [userName, setUserName] = useState<string>("anonymousUser")
 
+    useEffect(() => {
+        axios.get("/api/vocab/auth")
+            .then(response => setUserName(response.data.userName))
+            .catch(error => console.error(error))
+    }, []);
 
     return (
         <div id={"app"}>
