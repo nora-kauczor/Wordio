@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Collections;
 import java.util.List;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -24,6 +26,7 @@ class VocabControllerTest {
     @Autowired
     private VocabRepo vocabRepo;
 
+    @WithMockUser
     @DirtiesContext
     @Test
     void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
@@ -31,9 +34,10 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser
     @DirtiesContext
     @Test
-    void  activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
+    void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", "Spanish", Collections.emptyList());
         vocabRepo.save(testVocab);
@@ -47,7 +51,7 @@ class VocabControllerTest {
     }
 
 
-
+    @WithMockUser
     @DirtiesContext
     @Test
     void getAllVocabs_ShouldReturnAllVocabs_whenCalled() throws Exception {
@@ -62,7 +66,7 @@ class VocabControllerTest {
                         """));
     }
 
-
+    @WithMockUser
     @DirtiesContext
     @Test
     void getVocab_shouldReturnSpecificVocab_whenCalledWithItsId() throws Exception {
@@ -77,6 +81,7 @@ class VocabControllerTest {
                         """));
     }
 
+    @WithMockUser
     @DirtiesContext
     @Test
     void getVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
@@ -84,6 +89,7 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser
     @DirtiesContext
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
@@ -103,7 +109,7 @@ class VocabControllerTest {
     }
 
 
-
+    @WithMockUser
     @DirtiesContext
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws Exception {
@@ -124,6 +130,7 @@ class VocabControllerTest {
 
     }
 
+    @WithMockUser
     @DirtiesContext
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
@@ -136,6 +143,7 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser
     @DirtiesContext
     @Test
     void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {
@@ -147,6 +155,7 @@ class VocabControllerTest {
                 .andExpect(content().string("Vocab successfully deleted."));
     }
 
+    @WithMockUser
     @DirtiesContext
     @Test
     void deleteVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
