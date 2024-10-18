@@ -17,16 +17,15 @@ public class CalendarService {
 
     private final VocabRepo vocabRepo;
 
-    public VocabIdsOfDate[][] getVocabsOfMonth() {
+    public VocabIdsOfDate[][] getVocabsOfMonth(YearMonth yearMonth) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E-dd-MM-yyyy");
-        YearMonth yearMonth = YearMonth.now();
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
         for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
             String day = yearMonth.atDay(i).format(formatter);
             VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day);
             idsAndDates.add(idsAndDateOfDay);
         }
-        VocabIdsOfDate[][] vocabsOfMonth = new VocabIdsOfDate[5][4];
+        VocabIdsOfDate[][] vocabsOfMonth = new VocabIdsOfDate[5][7];
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
         int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
         vocabsOfMonth[0][calendarIndexOfFirstDay] = idsAndDates.getFirst();
@@ -41,8 +40,10 @@ public class CalendarService {
             }
         }
         for (int i = calendarIndexOfFirstDay + 1; i < 7; i++) {
-            vocabsOfMonth[4][i] = idsAndDates.getFirst();
-            idsAndDates.removeFirst();
+            if (!idsAndDates.isEmpty()) {
+                vocabsOfMonth[4][i] = idsAndDates.getFirst();
+                idsAndDates.removeFirst();
+            }
         }
         return vocabsOfMonth;
     }
