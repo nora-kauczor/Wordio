@@ -1,4 +1,4 @@
-package org.example.backend.security;
+package org.example.backend;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

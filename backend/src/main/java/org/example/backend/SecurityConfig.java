@@ -1,4 +1,4 @@
-package org.example.backend.security;
+package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

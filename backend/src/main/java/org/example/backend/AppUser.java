@@ -1,4 +1,4 @@
-package org.example.backend.security;
+package org.example.backend;
 
 public record AppUser(String id,
                       String name,

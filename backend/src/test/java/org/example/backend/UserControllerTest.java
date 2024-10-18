@@ -1,4 +1,4 @@
-package org.example.backend.security;
+package org.example.backend;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
