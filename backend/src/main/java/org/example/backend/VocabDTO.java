@@ -7,7 +7,6 @@ public record VocabDTO(
         String word,
         String translation,
         String info,
-        String language,
-        List<LocalDate> reviewDates) {
+        String language) {
 }
 
