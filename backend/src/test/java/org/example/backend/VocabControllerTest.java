@@ -1,6 +1,8 @@
 package org.example.backend;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,8 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@WithMockUser
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest
 @AutoConfigureMockMvc
 class VocabControllerTest {
@@ -26,21 +29,23 @@ class VocabControllerTest {
     @Autowired
     private VocabRepo vocabRepo;
 
-    @WithMockUser
-    @DirtiesContext
+
+    @BeforeEach
+    void setUp() {
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of());
+        vocabRepo.save(testVocab);
+    }
+
     @Test
     void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/000"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", Collections.emptyList());
-        vocabRepo.save(testVocab);
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/000"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -51,13 +56,8 @@ class VocabControllerTest {
     }
 
 
-    @WithMockUser
-    @DirtiesContext
     @Test
     void getAllVocabs_ShouldReturnAllVocabs_whenCalled() throws Exception {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of());
-        vocabRepo.save(testVocab);
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -66,13 +66,9 @@ class VocabControllerTest {
                         """));
     }
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void getVocab_shouldReturnSpecificVocab_whenCalledWithItsId() throws Exception {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of());
-        vocabRepo.save(testVocab);
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/000"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -81,16 +77,14 @@ class VocabControllerTest {
                         """));
     }
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void getVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/000"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
@@ -109,13 +103,9 @@ class VocabControllerTest {
     }
 
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws Exception {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of());
-        vocabRepo.save(testVocab);
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -130,8 +120,7 @@ class VocabControllerTest {
 
     }
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/nonexistent-id")
@@ -143,23 +132,17 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
-    @DirtiesContext
+
     @Test
     void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of());
-        vocabRepo.save(testVocab);
         mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Vocab successfully deleted."));
     }
 
-    @WithMockUser
-    @DirtiesContext
     @Test
     void deleteVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
