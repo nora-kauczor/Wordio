@@ -20,40 +20,30 @@ public class CalendarService {
     public VocabIdsOfDate[][] getVocabsOfMonth() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E-dd-MM-yyyy");
         YearMonth yearMonth = YearMonth.now();
-        List<String> daysOfMonth = new ArrayList<>();
-        // alle tage erzeugen
-        for (int day = 1; day <= yearMonth.lengthOfMonth(); day++) {
-            daysOfMonth.add(yearMonth.atDay(day).format(formatter));
-        }
-        // objekte mit date und den ids zu dem tag erzeugen
-        List<VocabIdsOfDate> idsAndDatesForAllDaysOfMonth = new ArrayList<>();
-        for (int i = 1; i < daysOfMonth.size(); i++) {
-            String day = daysOfMonth.get(i);
+        List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
+        for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
+            String day = yearMonth.atDay(i).format(formatter);
             VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day);
-            idsAndDatesForAllDaysOfMonth.add(idsAndDateOfDay);
+            idsAndDates.add(idsAndDateOfDay);
         }
         VocabIdsOfDate[][] vocabsOfMonth = new VocabIdsOfDate[5][4];
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
         int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
-        vocabsOfMonth[0][calendarIndexOfFirstDay] = idsAndDatesForAllDaysOfMonth.getFirst();
-        // Woche 1
+        vocabsOfMonth[0][calendarIndexOfFirstDay] = idsAndDates.getFirst();
         for (int i = calendarIndexOfFirstDay + 1; i < 7; i++) {
-            vocabsOfMonth[0][i] = idsAndDatesForAllDaysOfMonth.getFirst();
-            idsAndDatesForAllDaysOfMonth.removeFirst();
+            vocabsOfMonth[0][i] = idsAndDates.getFirst();
+            idsAndDates.removeFirst();
         }
-        // Woche 2-4
         for (int z = 1; z < 4; z++) {
             for (int i = 0; i < 7; i++) {
-                vocabsOfMonth[z][i] = idsAndDatesForAllDaysOfMonth.getFirst();
-                idsAndDatesForAllDaysOfMonth.removeFirst();
+                vocabsOfMonth[z][i] = idsAndDates.getFirst();
+                idsAndDates.removeFirst();
             }
         }
-        // Woche 5
         for (int i = calendarIndexOfFirstDay + 1; i < 7; i++) {
-            vocabsOfMonth[4][i] = idsAndDatesForAllDaysOfMonth.getFirst();
-            idsAndDatesForAllDaysOfMonth.removeFirst();
+            vocabsOfMonth[4][i] = idsAndDates.getFirst();
+            idsAndDates.removeFirst();
         }
-
         return vocabsOfMonth;
     }
 
