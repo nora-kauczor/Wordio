@@ -14,10 +14,10 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserRepo userRepo;
+//    private final UserRepo userRepo;
 
     @Value("${app.url}")
     private String appUrl;
@@ -35,11 +35,13 @@ public class SecurityConfig {
                         SessionCreationPolicy.ALWAYS
                 ))
                 .logout(logout -> logout
-                        .logoutSuccessUrl(appUrl)
-                        .logoutUrl("/api/auth/logout"))
-                .oauth2Login(login -> login.defaultSuccessUrl(appUrl+"/"))
+                                .logoutSuccessUrl(appUrl)
+                        .logoutUrl("/api/auth/logout")
+                )
+
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                .oauth2Login(login -> login.defaultSuccessUrl(appUrl + "/"))
                 .build();
     }
 

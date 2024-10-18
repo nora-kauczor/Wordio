@@ -72,6 +72,7 @@ const [userName, setUserName] = useState<string>("anonymousUser")
             .catch(error => console.error(error))
     }, []);
 
+
     return (
         <div id={"app"}>
             {useForm && <Form/>}
