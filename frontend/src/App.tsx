@@ -14,6 +14,7 @@ import {Vocab} from "./types/Vocab.ts";
 import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -63,11 +64,22 @@ function App() {
             .catch(error => console.error(error))
     }
 
+const [userName, setUserName] = useState<string>("anonymousUser")
+
+    useEffect(() => {
+        axios.get("/api/vocab/auth")
+            .then(response => setUserName(response.data.userName))
+            .catch(error => console.error(error))
+    }, []);
+
+
     return (
         <div id={"app"}>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
+                <Route path={"/login"}
+                       element={<LoginPage/>}></Route>
                 <Route path={"/"}
                        element={<HomePage/>}></Route>
                 {vocabs.length > 0 &&
