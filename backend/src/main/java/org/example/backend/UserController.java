@@ -19,7 +19,7 @@ public class UserController {
     public AppUser getUser(@AuthenticationPrincipal OAuth2User user) {
         if
        ( user == null) {
-            return new AppUser("not found", "anonymousUser", null, null);
+            return new AppUser("NotFound", "anonymousUser", null, null);
         }
                return userRepo.findById(user.getName()).orElseThrow();
     }
