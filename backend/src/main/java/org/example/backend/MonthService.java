@@ -14,19 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class MonthService {
 
+
     private final VocabRepo vocabRepo;
 
-    public Month buildMonth() {
-        LocalDate today = LocalDate.now();
-        YearMonth yearMonth = YearMonth.from(today);
-        List<Vocab> allVocabs = vocabRepo.findAll();
-        List<Vocab> vocabsOfMonth = allVocabs.stream().filter(vocab -> checkIfAnyDateOfVocabIsInYearMonth(vocab, yearMonth)).toList();
-        return new Month(yearMonth, vocabsOfMonth);
-    }
-
-    public boolean checkIfAnyDateOfVocabIsInYearMonth(Vocab vocab, YearMonth yearMonth) {
-        return vocab.reviewDates.stream().anyMatch(date -> yearMonth.equals(YearMonth.from(date)));
-    }
+   public List<Vocab> getVocabsPerDate(String date){
+       List<Vocab> allVocabs = vocabRepo.findAll();
+       return allVocabs.stream().filter(vocab ->
+               vocab.reviewDates.stream().anyMatch(date)).toList();
+}
 
 
 }
