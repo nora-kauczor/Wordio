@@ -1,3 +1,10 @@
 #calendar-page {
     display: flex;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 10px;
+}

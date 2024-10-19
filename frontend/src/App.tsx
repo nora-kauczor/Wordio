@@ -30,6 +30,7 @@ function App() {
         getAllVocabs()
     }, []);
 
+    // TODO anpassen an Datumsformat
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
         const year = date.getFullYear();
@@ -82,10 +83,9 @@ const [userName, setUserName] = useState<string>("anonymousUser")
                        element={<LoginPage/>}></Route>
                 <Route path={"/"}
                        element={<HomePage/>}></Route>
-                {vocabs.length > 0 &&
+
                     <Route path={"/calendar"} element={
-                        <CalendarPage
-                            vocabs={vocabs}/>}></Route>}
+                        <CalendarPage/>}></Route>
                 <Route path={"/review"}
                        element={<ReviewPage
                            todaysVocabs={getTodaysVocabs()}/>}></Route>

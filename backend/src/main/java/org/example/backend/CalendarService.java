@@ -18,6 +18,8 @@ public class CalendarService {
     private final VocabRepo vocabRepo;
 
     public VocabIdsOfDate[][] getVocabsOfMonth(YearMonth yearMonth) {
+        // TODO ich bekomme von FE den month aber als string, das heißt,
+        // ich muss hier erstmal das tatsächliche yerMonth objekt erzeugen auf basis des strings -> wie
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E-dd-MM-yyyy");
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
         for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
