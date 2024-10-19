@@ -5,12 +5,13 @@ import {
 } from "../../types/VocabsIdsOfDate.ts";
 type Props = {
     vocabIdsOfWeek: VocabIdsOfDate[]
+    openDayPopUpAndPassItVocabs: (vocabIdsOfDate: VocabIdsOfDate) => void
 }
 export default function CalendarWeek(props: Readonly<Props>) {
 
     return(
         <ul id={"calendar-week"}>
-            {props.vocabIdsOfWeek.map(vocabIdsOfDate => <CalendarDay vocabIdsOfDate={vocabIdsOfDate}/>) }
+            {props.vocabIdsOfWeek.map(vocabIdsOfDate => <CalendarDay vocabIdsOfDate={vocabIdsOfDate} openDayPopUpAndPassItVocabs={props.openDayPopUpAndPassItVocabs}/>) }
         </ul>
     )
 }

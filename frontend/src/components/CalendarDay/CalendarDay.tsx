@@ -5,13 +5,13 @@ import {
 
 type Props = {
     vocabIdsOfDate: VocabIdsOfDate
+    openDayPopUpAndPassItVocabs: (vocabIdsOfDate: VocabIdsOfDate) => void
 }
 
 export default function CalendarDay(props: Readonly<Props>) {
-    // on click: DayPopUp öffnet sich mit Liste der Vocabs, dafür mit den Ids die Vocabs rausfiltern
-    // diese funktionalität am besten in calendarpage
-    return (<div id={"calendar-day"}>
+    return (<button id={"calendar-day"} onClick={()=>props.openDayPopUpAndPassItVocabs(props.vocabIdsOfDate)}
+                    onKeyDown={()=>props.openDayPopUpAndPassItVocabs(props.vocabIdsOfDate)}>
         <p> {props.vocabIdsOfDate.date}</p>
         <p>{props.vocabIdsOfDate.vocabIds.length + 1} Vocabs</p>
-    </div>)
+    </button>)
 }

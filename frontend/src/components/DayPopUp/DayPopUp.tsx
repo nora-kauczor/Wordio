@@ -3,12 +3,15 @@ import VocabList from "../VocabList/VocabList.tsx";
 
 type Props = {
     vocabsOfDay: Vocab[]
+    closeDayPopUp: () => void
 }
 
 export default function DayPopUp(props: Readonly<Props>) {
 
-    return(
+    return(<div>
         <VocabList vocabs={props.vocabsOfDay}/>
+            <button>close</button>
+        </div>
     )
 
 
