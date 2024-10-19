@@ -2,6 +2,8 @@ import './BacklogPage.css'
 import {Vocab} from "../../types/Vocab.ts";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import VocabList
+    from "../../components/VocabList/VocabList.tsx";
 
 type Props = {
     vocabs: Vocab[]
@@ -26,15 +28,7 @@ export default function BacklogPage(props: Readonly<Props>) {
 
     return (<div id={"backlog-page"}>
         <p>{introduction}</p>
-        <ul id={"backlog-list"}>
-            {props.vocabs.map(vocab => <li key={vocab._id}
-                                           className={"backlog-list-item"}
-            // onClick={handleClick}
-            >
-                <p>{vocab.word}</p>
-                <p>{vocab.translation}</p>
-            </li>)}
-        </ul>
+<VocabList vocabs={props.vocabs}/>
     </div>)
 
 }

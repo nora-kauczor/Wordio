@@ -1,4 +1,5 @@
 import {Vocab} from "../../types/Vocab.ts";
+import VocabList from "../VocabList/VocabList.tsx";
 
 type Props = {
     vocabsOfDay: Vocab[]
@@ -7,7 +8,7 @@ type Props = {
 export default function DayPopUp(props: Readonly<Props>) {
 
     return(
-        // <VocabList vocabs={vocabsOfDay}/>
+        <VocabList vocabs={props.vocabsOfDay}/>
     )
 
 

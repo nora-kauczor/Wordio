@@ -3,6 +3,8 @@ import {Vocab} from "../../types/Vocab.ts";
 type Props = {
     vocab:Vocab
 }
+
+// rename ReviewCardContainer
 export default function CardContainer(props:Readonly<Props>){
     return(
         <div id={"card-container"}>
