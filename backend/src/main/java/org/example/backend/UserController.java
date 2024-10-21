@@ -21,7 +21,7 @@ public class UserController {
        ( user == null) {
             return new AppUser("NotFound", "anonymousUser", null, null);
         }
-               return userRepo.findById(user.getName()).orElseThrow();
+               return userRepo.findById(user.getAttributes().get("id").toString()).orElseThrow();
     }
 
 }

@@ -1,7 +1,7 @@
 import './App.css'
 import {
     Route,
-    Routes
+    Routes, useNavigate
 } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
@@ -19,6 +19,7 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
+    const [userName, setUserName] = useState<string>("")
 
     function getAllVocabs() {
         axios.get("/api/vocab")
@@ -26,9 +27,9 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    useEffect(() => {
-        getAllVocabs()
-    }, []);
+    // useEffect(() => {
+    //     getAllVocabs()
+    // }, []);
 
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
@@ -64,22 +65,29 @@ function App() {
             .catch(error => console.error(error))
     }
 
-const [userName, setUserName] = useState<string>("anonymousUser")
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        axios.get("/api/vocab/auth")
-            .then(response => setUserName(response.data.userName))
-            .catch(error => console.error(error))
-    }, []);
+    function logout (){
+        setUserName("")
+        // navigate("/login") //TODO geht das hier so?
+        const host = window.location.host ===
+        'localhost:5173' ? 'http://localhost:8080' : window.location.origin
+        window.open(host + '/api/vocab/logout', '_self')
+    }
 
+    axios.get("/api/vocab/auth")
+        .then(response => console.log(response.data))
+        .catch(error => console.error(error))
 
     return (
         <div id={"app"}>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
+        <button onClick={logout}>logout</button>
+            <p>Your are logged in as {userName}</p>
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage/>}></Route>
+                       element={<LoginPage setUserName={setUserName}/>}></Route>
                 <Route path={"/"}
                        element={<HomePage/>}></Route>
                 {vocabs.length > 0 &&
