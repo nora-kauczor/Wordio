@@ -35,7 +35,6 @@ class UserControllerTest {
                 .andExpect(content().json("""
                         {"id":"user","name":"Hans","avatarUrl":null,"authority":null}
                         """));
-
     }
 
     @DirtiesContext
