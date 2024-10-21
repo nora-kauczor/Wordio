@@ -30,20 +30,14 @@ export default function CalendarPage(props: Readonly<Props>) {
     }, []);
 
 
-
     function goToNextYearMonth() {
         const currentMonth: string = vocabIdsOfYearMonth[0].date.substring(8, 9)
         const currentYear: string = vocabIdsOfYearMonth[0].date.substring(11, 14)
         const currentMonthNumber: number = parseInt(currentMonth)
-        let nextYearMonth: string = ""
-        if (currentMonthNumber < 12) {
-            const nextMonthNumber: number = currentMonthNumber + 1
-            nextYearMonth = nextMonthNumber.toString()+"-"+currentYear
-        } else {
-            const nextYearNumber: number = parseInt(currentYear) + 1
-            nextYearMonth = `01-` + nextYearNumber.toString()
-        }
-        axios.get(`/api/calendar?year=${2024}&month=${10}`)
+        const currentYearNumber: number = parseInt(currentYear)
+        const month: string = currentMonthNumber < 11 ? (currentMonthNumber + 1).toString() : "0"
+        const year: string = currentMonthNumber < 11 ? currentYear : (currentYearNumber + 1).toString()
+        axios.get(`/api/calendar?year=${year}&month=${month}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
     }
@@ -52,7 +46,6 @@ export default function CalendarPage(props: Readonly<Props>) {
         const ids: string[] = vocabIdsOfDate.vocabIds;
         const vocabs: Vocab[] = props.vocabs.filter(vocab => ids.includes(vocab._id))
         setVocabsOfDayPopUp(vocabs)
-
     }
 
     function closeDayPopUp(): void {
