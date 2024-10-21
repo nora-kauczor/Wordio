@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
