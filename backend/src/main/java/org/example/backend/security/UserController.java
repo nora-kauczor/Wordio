@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,9 +19,9 @@ public class UserController {
     public AppUser getUser(@AuthenticationPrincipal OAuth2User user) {
         if
        ( user == null) {
-            return new AppUser("NotFound", "anonymousUser", null, null);
+            return new AppUser("NotFound", "", null, null);
         }
-               return userRepo.findById(user.getName()).orElseThrow();
+        return userRepo.findById(user.getName()).orElseThrow();
     }
 
 }
