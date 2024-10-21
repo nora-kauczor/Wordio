@@ -21,8 +21,8 @@ public class CalendarController {
         return calendarService.getVocabsOfMonth(YearMonth.now());
     }
 
-    @GetMapping("?year={year}&month={month}")
+    @GetMapping("/other-month")
     public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam String month, @RequestParam String year){
-        return calendarService.getVocabsOfMonth(month, year);
+        return calendarService.getVocabsOfMonth2(month, year);
     }
 }

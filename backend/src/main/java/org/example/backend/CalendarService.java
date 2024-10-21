@@ -17,7 +17,7 @@ public class CalendarService {
 
     private final VocabRepo vocabRepo;
 
-    public VocabIdsOfDate[][] getVocabsOfMonth(String month, String year) {
+    public VocabIdsOfDate[][] getVocabsOfMonth2(String month, String year) {
         int monthInt = Integer.parseInt(month);
         int yearInt = Integer.parseInt(year);
         YearMonth nextYearMonth = YearMonth.of(yearInt, monthInt);
@@ -25,10 +25,9 @@ public class CalendarService {
     }
 
     public VocabIdsOfDate[][] getVocabsOfMonth(YearMonth yearMonth) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E-dd-MM-yyyy");
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
         for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
-            String day = yearMonth.atDay(i).format(formatter);
+           LocalDate day = yearMonth.atDay(i);
             VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day);
             idsAndDates.add(idsAndDateOfDay);
         }
@@ -63,7 +62,7 @@ public class CalendarService {
     }
 
 
-    public VocabIdsOfDate getVocabIdsOfDate(String date) {
+    public VocabIdsOfDate getVocabIdsOfDate(LocalDate date) {
         List<Vocab> allVocabs = vocabRepo.findAll();
         List<Vocab> vocabsOfDate = allVocabs.stream().filter(vocab ->
                 vocab.reviewDates.stream().anyMatch(reviewDate -> reviewDate.equals(date))).toList();

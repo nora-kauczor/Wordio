@@ -44,7 +44,7 @@ export default function CalendarPage(props: Readonly<Props>) {
 
     function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
         const ids: string[] = vocabIdsOfDate.vocabIds;
-        const vocabs: Vocab[] = props.vocabs.filter(vocab => ids.includes(vocab._id))
+        const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids.includes(vocab._id))
         setVocabsOfDayPopUp(vocabs)
     }
 
