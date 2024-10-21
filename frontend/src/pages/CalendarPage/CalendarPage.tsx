@@ -29,6 +29,8 @@ export default function CalendarPage(props: Readonly<Props>) {
         getVocabIdsOfMonth()
     }, []);
 
+
+
     function goToNextYearMonth() {
         const currentMonth: string = vocabIdsOfYearMonth[0].date.substring(8, 9)
         const currentYear: string = vocabIdsOfYearMonth[0].date.substring(11, 14)
@@ -38,11 +40,10 @@ export default function CalendarPage(props: Readonly<Props>) {
             const nextMonthNumber: number = currentMonthNumber + 1
             nextYearMonth = nextMonthNumber.toString()+"-"+currentYear
         } else {
-
             const nextYearNumber: number = parseInt(currentYear) + 1
             nextYearMonth = `01-` + nextYearNumber.toString()
         }
-        axios.get(`/api/calendar/${nextYearMonth}`)
+        axios.get(`/api/calendar?year=${2024}&month=${10}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
     }

@@ -21,10 +21,8 @@ public class CalendarController {
         return calendarService.getVocabsOfMonth(YearMonth.now());
     }
 
-    @GetMapping("/{month}")
-    public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam YearMonth month){
-        return calendarService.getVocabsOfMonth(month);
+    @GetMapping("?year={year}&month={month}")
+    public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam String month, @RequestParam String year){
+        return calendarService.getVocabsOfMonth(month, year);
     }
-
-    // request param muss string sein
 }

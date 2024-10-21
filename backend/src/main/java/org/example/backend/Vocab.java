@@ -18,19 +18,30 @@ public class Vocab {
     String translation;
     String info;
     String language;
-    List<String> reviewDates;
+    List<LocalDate> reviewDates;
 
-    public List<String> generateDates(LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E-dd-MM-yyyy");
-        List<String> reviewDates = new ArrayList();
+    public List<LocalDate> generateDates(LocalDate date) {
+        List<LocalDate> reviewDates = new ArrayList();
         int daysToAdd = 0;
         for (int i = 1; i < 20; i++) {
             LocalDate newDate = date.plusDays(daysToAdd);
-            reviewDates.add(newDate.format(formatter));
+            reviewDates.add(newDate);
             daysToAdd += i;
         }
         return reviewDates;
     }
+
+//    public List<String> generateDates(LocalDate date) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E-dd-MM-yyyy");
+//        List<String> reviewDates = new ArrayList();
+//        int daysToAdd = 0;
+//        for (int i = 1; i < 20; i++) {
+//            LocalDate newDate = date.plusDays(daysToAdd);
+//            reviewDates.add(newDate.format(formatter));
+//            daysToAdd += i;
+//        }
+//        return reviewDates;
+//    }
 
 
 
