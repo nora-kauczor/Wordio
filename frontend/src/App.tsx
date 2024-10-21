@@ -75,16 +75,16 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    useEffect(() => {
-        if (!userName) {
-            navigate("/login")
-        }
-    }, [navigate, userName]);
+    // useEffect(() => {
+    //     if (!userName) {
+    //         navigate("/login")
+    //     }
+    // }, [navigate, userName]);
 
     useEffect(() => {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
-            .then(()=> navigate("/"))
+            // .then(()=> navigate("/"))
             .catch(error => console.error(error))
     }, []);
 

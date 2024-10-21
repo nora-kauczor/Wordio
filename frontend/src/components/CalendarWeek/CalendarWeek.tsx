@@ -3,7 +3,7 @@ import CalendarDay from "../CalendarDay/CalendarDay.tsx";
 import {
     VocabIdsOfDate
 } from "../../types/VocabsIdsOfDate.ts";
-type Props = {
+type Props = {m run dev
     vocabIdsOfWeek: VocabIdsOfDate[]
     openDayPopUpAndPassItVocabs: (vocabIdsOfDate: VocabIdsOfDate) => void
 }

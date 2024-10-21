@@ -9,7 +9,7 @@ import {
 import {Vocab} from "../../types/Vocab.ts";
 import DayPopUp
     from "../../components/DayPopUp/DayPopUp.tsx";
-
+import { uid } from 'uid';
 
 type Props = {
     vocabs: Vocab[]
@@ -19,14 +19,14 @@ export default function CalendarPage(props: Readonly<Props>) {
     const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
 
-    function getVocabIdsOfMonth() {
+    function getVocabIdsOfYearMonth() {
         axios.get("/api/calendar/current-month")
-            .then(response => console.log(response.data))
+            .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
     }
 
     useEffect(() => {
-        getVocabIdsOfMonth()
+        getVocabIdsOfYearMonth()
     }, []);
 
 
@@ -53,6 +53,7 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
 
+
     return (
         <div id={"calendar-page"}>
             <div id={"button-container"}>
@@ -62,6 +63,7 @@ export default function CalendarPage(props: Readonly<Props>) {
             </div>
             {vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
                 <CalendarWeek
+                    key={uid()}
                     vocabIdsOfWeek={vocabIdsOfWeek}
                     openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
             {vocabsOfDayPopUp.length > 0 &&
