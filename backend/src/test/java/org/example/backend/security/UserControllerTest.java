@@ -22,7 +22,6 @@ class UserControllerTest {
     @Autowired
     private UserRepo userRepo;
 
-
     @DirtiesContext
     @Test
     void getUser_shouldReturn200AndUserObject_whenCalled_ifUserIsLoggedIn() throws Exception {
