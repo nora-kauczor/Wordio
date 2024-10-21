@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,7 +27,7 @@ class UserControllerTest {
 
     @DirtiesContext
     @Test
-    void getUser_shouldReturn200AndUserObject_ifUserIsLoggedIn_whenCalled() throws Exception {
+    void getUser_shouldReturn200AndUserObject_whenCalled_ifUserIsLoggedIn() throws Exception {
         AppUser testUser = new AppUser("user", "Hans", null, null);
         userRepo.save(testUser);
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth")
@@ -39,16 +40,13 @@ class UserControllerTest {
 
     }
 
-    @Disabled
     @DirtiesContext
     @Test
-    void getUser_shouldReturn302AndDummyUserObject_ifUserIsLoggedIn_whenCalled() throws Exception {
-        AppUser testUser = new AppUser("user", "Hans", null, null);
-        userRepo.save(testUser);
+    void getUser_shouldReturn200AndDummyUserObject_whenCalled_ifUserIsNotLoggedIn() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth"))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {"id":"NotFound","name":"anonymousUser","avatarUrl":null,"authority":null}
+                        {"id":"NotFound","name":"","avatarUrl":null,"authority":null}
                         """))
         ;
 

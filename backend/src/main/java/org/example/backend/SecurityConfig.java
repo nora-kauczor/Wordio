@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/vocab").authenticated()
                         .requestMatchers("/api/vocab/login").permitAll()
+                        .requestMatchers("/api/vocab/auth").permitAll()
                         .requestMatchers("/api/vocab/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(
@@ -69,7 +70,8 @@ public class SecurityConfig {
                 return userRepo.save(newAppUser);
             });
 
-            return new DefaultOAuth2User(List.of(new SimpleGrantedAuthority(appUser.authority())), oAuth2User.getAttributes(), "id");
+            return new DefaultOAuth2User(List.of(new SimpleGrantedAuthority(
+                    appUser.authority())), oAuth2User.getAttributes(), "id");
         };
 
     }
