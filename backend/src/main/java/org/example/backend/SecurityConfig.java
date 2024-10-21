@@ -68,7 +68,8 @@ public class SecurityConfig {
                 );
                 return userRepo.save(newAppUser);
             });
-            return new DefaultOAuth2User(List.of(new SimpleGrantedAuthority(appUser.authority())), oAuth2User.getAttributes(), "login");
+
+            return new DefaultOAuth2User(List.of(new SimpleGrantedAuthority(appUser.authority())), oAuth2User.getAttributes(), "id");
         };
 
     }

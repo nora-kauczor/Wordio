@@ -69,22 +69,30 @@ function App() {
 
     function logout (){
         setUserName("")
-        // navigate("/login") //TODO geht das hier so?
         const host = window.location.host ===
         'localhost:5173' ? 'http://localhost:8080' : window.location.origin
-        window.open(host + '/api/vocab/logout', '_self')
+        window.open(host + '/api/auth/logout', '_self')
     }
 
-    axios.get("/api/vocab/auth")
-        .then(response => console.log(response.data))
-        .catch(error => console.error(error))
+    useEffect(() => {
+        if (!userName) {
+            navigate("/login")
+        }
+    }, [navigate, userName]);
+
+    useEffect(() => {
+        axios.get("/api/vocab/auth")
+            .then(response => setUserName(response.data.name))
+            .then(()=> navigate("/"))
+            .catch(error => console.error(error))
+    }, []);
 
     return (
         <div id={"app"}>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
-        <button onClick={logout}>logout</button>
-            <p>Your are logged in as {userName}</p>
+            {userName && <button onClick={logout}>logout</button>}
+            {userName && <p>Your are logged in as {userName}</p>}
             <Routes>
                 <Route path={"/login"}
                        element={<LoginPage setUserName={setUserName}/>}></Route>
