@@ -73,11 +73,11 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    // function editVocab(editedVocab: Vocab): void {
-    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-    //         .then(response => console.log(response.data))
-    //         .catch(error => console.error(error))
-    // }
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
 
     function activateVocab(_id: string): void {
         axios.get(`api/vocab/activate/${_id}`)
@@ -129,7 +129,7 @@ function App() {
                 <Route path={"/review"}
                        element={<ReviewPage
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
-                           todaysVocabs={todaysVocabs}/>}></Route>
+                           vocabsLeftToReview={vocabsLeftToReview}/>}></Route>
                 {vocabs.length > 0 &&
                     <Route path={"/backlog"}
                            element={<BacklogPage
