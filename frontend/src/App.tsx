@@ -15,21 +15,25 @@ import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import useLocalStorageState from "use-local-storage-state"
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
+    const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState("vocabsLeftToReview", {defaultValue: []})
+
+    useEffect(() => {
+        getAllVocabs()
+    }, []);
+
 
     function getAllVocabs() {
         axios.get("/api/vocab")
             .then(response => setVocabs(response.data))
+            .then(() => getTodaysVocabs())
             .catch(error => console.error(error))
     }
-
-    // useEffect(() => {
-    //     getAllVocabs()
-    // }, []);
 
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
@@ -40,34 +44,35 @@ function App() {
         return vocabs.filter(vocab => vocab.reviewDates.includes(today))
     }
 
-    function getVocab(_id: string): void {
-        axios.get(`api/vocab/${_id}`)
-            .then(response => console.log("fetched with getVocab:", response.data))
-            .catch(error => console.error(error))
-    }
+    // function getVocab(_id: string): void {
+    //     axios.get(`api/vocab/${_id}`)
+    //         .then(response => console.log("fetched with getVocab:", response.data))
+    //         .catch(error => console.error(error))
+    // }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
-            .then(response => console.log(response.data))
+            .then(() => console.log(`Vocab ${_id} successfully deleted.`))
+            .then(() => getAllVocabs())
             .catch(error => console.error(error))
     }
 
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
+    // function editVocab(editedVocab: Vocab): void {
+    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+    //         .then(response => console.log(response.data))
+    //         .catch(error => console.error(error))
+    // }
 
     function activateVocab(_id: string): void {
         axios.get(`api/vocab/activate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully activated.`))
-            .then(() => getVocab("670bc0ba64630f6a589cd2d4"))
+            .then(() => getAllVocabs())
             .catch(error => console.error(error))
     }
 
     const navigate = useNavigate();
 
-    function logout (){
+    function logout() {
         setUserName("")
         const host = window.location.host ===
         'localhost:5173' ? 'http://localhost:8080' : window.location.origin
@@ -83,7 +88,7 @@ function App() {
     useEffect(() => {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
-            .then(()=> navigate("/"))
+            .then(() => navigate("/"))
             .catch(error => console.error(error))
     }, []);
 
@@ -91,11 +96,14 @@ function App() {
         <div id={"app"}>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
-            {userName && <button onClick={logout}>logout</button>}
-            {userName && <p>Your are logged in as {userName}</p>}
+            {userName &&
+                <button onClick={logout}>logout</button>}
+            {userName &&
+                <p>Your are logged in as {userName}</p>}
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage setUserName={setUserName}/>}></Route>
+                       element={<LoginPage
+                           setUserName={setUserName}/>}></Route>
                 <Route path={"/"}
                        element={<HomePage/>}></Route>
                 {vocabs.length > 0 &&

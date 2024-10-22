@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
-    const [vocabsLeftToReview, setVocabsLeftToReview] = useState<Vocab[]>(props.todaysVocabs)
+
     const [currentVocab, setCurrentVocab] = useState<Vocab>(vocabsLeftToReview[0])
 
 
