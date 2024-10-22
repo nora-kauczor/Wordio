@@ -23,6 +23,6 @@ public class CalendarController {
 
     @GetMapping("/other-month")
     public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam String month, @RequestParam String year){
-        return calendarService.getVocabsOfMonth2(month, year);
+        return calendarService.getVocabsOfMonth(month, year);
     }
 }
