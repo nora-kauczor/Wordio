@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.YearMonth;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/calendar")
@@ -17,12 +16,12 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping("/current-month")
-    public VocabIdsOfDate[][] getVocabsOfCurrentMonth(){
+    public VocabIdsOfDate[][] getVocabsOfCurrentMonth() {
         return calendarService.getVocabsOfMonth(YearMonth.now());
     }
 
     @GetMapping("/other-month")
-    public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam String month, @RequestParam String year){
-        return calendarService.getVocabsOfMonth(month, year);
+    public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam String month, @RequestParam String year) {
+        return calendarService.getVocabsOfMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)));
     }
 }
