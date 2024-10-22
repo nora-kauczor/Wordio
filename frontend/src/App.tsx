@@ -22,17 +22,29 @@ function App() {
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState("vocabsLeftToReview", {defaultValue: []})
+    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState("todaysVocabs", {defaultValue: []})
 
     useEffect(() => {
         getAllVocabs()
     }, []);
 
-
-    function getAllVocabs() {
+    function getAllVocabs(): void {
         axios.get("/api/vocab")
             .then(response => setVocabs(response.data))
-            .then(() => getTodaysVocabs())
+            .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
+    }
+
+    function updateVocabsLeftToReview():void {
+        const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
+        // delete vocabs that have been deleted from today's
+        const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview.filter(vocabToReview => updatedTodaysVocabs.find(vocabFromTodays => vocabFromTodays._id === vocabToReview._id))
+        // get vocabs that are new
+        const newVocabs: Vocab[] = updatedTodaysVocabs.filter(vocabFromUpdatedOnes => todaysVocabs.find(vocabFromOldOnes => vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
+        const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
+        setVocabsLeftToReview(updatedVocabsToReview)
+        // only update today's vocabs after the above comparison
+        setTodaysVocabs(updatedTodaysVocabs)
     }
 
     function getTodaysVocabs(): Vocab[] {
