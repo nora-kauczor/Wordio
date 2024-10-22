@@ -1,5 +1,5 @@
  export type VocabIdsOfDate =
  {
-     date:string
-     vocabIds: string[]
+     date:string | null
+     vocabIds: string[] | null
  }
