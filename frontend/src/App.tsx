@@ -21,8 +21,8 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
-    const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState("vocabsLeftToReview", {defaultValue: []})
-    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState("todaysVocabs", {defaultValue: []})
+    const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>("vocabsLeftToReview", {defaultValue: []})
+    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>("todaysVocabs", {defaultValue: []})
 
     useEffect(() => {
         getAllVocabs()
@@ -45,6 +45,10 @@ function App() {
         setVocabsLeftToReview(updatedVocabsToReview)
         // only update today's vocabs after the above comparison
         setTodaysVocabs(updatedTodaysVocabs)
+    }
+
+    function removeVocabFromVocabsToReview(_id:string):void{
+        setVocabsLeftToReview(vocabsLeftToReview.filter(vocab => vocab._id === _id))
     }
 
     function getTodaysVocabs(): Vocab[] {
@@ -124,7 +128,8 @@ function App() {
                             vocabs={vocabs}/>}></Route>}
                 <Route path={"/review"}
                        element={<ReviewPage
-                           todaysVocabs={getTodaysVocabs()}/>}></Route>
+                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
+                           todaysVocabs={todaysVocabs}/>}></Route>
                 {vocabs.length > 0 &&
                     <Route path={"/backlog"}
                            element={<BacklogPage

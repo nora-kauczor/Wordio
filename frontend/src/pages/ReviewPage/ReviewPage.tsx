@@ -5,7 +5,8 @@ import CardContainer
 import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
-    todaysVocabs: Vocab[]
+    vocabsLeftToReview: Vocab[]
+    removeVocabFromVocabsToReview: (_id:string) => void
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
