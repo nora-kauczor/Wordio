@@ -82,13 +82,6 @@ class CalendarServiceTest {
 
         };
         VocabIdsOfDate[][] actual = calendarService.getVocabsOfMonth(YearMonth.of(2024, 10));
-        for (VocabIdsOfDate[] vocabIdsOfDates : actual) {
-            for (VocabIdsOfDate vocabIdsOfDate : vocabIdsOfDates) {
-                System.out.print(vocabIdsOfDate + " ");
-            }
-            System.out.println();
-        }
-
         assertArrayEquals(expected[0], actual[0]);
     }
 
