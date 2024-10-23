@@ -27,9 +27,10 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    // useEffect(() => {
-    //     getAllVocabs()
-    // }, []);
+    useEffect(() => {
+        getAllVocabs()
+    }, []);
+
 
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
@@ -83,7 +84,7 @@ function App() {
     useEffect(() => {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
-            .then(()=> navigate("/"))
+            // .then(()=> navigate("/"))
             .catch(error => console.error(error))
     }, []);
 
@@ -98,10 +99,9 @@ function App() {
                        element={<LoginPage setUserName={setUserName}/>}></Route>
                 <Route path={"/"}
                        element={<HomePage/>}></Route>
-                {vocabs.length > 0 &&
+
                     <Route path={"/calendar"} element={
-                        <CalendarPage
-                            vocabs={vocabs}/>}></Route>}
+                        <CalendarPage vocabs={vocabs}/>}></Route>
                 <Route path={"/review"}
                        element={<ReviewPage
                            todaysVocabs={getTodaysVocabs()}/>}></Route>
