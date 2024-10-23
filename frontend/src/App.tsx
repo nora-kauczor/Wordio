@@ -75,11 +75,6 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    useEffect(() => {
-        if (!userName) {
-            navigate("/login")
-        }
-    }, [navigate, userName]);
 
     useEffect(() => {
         axios.get("/api/vocab/auth")
@@ -98,8 +93,7 @@ function App() {
                 <Route path={"/login"}
                        element={<LoginPage setUserName={setUserName}/>}></Route>
                 <Route path={"/"}
-                       element={<HomePage/>}></Route>
-
+                       element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}/>}></Route>
                     <Route path={"/calendar"} element={
                         <CalendarPage vocabs={vocabs}/>}></Route>
                 <Route path={"/review"}
