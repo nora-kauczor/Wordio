@@ -9,9 +9,9 @@ import {
 import {Vocab} from "../../types/Vocab.ts";
 import DayPopUp
     from "../../components/DayPopUp/DayPopUp.tsx";
-import { uid } from 'uid';
+import {uid} from 'uid';
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
+
 
 type Props = {
     vocabs: Vocab[]
@@ -20,47 +20,80 @@ type Props = {
 export default function CalendarPage(props: Readonly<Props>) {
     const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
+    const [monthHeader, setMonthHeader] = useState<string>("")
 
     useEffect(() => {
-        const today = new Date();
-        const year = today.getFullYear().toString();
-        const month = today.getMonth().toString();
-        const vocabIds:VocabIdsOfDate[] = getVocabIdsOfYearMonth(month, year)
-        setVocabIdsOfYearMonth(vocabIds)
+        getVocabIdsOfCurrentYearMonth()
     }, []);
 
-    async function getVocabIdsOfYearMonth(month: string, year: string): VocabIdsOfDate[] {
-        try {
-            const response = await axios.get(`/api/calendar?year=${year}&month=${month}`)
-            return response.data
-        } catch {
-            console.error(error)
-            return [];
-        }
+    if (vocabIdsOfYearMonth.length === 0) {
+        return <p>Loading calendar...</p>
+    }
+
+    async function getVocabIdsOfCurrentYearMonth() {
+        const today = new Date();
+        const year = today.getFullYear().toString();
+        const month = (today.getMonth() + 1).toString();
+        console.log(month)
+        setMonthHeader(getMonthHeader(month, year))
+        axios.get(`/api/calendar?year=${year}&month=${month}`)
+            .then(response => setVocabIdsOfYearMonth(response.data))
+            .catch(error => console.error(error))
+    }
+
+    function getCurrentlyDisplayedYear():number{
+        if (vocabIdsOfYearMonth.length === 0 || !vocabIdsOfYearMonth[1].date) {return 0}
+        const currentYear: string | undefined = vocabIdsOfYearMonth[1].date?.substring(11, 14)
+        return parseInt(currentYear)
+    }
+
+    function getCurrentlyDisplayedMonth():number{
+        if (vocabIdsOfYearMonth.length === 0 || !vocabIdsOfYearMonth[1].date) {return 0}
+        const currentMonth: string | undefined = vocabIdsOfYearMonth[1].date?.substring(8, 9)
+        return parseInt(currentMonth)
     }
 
     function goToNextYearMonth() {
-        const currentMonth: string = vocabIdsOfYearMonth[0].date.substring(8, 9)
-        const currentYear: string = vocabIdsOfYearMonth[0].date.substring(11, 14)
-        const currentMonthNumber: number = parseInt(currentMonth)
-        const currentYearNumber: number = parseInt(currentYear)
-        const month: string = currentMonthNumber < 11 ? (currentMonthNumber + 1).toString() : "0"
-        const year: string = currentMonthNumber < 11 ? currentYear : (currentYearNumber + 1).toString()
-        const vocabIds:VocabIdsOfDate[] = getVocabIdsOfYearMonth(month, year)
-        setVocabIdsOfYearMonth(vocabIds)
+        const currentMonthNumber: number = getCurrentlyDisplayedMonth()
+        const currentYearNumber: number = getCurrentlyDisplayedYear()
+        const month: string = currentMonthNumber < 11 ? (currentMonthNumber + 1).toString() : "1"
+        const year: string | undefined = currentMonthNumber < 11 ? currentYearNumber.toString() : (currentYearNumber + 1).toString()
+
+        console.log(year)
+        axios.get(`/api/calendar?year=${year}&month=${month}`)
+            .then(response => setVocabIdsOfYearMonth(response.data))
+            .catch(error => console.error(error))
+        setMonthHeader(getMonthHeader(month, year))
+    }
+
+    function getMonthHeader(month:string, year:string): string {
+        if (vocabIdsOfYearMonth.length === 0) {return ""}
+        const months: string[] = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+        return months[Number(month)-1]+" "+year
     }
 
     function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
-        const ids: string[] = vocabIdsOfDate.vocabIds;
-        const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids.includes(vocab._id))
+        const ids: string[] | null = vocabIdsOfDate.vocabIds;
+        const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids?.includes(vocab._id))
         setVocabsOfDayPopUp(vocabs)
     }
 
     function closeDayPopUp(): void {
         setVocabsOfDayPopUp([])
     }
-
-
 
     return (
         <div id={"calendar-page"}>
@@ -69,7 +102,8 @@ export default function CalendarPage(props: Readonly<Props>) {
                 <button onClick={goToNextYearMonth}>next
                 </button>
             </div>
-            {vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
+            <h2>{monthHeader}</h2>
+            {vocabIdsOfYearMonth.length > 0 && vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
                 <CalendarWeek
                     key={uid()}
                     vocabIdsOfWeek={vocabIdsOfWeek}
