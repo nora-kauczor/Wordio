@@ -39,15 +39,22 @@ export default function CalendarPage(props: Readonly<Props>) {
             .catch(error => console.error(error))
     }
 
-    function goToNextYearMonth() {
+    function changeMonth(buttonPressed: string) {
         const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(0, 4)
-        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5,9)
+        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5, 9)
         const currentMonthNumber: number = parseInt(currentMonth)
         const currentYearNumber: number = parseInt(currentYear)
-        console.log(currentMonthNumber)
-        const month: string = currentMonthNumber < 12 ? (currentMonthNumber + 1).toString() : "1"
-        const year: string | undefined = currentMonthNumber < 12 ? currentYearNumber.toString() : (currentYearNumber + 1).toString()
-        axios.get(`/api/calendar?year=${year}&month=${month}`)
+        let month: number = 0
+        let year: number = 0
+        if (buttonPressed === "previous") {
+            month = currentMonthNumber > 1 ? (currentMonthNumber - 1) : 12
+            year = currentMonthNumber > 1 ? currentYear : (currentYearNumber - 1)
+        }
+      else {
+            month = currentMonthNumber < 12 ? (currentMonthNumber + 1) : 1
+            year = currentMonthNumber < 12 ? currentYearNumber : (currentYearNumber + 1)
+        }
+        axios.get(`/api/calendar?year=${year.toString()}&month=${month.toString()}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
         setMonthHeader(getMonthHeader(month, year))
@@ -87,8 +94,12 @@ export default function CalendarPage(props: Readonly<Props>) {
     return (
         <div id={"calendar-page"}>
             <div id={"button-container"}>
-                <button>previous</button>
-                <button onClick={goToNextYearMonth}>next
+                <button
+                    onClick={() => changeMonth("previous")}
+                    onKeyDown={() => changeMonth("previous")}>previous
+                </button>
+                <button onClick={() => changeMonth("next")}
+                        onKeyDown={() => changeMonth("next")}>next
                 </button>
             </div>
             <h2>{monthHeader}</h2>
