@@ -19,6 +19,7 @@ type Props = {
 export default function CalendarPage(props: Readonly<Props>) {
     const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
+    const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
     const [monthHeader, setMonthHeader] = useState<string>("")
 
     useEffect(() => {
@@ -82,6 +83,8 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
     function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
+       if (!vocabIdsOfDate.date){return}
+        setDayOfDayPopUp(vocabIdsOfDate.date)
         const ids: string[] | null = vocabIdsOfDate.vocabIds;
         const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids?.includes(vocab._id))
         setVocabsOfDayPopUp(vocabs)
@@ -89,6 +92,7 @@ export default function CalendarPage(props: Readonly<Props>) {
 
     function closeDayPopUp(): void {
         setVocabsOfDayPopUp([])
+        setDayOfDayPopUp("")
     }
 
     return (
@@ -103,13 +107,17 @@ export default function CalendarPage(props: Readonly<Props>) {
                 </button>
             </div>
             <h2>{monthHeader}</h2>
+            <article id={"weeks-wrapper"}>
             {vocabIdsOfYearMonth.length > 0 && vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
                 <CalendarWeek
                     key={uid()}
                     vocabIdsOfWeek={vocabIdsOfWeek}
                     openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
+            </article>
             {vocabsOfDayPopUp.length > 0 &&
-                <DayPopUp vocabsOfDay={vocabsOfDayPopUp}
+                <DayPopUp
+                day={dayOfDayPopUp}
+                    vocabsOfDay={vocabsOfDayPopUp}
                           closeDayPopUp={closeDayPopUp}/>}
         </div>
     )

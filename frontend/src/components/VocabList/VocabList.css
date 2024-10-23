@@ -1,0 +1,13 @@
+#vocab-list {
+    list-style: none;
+    color: inherit;
+    font: inherit;
+    width: 100%;
+    margin: 0;
+    padding: 0
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-around;
+}

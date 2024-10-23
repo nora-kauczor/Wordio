@@ -1,5 +1,5 @@
 import {Vocab} from "../../types/Vocab.ts";
-
+import './VocabList.css'
 type Props = {
     vocabs: Vocab[]
 
