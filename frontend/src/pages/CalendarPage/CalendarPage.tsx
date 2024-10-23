@@ -10,7 +10,6 @@ import {Vocab} from "../../types/Vocab.ts";
 import DayPopUp
     from "../../components/DayPopUp/DayPopUp.tsx";
 import {uid} from 'uid';
-import {Simulate} from "react-dom/test-utils";
 
 
 type Props = {
@@ -34,40 +33,30 @@ export default function CalendarPage(props: Readonly<Props>) {
         const today = new Date();
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
-        console.log(month)
         setMonthHeader(getMonthHeader(month, year))
         axios.get(`/api/calendar?year=${year}&month=${month}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
-    }
-
-    function getCurrentlyDisplayedYear():number{
-        if (vocabIdsOfYearMonth.length === 0 || !vocabIdsOfYearMonth[1].date) {return 0}
-        const currentYear: string | undefined = vocabIdsOfYearMonth[1].date?.substring(11, 14)
-        return parseInt(currentYear)
-    }
-
-    function getCurrentlyDisplayedMonth():number{
-        if (vocabIdsOfYearMonth.length === 0 || !vocabIdsOfYearMonth[1].date) {return 0}
-        const currentMonth: string | undefined = vocabIdsOfYearMonth[1].date?.substring(8, 9)
-        return parseInt(currentMonth)
     }
 
     function goToNextYearMonth() {
-        const currentMonthNumber: number = getCurrentlyDisplayedMonth()
-        const currentYearNumber: number = getCurrentlyDisplayedYear()
-        const month: string = currentMonthNumber < 11 ? (currentMonthNumber + 1).toString() : "1"
-        const year: string | undefined = currentMonthNumber < 11 ? currentYearNumber.toString() : (currentYearNumber + 1).toString()
-
-        console.log(year)
+        const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(0, 4)
+        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5,9)
+        const currentMonthNumber: number = parseInt(currentMonth)
+        const currentYearNumber: number = parseInt(currentYear)
+        console.log(currentMonthNumber)
+        const month: string = currentMonthNumber < 12 ? (currentMonthNumber + 1).toString() : "1"
+        const year: string | undefined = currentMonthNumber < 12 ? currentYearNumber.toString() : (currentYearNumber + 1).toString()
         axios.get(`/api/calendar?year=${year}&month=${month}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
         setMonthHeader(getMonthHeader(month, year))
     }
 
-    function getMonthHeader(month:string, year:string): string {
-        if (vocabIdsOfYearMonth.length === 0) {return ""}
+    function getMonthHeader(month: string, year: string): string {
+        if (vocabIdsOfYearMonth.length === 0) {
+            return ""
+        }
         const months: string[] = [
             "January",
             "February",
@@ -82,7 +71,7 @@ export default function CalendarPage(props: Readonly<Props>) {
             "November",
             "December"
         ];
-        return months[Number(month)-1]+" "+year
+        return months[Number(month) - 1] + " " + year
     }
 
     function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
