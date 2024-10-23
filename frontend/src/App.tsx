@@ -27,11 +27,11 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    // useEffect(() => {
-    //     getAllVocabs()
-    // }, []);
+    useEffect(() => {
+        getAllVocabs()
+    }, []);
 
-    // TODO anpassen an Datumsformat
+
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
         const year = date.getFullYear();
@@ -75,11 +75,11 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    // useEffect(() => {
-    //     if (!userName) {
-    //         navigate("/login")
-    //     }
-    // }, [navigate, userName]);
+    useEffect(() => {
+        if (!userName) {
+            navigate("/login")
+        }
+    }, [navigate, userName]);
 
     useEffect(() => {
         axios.get("/api/vocab/auth")
@@ -101,7 +101,7 @@ function App() {
                        element={<HomePage/>}></Route>
 
                     <Route path={"/calendar"} element={
-                        <CalendarPage/>}></Route>
+                        <CalendarPage vocabs={vocabs}/>}></Route>
                 <Route path={"/review"}
                        element={<ReviewPage
                            todaysVocabs={getTodaysVocabs()}/>}></Route>
