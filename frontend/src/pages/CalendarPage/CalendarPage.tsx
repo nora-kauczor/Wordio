@@ -91,6 +91,7 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
     function closeDayPopUp(): void {
+        console.log("closeDayPopUp was clicked")
         setVocabsOfDayPopUp([])
         setDayOfDayPopUp("")
     }

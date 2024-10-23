@@ -12,8 +12,8 @@ export default function DayPopUp(props: Readonly<Props>) {
         +props.day.substring(5,7)+"."+props.day.substring(0,4)
     return(<div id={"day-popup"}>
             <h3>{displayDate}</h3>
-        <VocabList vocabs={props.vocabsOfDay}/>
-            <button>close</button>
+        <VocabList vocabs={props.vocabsOfDay} calendarMode={true}/>
+            <button onClick={props.closeDayPopUp}>close</button>
         </div>
     )
 
