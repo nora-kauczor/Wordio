@@ -26,7 +26,7 @@ public class CalendarService {
         return vocabsOfMonth;
     }
 
-    public List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth) {
+    private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth) {
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
         for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
             LocalDate day = yearMonth.atDay(i);
@@ -44,18 +44,18 @@ public class CalendarService {
         return new VocabIdsOfDate(date, ids);
     }
 
-    public VocabIdsOfDate[][] createEmptyCalendar() {
+   private VocabIdsOfDate[][] createEmptyCalendar() {
         return new VocabIdsOfDate[5][7];
     }
 
-    public void fillWeek1(VocabIdsOfDate[][] vocabsOfMonth, List<VocabIdsOfDate> idsAndDates, int calendarIndexOfFirstDay) {
+   private void fillWeek1(VocabIdsOfDate[][] vocabsOfMonth, List<VocabIdsOfDate> idsAndDates, int calendarIndexOfFirstDay) {
         for (int i = calendarIndexOfFirstDay; i < 7; i++) {
             vocabsOfMonth[0][i] = idsAndDates.getFirst();
             idsAndDates.removeFirst();
         }
     }
 
-    public void fillWeek2To4(VocabIdsOfDate[][] vocabsOfMonth, List<VocabIdsOfDate> idsAndDates) {
+    private void fillWeek2To4(VocabIdsOfDate[][] vocabsOfMonth, List<VocabIdsOfDate> idsAndDates) {
         for (int z = 1; z < 4; z++) {
             for (int i = 0; i < 7; i++) {
                 vocabsOfMonth[z][i] = idsAndDates.getFirst();
@@ -64,7 +64,7 @@ public class CalendarService {
         }
     }
 
-    public void fillWeek5(VocabIdsOfDate[][] vocabsOfMonth, List<VocabIdsOfDate> idsAndDates) {
+    private void fillWeek5(VocabIdsOfDate[][] vocabsOfMonth, List<VocabIdsOfDate> idsAndDates) {
             for (int i = 0; i < 7; i++) {
                 if (!idsAndDates.isEmpty()) {
                 vocabsOfMonth[4][i] = idsAndDates.getFirst();

@@ -10,6 +10,8 @@ import {Vocab} from "../../types/Vocab.ts";
 import DayPopUp
     from "../../components/DayPopUp/DayPopUp.tsx";
 import { uid } from 'uid';
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 type Props = {
     vocabs: Vocab[]
@@ -19,16 +21,23 @@ export default function CalendarPage(props: Readonly<Props>) {
     const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
 
-    function getVocabIdsOfYearMonth() {
-        axios.get("/api/calendar/current-month")
-            .then(response => setVocabIdsOfYearMonth(response.data))
-            .catch(error => console.error(error))
-    }
-
     useEffect(() => {
-        getVocabIdsOfYearMonth()
+        const today = new Date();
+        const year = today.getFullYear().toString();
+        const month = today.getMonth().toString();
+        const vocabIds:VocabIdsOfDate[] = getVocabIdsOfYearMonth(month, year)
+        setVocabIdsOfYearMonth(vocabIds)
     }, []);
 
+    async function getVocabIdsOfYearMonth(month: string, year: string): VocabIdsOfDate[] {
+        try {
+            const response = await axios.get(`/api/calendar?year=${year}&month=${month}`)
+            return response.data
+        } catch {
+            console.error(error)
+            return [];
+        }
+    }
 
     function goToNextYearMonth() {
         const currentMonth: string = vocabIdsOfYearMonth[0].date.substring(8, 9)
@@ -37,9 +46,8 @@ export default function CalendarPage(props: Readonly<Props>) {
         const currentYearNumber: number = parseInt(currentYear)
         const month: string = currentMonthNumber < 11 ? (currentMonthNumber + 1).toString() : "0"
         const year: string = currentMonthNumber < 11 ? currentYear : (currentYearNumber + 1).toString()
-        axios.get(`/api/calendar?year=${year}&month=${month}`)
-            .then(response => setVocabIdsOfYearMonth(response.data))
-            .catch(error => console.error(error))
+        const vocabIds:VocabIdsOfDate[] = getVocabIdsOfYearMonth(month, year)
+        setVocabIdsOfYearMonth(vocabIds)
     }
 
     function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
