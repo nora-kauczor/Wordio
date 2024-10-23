@@ -6,6 +6,7 @@ import {useState} from "react";
 
 type Props = {
     finishedReviewing: boolean
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default function HomePage(props: Readonly<Props>) {
     const [showPopUp, setShowPopUp] = useState(false)
@@ -25,13 +26,12 @@ export default function HomePage(props: Readonly<Props>) {
                         review</p>}
                 {props.finishedReviewing ? <button
                     onClick={() => navigate("/review")}
-                    onKeyDown={() => navigate("/review")}>Learn
-                    more</button> : <button
+                    onKeyDown={() => navigate("/review")}>New vocabulary</button> : <button
                     onClick={() => setShowPopUp(true)}
                     onKeyDown={() => setShowPopUp(true)}>
                     Review</button>}
             </article>
-            {showPopUp && <NewVocabsPopUp/>}
+            {showPopUp && <NewVocabsPopUp setUseForm={props.setUseForm} setShowPopUp={setShowPopUp}/>}
         </div>
     )
 }

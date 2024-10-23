@@ -93,7 +93,8 @@ function App() {
                 <Route path={"/login"}
                        element={<LoginPage setUserName={setUserName}/>}></Route>
                 <Route path={"/"}
-                       element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}/>}></Route>
+                       element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                                          setUseForm={setUseForm}/>}></Route>
                     <Route path={"/calendar"} element={
                         <CalendarPage vocabs={vocabs}/>}></Route>
                 <Route path={"/review"}
