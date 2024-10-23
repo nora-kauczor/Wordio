@@ -15,6 +15,7 @@ import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import ProtectedRoutes from "./ProtectedRoutes.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -29,6 +30,7 @@ function App() {
 
     useEffect(() => {
         getAllVocabs()
+        getUserName()
     }, []);
 
 
@@ -68,49 +70,54 @@ function App() {
 
     const navigate = useNavigate();
 
-    function logout (){
+    function logout() {
         setUserName("")
         const host = window.location.host ===
         'localhost:5173' ? 'http://localhost:8080' : window.location.origin
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    useEffect(() => {
-        if (!userName) {
-            navigate("/login")
-        }
-    }, [navigate, userName]);
-
-    useEffect(() => {
+    function getUserName():void{
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
-            // .then(()=> navigate("/"))
             .catch(error => console.error(error))
-    }, []);
+    }
+
+    useEffect(() => {
+        if (userName) {
+            navigate("/")
+        }
+    }, [userName]);
+
 
     return (
         <div id={"app"}>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
-            {userName && <button onClick={logout}>logout</button>}
-            {userName && <p>Your are logged in as {userName}</p>}
+            {userName &&
+                <button onClick={logout}>logout</button>}
+            {userName &&
+                <p>Your are logged in as {userName}</p>}
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage setUserName={setUserName}/>}></Route>
-                <Route path={"/"}
-                       element={<HomePage/>}></Route>
-
+                       element={<LoginPage
+                           setUserName={setUserName}/>}></Route>
+                <Route element={<ProtectedRoutes
+                    userName={userName}/>}>
+                    <Route path={"/"}
+                           element={<HomePage/>}></Route>
                     <Route path={"/calendar"} element={
-                        <CalendarPage vocabs={vocabs}/>}></Route>
-                <Route path={"/review"}
-                       element={<ReviewPage
-                           todaysVocabs={getTodaysVocabs()}/>}></Route>
-                {vocabs.length > 0 &&
+                        <CalendarPage
+                            vocabs={vocabs}/>}></Route>
+                    <Route path={"/review"}
+                           element={<ReviewPage
+                               todaysVocabs={getTodaysVocabs()}/>}></Route>
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
-                           />}></Route>}
+                           />}></Route>
+                </Route>
             </Routes>
         </div>
     )

@@ -1,6 +1,5 @@
 import './LoginPage.css'
-import {useEffect} from "react";
-import axios from "axios";
+
 
 type Props ={
     setUserName: React.Dispatch<React.SetStateAction<string>>;
