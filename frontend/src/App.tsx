@@ -16,6 +16,7 @@ import BacklogPage
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Header from "./components/Header/Header.tsx";
+import ProtectedRoutes from "./ProtectedRoutes.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -30,6 +31,7 @@ function App() {
 
     useEffect(() => {
         getAllVocabs()
+        getUserName()
     }, []);
 
 
@@ -69,7 +71,7 @@ function App() {
 
     const navigate = useNavigate();
 
-    function logout (){
+    function logout() {
         setUserName("")
         const host = window.location.host ===
         'localhost:5173' ? 'http://localhost:8080' : window.location.origin
@@ -78,11 +80,19 @@ function App() {
 
 
 
-    useEffect(() => {
+    function getUserName():void{
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
             .catch(error => console.error(error))
-    }, []);
+    }
+
+
+    useEffect(() => {
+        if (userName) {
+            navigate("/")
+        }
+    }, [userName]);
+
 
     return (
         <div id={"app"}>
@@ -91,21 +101,31 @@ function App() {
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage/>}></Route>
+                       element={<LoginPage
+                          />}/>
+                <Route element={<ProtectedRoutes
+                    userName={userName}/>}>
+                    <Route path={"/"}
+                           element={<HomePage/>}/>
+
                 <Route path={"/"}
                        element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
-                                          setUseForm={setUseForm}/>}></Route>
+                                          setUseForm={setUseForm}/>}/>
+
+
                     <Route path={"/calendar"} element={
-                        <CalendarPage vocabs={vocabs}/>}></Route>
-                <Route path={"/review"}
-                       element={<ReviewPage
-                           todaysVocabs={getTodaysVocabs()}/>}></Route>
-                {vocabs.length > 0 &&
+                        <CalendarPage
+                            vocabs={vocabs}/>}/>
+                    <Route path={"/review"}
+                           element={<ReviewPage
+                               todaysVocabs={getTodaysVocabs()}/>}/>
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
-                           />}></Route>}
+                           />}/>
+
+                    </Route>
             </Routes>
         </div>
     )
