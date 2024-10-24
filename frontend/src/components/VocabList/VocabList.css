@@ -1,0 +1,27 @@
+#vocab-list {
+    list-style: none;
+    color: inherit;
+    font: inherit;
+    width: 100%;
+    margin: 0;
+    padding: 0
+
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-around;
+    background-color: lightblue;
+    margin: 15px;
+}
+
+.list-item-word-wrapper
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.list-item-button-wrapper {
+    display: flex;
+}

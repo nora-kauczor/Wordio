@@ -17,7 +17,6 @@ class CalendarServiceTest {
     private final CalendarService calendarService = new CalendarService(mockVocabRepo);
 
 
-    @Disabled
     @Test
     void getVocabsOfMonth() {
         LocalDate date011024 = LocalDate.of(2024, 10, 1);
@@ -86,24 +85,24 @@ class CalendarServiceTest {
     }
 
 
-        @Test
-        void getVocabIdsOfDate () {
-            List<LocalDate> reviewDates = new ArrayList<>(List.of());
-            LocalDate date = LocalDate.of(2024, 10, 18);
-            reviewDates.add(date);
-            List<LocalDate> otherDates = new ArrayList<>(List.of());
-            otherDates.add(LocalDate.of(2024, 10, 16));
-            Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                    "", "Spanish", reviewDates);
-            Vocab testVocab2 = new Vocab("777", "la prueba", "test",
-                    "", "Spanish", reviewDates);
-            Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                    "", "Spanish", otherDates);
-            when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
-            VocabIdsOfDate expected = new VocabIdsOfDate(date, List.of("000", "777"));
-            VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date);
-            assertEquals(expected, actual);
-        }
-
-
+    @Test
+    void getVocabIdsOfDate() {
+        List<LocalDate> reviewDates = new ArrayList<>(List.of());
+        LocalDate date = LocalDate.of(2024, 10, 18);
+        reviewDates.add(date);
+        List<LocalDate> otherDates = new ArrayList<>(List.of());
+        otherDates.add(LocalDate.of(2024, 10, 16));
+        Vocab testVocab1 = new Vocab("000", "la prueba", "test",
+                "", "Spanish", reviewDates);
+        Vocab testVocab2 = new Vocab("777", "la prueba", "test",
+                "", "Spanish", reviewDates);
+        Vocab testVocab3 = new Vocab("222", "la prueba", "test",
+                "", "Spanish", otherDates);
+        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
+        VocabIdsOfDate expected = new VocabIdsOfDate(date, List.of("000", "777"));
+        VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date);
+        assertEquals(expected, actual);
     }
+
+
+}

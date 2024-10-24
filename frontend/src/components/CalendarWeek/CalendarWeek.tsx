@@ -11,7 +11,7 @@ type Props = {
     openDayPopUpAndPassItVocabs: (vocabIdsOfDate: VocabIdsOfDate) => void
 }
 export default function CalendarWeek(props: Readonly<Props>) {
-console.log(props.vocabIdsOfWeek)
+
     return(
         <ul id={"calendar-week"}>
             {props.vocabIdsOfWeek.length > 0 && props.vocabIdsOfWeek.map(vocabIdsOfDate =>
