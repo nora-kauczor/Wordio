@@ -106,17 +106,17 @@ function App() {
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
                     <Route path={"/"}
-                           element={<HomePage/>}></Route>
+                           element={<HomePage/>}/>
 
                 <Route path={"/"}
-                       element={<HomePage/>}></Route>
+                       element={<HomePage/>}/>
 
                     <Route path={"/calendar"} element={
                         <CalendarPage
-                            vocabs={vocabs}/>}></Route>
+                            vocabs={vocabs}/>}/>
                     <Route path={"/review"}
                            element={<ReviewPage
-                               todaysVocabs={getTodaysVocabs()}/>}></Route>
+                               todaysVocabs={getTodaysVocabs()}/>}/>
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
