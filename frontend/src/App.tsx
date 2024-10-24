@@ -15,6 +15,7 @@ import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 
 function App() {
@@ -77,11 +78,14 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
+
+
     function getUserName():void{
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
             .catch(error => console.error(error))
     }
+
 
     useEffect(() => {
         if (userName) {
@@ -92,20 +96,21 @@ function App() {
 
     return (
         <div id={"app"}>
+            <Header userName={userName} logout={logout}/>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
-            {userName &&
-                <button onClick={logout}>logout</button>}
-            {userName &&
-                <p>Your are logged in as {userName}</p>}
             <Routes>
                 <Route path={"/login"}
                        element={<LoginPage
-                           setUserName={setUserName}/>}></Route>
+                          />}></Route>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
                     <Route path={"/"}
                            element={<HomePage/>}></Route>
+
+                <Route path={"/"}
+                       element={<HomePage/>}></Route>
+
                     <Route path={"/calendar"} element={
                         <CalendarPage
                             vocabs={vocabs}/>}></Route>
@@ -116,8 +121,9 @@ function App() {
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
-                           />}></Route>
-                </Route>
+                           />}/>
+
+                    </Route>
             </Routes>
         </div>
     )
