@@ -17,6 +17,7 @@ import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import useLocalStorageState from "use-local-storage-state"
 import Header from "./components/Header/Header.tsx";
+import ProtectedRoutes from "./ProtectedRoutes.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -25,17 +26,17 @@ function App() {
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>("vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>("todaysVocabs", {defaultValue: []})
 
-    useEffect(() => {
-        getAllVocabs()
-    }, []);
-
-    function getAllVocabs(): void {
+    function getAllVocabs() {
         axios.get("/api/vocab")
             .then(response => setVocabs(response.data))
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
     }
 
+    useEffect(() => {
+        getAllVocabs()
+        getUserName()
+    }, []);
 
     function updateVocabsLeftToReview():void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
@@ -99,12 +100,20 @@ function App() {
 
 
 
-    useEffect(() => {
+    function getUserName():void{
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
             .then(() => navigate("/"))
             .catch(error => console.error(error))
-    }, []);
+    }
+
+
+    useEffect(() => {
+        if (userName) {
+            navigate("/")
+        }
+    }, [userName]);
+
 
     return (
         <div id={"app"}>
@@ -113,22 +122,28 @@ function App() {
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage/>}></Route>
-                <Route path={"/"}
-                       element={<HomePage/>}></Route>
+                       element={<LoginPage
+                          />}/>
+                <Route element={<ProtectedRoutes
+                    userName={userName}/>}>
+                    <Route path={"/"}
+                           element={<HomePage/>}/>
+
 
                     <Route path={"/calendar"} element={
-                        <CalendarPage vocabs={vocabs}/>}></Route>
+                        <CalendarPage vocabs={vocabs}/>}/>
                 <Route path={"/review"}
                        element={<ReviewPage
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
-                           vocabsLeftToReview={vocabsLeftToReview}/>}></Route>
-                {vocabs.length > 0 &&
+                           vocabsLeftToReview={vocabsLeftToReview}/>}/>
+
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
-                           />}></Route>}
+                           />}/>
+
+                    </Route>
             </Routes>
         </div>
     )
