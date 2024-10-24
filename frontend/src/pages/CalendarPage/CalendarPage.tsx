@@ -9,7 +9,8 @@ import {
 import {Vocab} from "../../types/Vocab.ts";
 import DayPopUp
     from "../../components/DayPopUp/DayPopUp.tsx";
-import { uid } from 'uid';
+import {uid} from 'uid';
+
 
 type Props = {
     vocabs: Vocab[]
@@ -18,56 +19,106 @@ type Props = {
 export default function CalendarPage(props: Readonly<Props>) {
     const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
-
-    function getVocabIdsOfYearMonth() {
-        axios.get("/api/calendar/current-month")
-            .then(response => setVocabIdsOfYearMonth(response.data))
-            .catch(error => console.error(error))
-    }
+    const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
+    const [monthHeader, setMonthHeader] = useState<string>("")
 
     useEffect(() => {
-        getVocabIdsOfYearMonth()
+        getVocabIdsOfCurrentYearMonth()
     }, []);
 
+    if (vocabIdsOfYearMonth.length === 0) {
+        return <p>Loading calendar...</p>
+    }
 
-    function goToNextYearMonth() {
-        const currentMonth: string = vocabIdsOfYearMonth[0].date.substring(8, 9)
-        const currentYear: string = vocabIdsOfYearMonth[0].date.substring(11, 14)
-        const currentMonthNumber: number = parseInt(currentMonth)
-        const currentYearNumber: number = parseInt(currentYear)
-        const month: string = currentMonthNumber < 11 ? (currentMonthNumber + 1).toString() : "0"
-        const year: string = currentMonthNumber < 11 ? currentYear : (currentYearNumber + 1).toString()
+    async function getVocabIdsOfCurrentYearMonth() {
+        const today = new Date();
+        const year = today.getFullYear().toString();
+        const month = (today.getMonth() + 1).toString();
+        setMonthHeader(getMonthHeader(month, year))
         axios.get(`/api/calendar?year=${year}&month=${month}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
     }
 
+    function changeMonth(buttonPressed: string) {
+        const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(0, 4)
+        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5, 9)
+        const currentMonthNumber: number = parseInt(currentMonth)
+        const currentYearNumber: number = parseInt(currentYear)
+        let month: number = 0
+        let year: number = 0
+        if (buttonPressed === "previous") {
+            month = currentMonthNumber > 1 ? (currentMonthNumber - 1) : 12
+            year = currentMonthNumber > 1 ? currentYear : (currentYearNumber - 1)
+        }
+      else {
+            month = currentMonthNumber < 12 ? (currentMonthNumber + 1) : 1
+            year = currentMonthNumber < 12 ? currentYearNumber : (currentYearNumber + 1)
+        }
+        axios.get(`/api/calendar?year=${year.toString()}&month=${month.toString()}`)
+            .then(response => setVocabIdsOfYearMonth(response.data))
+            .catch(error => console.error(error))
+        setMonthHeader(getMonthHeader(month, year))
+    }
+
+    function getMonthHeader(month: string, year: string): string {
+        if (vocabIdsOfYearMonth.length === 0) {
+            return ""
+        }
+        const months: string[] = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+        return months[Number(month) - 1] + " " + year
+    }
+
     function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
-        const ids: string[] = vocabIdsOfDate.vocabIds;
-        const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids.includes(vocab._id))
+       if (!vocabIdsOfDate.date){return}
+        setDayOfDayPopUp(vocabIdsOfDate.date)
+        const ids: string[] | null = vocabIdsOfDate.vocabIds;
+        const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids?.includes(vocab._id))
         setVocabsOfDayPopUp(vocabs)
     }
 
     function closeDayPopUp(): void {
+        console.log("closeDayPopUp was clicked")
         setVocabsOfDayPopUp([])
+        setDayOfDayPopUp("")
     }
-
-
 
     return (
         <div id={"calendar-page"}>
             <div id={"button-container"}>
-                <button>previous</button>
-                <button onClick={goToNextYearMonth}>next
+                <button
+                    onClick={() => changeMonth("previous")}
+                    onKeyDown={() => changeMonth("previous")}>previous
+                </button>
+                <button onClick={() => changeMonth("next")}
+                        onKeyDown={() => changeMonth("next")}>next
                 </button>
             </div>
-            {vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
+            <h2>{monthHeader}</h2>
+            <article id={"weeks-wrapper"}>
+            {vocabIdsOfYearMonth.length > 0 && vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
                 <CalendarWeek
                     key={uid()}
                     vocabIdsOfWeek={vocabIdsOfWeek}
                     openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
+            </article>
             {vocabsOfDayPopUp.length > 0 &&
-                <DayPopUp vocabsOfDay={vocabsOfDayPopUp}
+                <DayPopUp
+                day={dayOfDayPopUp}
+                    vocabsOfDay={vocabsOfDayPopUp}
                           closeDayPopUp={closeDayPopUp}/>}
         </div>
     )
