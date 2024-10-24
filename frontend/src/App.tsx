@@ -15,6 +15,7 @@ import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import Header from "./components/Header/Header.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -76,22 +77,21 @@ function App() {
     }
 
 
+
     useEffect(() => {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
-            // .then(()=> navigate("/"))
             .catch(error => console.error(error))
     }, []);
 
     return (
         <div id={"app"}>
+            <Header userName={userName} logout={logout}/>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
-            {userName && <button onClick={logout}>logout</button>}
-            {userName && <p>Your are logged in as {userName}</p>}
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage setUserName={setUserName}/>}></Route>
+                       element={<LoginPage/>}></Route>
                 <Route path={"/"}
                        element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
                                           setUseForm={setUseForm}/>}></Route>
