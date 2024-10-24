@@ -1,0 +1,17 @@
+#calendar-day-wrapper {
+    height: 100px;
+    width: 50px;
+
+}
+
+#calendar-day {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 0.75rem;
+    border: 1px solid gray;
+    border-radius: 0;
+    color: black;
+    background-color: var(--secondary-color)
+}

@@ -16,6 +16,7 @@ import BacklogPage
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import useLocalStorageState from "use-local-storage-state"
+import Header from "./components/Header/Header.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -34,6 +35,7 @@ function App() {
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
     }
+
 
     function updateVocabsLeftToReview():void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
@@ -60,11 +62,11 @@ function App() {
         return vocabs.filter(vocab => vocab.reviewDates.includes(today))
     }
 
-    // function getVocab(_id: string): void {
-    //     axios.get(`api/vocab/${_id}`)
-    //         .then(response => console.log("fetched with getVocab:", response.data))
-    //         .catch(error => console.error(error))
-    // }
+    function getVocab(_id: string): void {
+        axios.get(`api/vocab/${_id}`)
+            .then(response => console.log("fetched with getVocab:", response.data))
+            .catch(error => console.error(error))
+    }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -95,11 +97,7 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    useEffect(() => {
-        if (!userName) {
-            navigate("/login")
-        }
-    }, [navigate, userName]);
+
 
     useEffect(() => {
         axios.get("/api/vocab/auth")
@@ -110,22 +108,17 @@ function App() {
 
     return (
         <div id={"app"}>
+            <Header userName={userName} logout={logout}/>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
-            {userName &&
-                <button onClick={logout}>logout</button>}
-            {userName &&
-                <p>Your are logged in as {userName}</p>}
             <Routes>
                 <Route path={"/login"}
-                       element={<LoginPage
-                           setUserName={setUserName}/>}></Route>
+                       element={<LoginPage/>}></Route>
                 <Route path={"/"}
                        element={<HomePage/>}></Route>
-                {vocabs.length > 0 &&
+
                     <Route path={"/calendar"} element={
-                        <CalendarPage
-                            vocabs={vocabs}/>}></Route>}
+                        <CalendarPage vocabs={vocabs}/>}></Route>
                 <Route path={"/review"}
                        element={<ReviewPage
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
