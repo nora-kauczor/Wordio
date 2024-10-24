@@ -102,14 +102,16 @@ function App() {
             <Routes>
                 <Route path={"/login"}
                        element={<LoginPage
-                          />}></Route>
+                          />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
                     <Route path={"/"}
                            element={<HomePage/>}/>
 
                 <Route path={"/"}
-                       element={<HomePage/>}/>
+                       element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                                          setUseForm={setUseForm}/>}/>
+
 
                     <Route path={"/calendar"} element={
                         <CalendarPage
