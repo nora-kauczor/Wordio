@@ -63,11 +63,11 @@ function App() {
         return vocabs.filter(vocab => vocab.reviewDates.includes(today))
     }
 
-    // function getVocab(_id: string): void {
-    //     axios.get(`api/vocab/${_id}`)
-    //         .then(response => console.log("fetched with getVocab:", response.data))
-    //         .catch(error => console.error(error))
-    // }
+    function getVocab(_id: string): void {
+        axios.get(`api/vocab/${_id}`)
+            .then(response => console.log("fetched with getVocab:", response.data))
+            .catch(error => console.error(error))
+    }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -109,11 +109,11 @@ function App() {
     }, [userName]);
 
 
-    // function editVocab(editedVocab: Vocab): void {
-    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-    //         .then(response => console.log(response.data))
-    //         .catch(error => console.error(error))
-    // }
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
 
 
     function changeReviewDates(_id: string | null): void {
@@ -138,8 +138,7 @@ function App() {
 
                     <Route path={"/"}
                            element={<HomePage
-                               // finishedReviewing={vocabsLeftToReview.length < 1}
-                               finishedReviewing={false}
+                               finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}/>}/>
 
                     <Route path={"/calendar"} element={
@@ -155,6 +154,7 @@ function App() {
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
+                               activateVocab={activateVocab}
                            />}/>
 
                 </Route>

@@ -6,12 +6,13 @@ import VocabList
 type Props = {
     vocabs: Vocab[]
     deleteVocab: (_id: string) => void
+    activateVocab: (_id: string) => void
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
 
     return (<div id={"backlog-page"}>
-<VocabList vocabs={props.vocabs} calendarMode={true}/>
+<VocabList vocabs={props.vocabs} calendarMode={true} activateVocab={props.activateVocab} deleteVocab={props.deleteVocab()}/>
     </div>)
 
 }
