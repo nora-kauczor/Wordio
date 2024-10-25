@@ -6,11 +6,13 @@ import axios from "axios";
 export default function Form() {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
+        const formData = new FormData(event.currentTarget)
+
         const newVocab: Vocab = {
-            id: null,
-            word: event.target.word.value,
-            translation: event.target.translation.value,
-            info: event.target.info.value,
+            _id: null,
+            word: formData.get("word") as string,
+            translation: formData.get("translation") as string,
+            info: formData.get("info") as string,
             language: "Spanish",
             reviewDates: []
         }
@@ -21,12 +23,6 @@ export default function Form() {
         axios.post("/api/vocab", newVocab)
             .then(() => console.log("New vocab was successfully created."))
             .catch(error => console.log(error))
-    }
-
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
     }
 
     return (

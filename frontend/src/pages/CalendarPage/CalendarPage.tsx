@@ -17,7 +17,7 @@ type Props = {
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
-    const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
+    const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[] | null>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
     const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
     const [monthHeader, setMonthHeader] = useState<string>("")
@@ -41,6 +41,7 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
     function changeMonth(buttonPressed: string) {
+        if (!vocabIdsOfYearMonth || !vocabIdsOfYearMonth[1][0]) {return}
         const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(0, 4)
         const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5, 9)
         const currentMonthNumber: number = parseInt(currentMonth)

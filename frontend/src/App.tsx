@@ -56,18 +56,18 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
-
-    function activateVocab(_id: string): void {
-        axios.get(`api/vocab/activate/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully activated.`))
-            .then(() => getVocab("670bc0ba64630f6a589cd2d4"))
-            .catch(error => console.error(error))
-    }
+    // function editVocab(editedVocab: Vocab): void {
+    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+    //         .then(response => console.log(response.data))
+    //         .catch(error => console.error(error))
+    // }
+    //
+    // function activateVocab(_id: string): void {
+    //     axios.get(`api/vocab/activate/${_id}`)
+    //         .then(() => console.log(`Vocab ${_id} successfully activated.`))
+    //         .then(() => getVocab("670bc0ba64630f6a589cd2d4"))
+    //         .catch(error => console.error(error))
+    // }
 
     const navigate = useNavigate();
 
@@ -105,11 +105,10 @@ function App() {
                           />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
-                    <Route path={"/"}
-                           element={<HomePage/>}/>
                 <Route path={"/"}
                        element={<HomePage
                            // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                           finishedReviewing={false}
                                           setUseForm={setUseForm}/>}/>
                     <Route path={"/calendar"} element={
                         <CalendarPage
