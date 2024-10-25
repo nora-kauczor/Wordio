@@ -82,7 +82,7 @@ jobs:
     needs: push-to-docker-hub
     environment:
       name: wordio # Capstone Project name
-      url:
+      url: https://wordio.onrender.com
     steps:
       - name: Trigger Render.com Deployment
         run: |
