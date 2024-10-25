@@ -11,7 +11,7 @@ type Props = {
 export default function BacklogPage(props: Readonly<Props>) {
 
     return (<div id={"backlog-page"}>
-<VocabList vocabs={props.vocabs}/>
+<VocabList vocabs={props.vocabs} calendarMode={true}/>
     </div>)
 
 }

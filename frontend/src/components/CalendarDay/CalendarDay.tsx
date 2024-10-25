@@ -17,8 +17,8 @@ export default function CalendarDay(props: Readonly<Props>) {
     return (
         <div id={"calendar-day-wrapper"}>
             {props.vocabIdsOfDate && <button id={"calendar-day"}
-                     onClick={() => props.openDayPopUpAndPassItVocabs(props.vocabIdsOfDate)}
-                     onKeyDown={() => props.openDayPopUpAndPassItVocabs(props.vocabIdsOfDate)}>
+                     onClick={() => props.vocabIdsOfDate && props.openDayPopUpAndPassItVocabs(props.vocabIdsOfDate)}
+                     onKeyDown={() => props.vocabIdsOfDate && props.openDayPopUpAndPassItVocabs(props.vocabIdsOfDate)}>
                 <p> {displayDate}</p>
                 <p>{props.vocabIdsOfDate?.vocabIds?.length} Vocabs</p>
             </button>}
