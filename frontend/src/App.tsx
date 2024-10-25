@@ -107,12 +107,10 @@ function App() {
                     userName={userName}/>}>
                     <Route path={"/"}
                            element={<HomePage/>}/>
-
                 <Route path={"/"}
-                       element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                       element={<HomePage
+                           // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
                                           setUseForm={setUseForm}/>}/>
-
-
                     <Route path={"/calendar"} element={
                         <CalendarPage
                             vocabs={vocabs}/>}/>
