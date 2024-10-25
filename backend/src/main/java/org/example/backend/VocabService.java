@@ -12,6 +12,15 @@ import java.util.NoSuchElementException;
 public class VocabService {
     private final VocabRepo vocabRepo;
 
+    public Vocab changeReviewDates(String _id){
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+        LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
+        vocab.reviewDates = vocab.generateDates(firstDayOfOldReviewDates.plusDays(1));
+        return vocabRepo.save(vocab);
+    }
+
+    // TODO deactivateVocab
+
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         vocab.reviewDates = vocab.generateDates(LocalDate.now());

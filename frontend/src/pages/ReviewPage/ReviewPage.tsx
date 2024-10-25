@@ -3,14 +3,11 @@ import {useEffect, useState} from "react";
 import CardContainer
     from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
-import {useState} from "react";
-import CardContainer
-    from "../../components/CardContainer/CardContainer.tsx";
-import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
     vocabsLeftToReview: Vocab[]
-    removeVocabFromVocabsToReview: (_id: string) => void
+    removeVocabFromVocabsToReview: (_id: string | null) => void
+    refactorReviewDates: (vocab: Vocab) => void
 }
 
 
@@ -20,18 +17,16 @@ export default function ReviewPage(props: Readonly<Props>) {
     const [userInput, setUserInput] = useState<string>("")
 
 
-
-
     useEffect(() => {
         setCurrentVocab(props.vocabsLeftToReview[currentIndex])
     }, [currentIndex]);
 
     function checkAnswer() {
         if (currentVocab.word !== userInput) {
-// shiftStartDateOfReview
+            props.refactorReviewDates(currentVocab)
         }
-        setCurrentIndex(currentIndex++)
-        props.removeVocabFromVocabsToReview(currentVocab)
+        setCurrentIndex(currentIndex + 1)
+        props.removeVocabFromVocabsToReview(currentVocab._id)
     }
 
     return (

@@ -41,17 +41,17 @@ function App() {
     function updateVocabsLeftToReview():void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
         // delete vocabs that have been deleted from today's
-        const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview.filter(vocabToReview => updatedTodaysVocabs.find(vocabFromTodays => vocabFromTodays._id === vocabToReview._id))
+        const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview.filter((vocabToReview:Vocab) => updatedTodaysVocabs.find(vocabFromTodays => vocabFromTodays._id === vocabToReview._id))
         // get vocabs that are new
-        const newVocabs: Vocab[] = updatedTodaysVocabs.filter(vocabFromUpdatedOnes => todaysVocabs.find(vocabFromOldOnes => vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
+        const newVocabs: Vocab[] = updatedTodaysVocabs.filter(vocabFromUpdatedOnes => todaysVocabs.find((vocabFromOldOnes:Vocab )=> vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
         // only update today's vocabs after the above comparison
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
-    function removeVocabFromVocabsToReview(_id:string):void{
-        setVocabsLeftToReview(vocabsLeftToReview.filter(vocab => vocab._id === _id))
+    function removeVocabFromVocabsToReview(_id:string | null):void{
+        setVocabsLeftToReview(vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
     }
 
     function getTodaysVocabs(): Vocab[] {
@@ -77,18 +77,13 @@ function App() {
     }
 
 
-    // function editVocab(editedVocab: Vocab): void {
-    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-    //         .then(response => console.log(response.data))
-    //         .catch(error => console.error(error))
-    // }
-    //
-    // function activateVocab(_id: string): void {
-    //     axios.get(`api/vocab/activate/${_id}`)
-    //         .then(() => console.log(`Vocab ${_id} successfully activated.`))
-    //         .then(() => getAllVocabs())
-    //         .catch(error => console.error(error))
-    // }
+
+    function activateVocab(_id: string): void {
+        axios.get(`api/vocab/activate/${_id}`)
+            .then(() => console.log(`Vocab ${_id} successfully activated.`))
+            .then(() => getAllVocabs())
+            .catch(error => console.error(error))
+    }
 
     const navigate = useNavigate();
 
@@ -116,9 +111,22 @@ function App() {
     }, [userName]);
 
 
+    // function editVocab(editedVocab: Vocab): void {
+    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+    //         .then(response => console.log(response.data))
+    //         .catch(error => console.error(error))
+    // }
+
+// TODO oder mit id???
+    function changeReviewDates(_id:string):void{
+
+
+    }
+
     return (
         <div id={"app"}>
             <Header userName={userName} logout={logout}/>
+            <div style={{height: "60px"}}/>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
@@ -127,24 +135,21 @@ function App() {
                           />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
+
                 <Route path={"/"}
                        element={<HomePage
-                           // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                           // finishedReviewing={vocabsLeftToReview.length < 1}
                            finishedReviewing={false}
                                           setUseForm={setUseForm}/>}/>
+
                     <Route path={"/calendar"} element={
                         <CalendarPage vocabs={vocabs}/>}/>
+
                 <Route path={"/review"}
                        element={<ReviewPage
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsLeftToReview={vocabsLeftToReview}/>}/>
 
-                        <CalendarPage
-                            vocabs={vocabs}/>}/>
-                    <Route path={"/review"}
-                           element={<ReviewPage
-                               // todaysVocabs={getTodaysVocabs()}
-                           />}/>
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
