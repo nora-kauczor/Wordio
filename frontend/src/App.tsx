@@ -63,11 +63,11 @@ function App() {
         return vocabs.filter(vocab => vocab.reviewDates.includes(today))
     }
 
-    function getVocab(_id: string): void {
-        axios.get(`api/vocab/${_id}`)
-            .then(response => console.log("fetched with getVocab:", response.data))
-            .catch(error => console.error(error))
-    }
+    // function getVocab(_id: string): void {
+    //     axios.get(`api/vocab/${_id}`)
+    //         .then(response => console.log("fetched with getVocab:", response.data))
+    //         .catch(error => console.error(error))
+    // }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -76,18 +76,19 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
 
-    function activateVocab(_id: string): void {
-        axios.get(`api/vocab/activate/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully activated.`))
-            .then(() => getAllVocabs())
-            .catch(error => console.error(error))
-    }
+    // function editVocab(editedVocab: Vocab): void {
+    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+    //         .then(response => console.log(response.data))
+    //         .catch(error => console.error(error))
+    // }
+    //
+    // function activateVocab(_id: string): void {
+    //     axios.get(`api/vocab/activate/${_id}`)
+    //         .then(() => console.log(`Vocab ${_id} successfully activated.`))
+    //         .then(() => getAllVocabs())
+    //         .catch(error => console.error(error))
+    // }
 
     const navigate = useNavigate();
 
@@ -126,14 +127,11 @@ function App() {
                           />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
-                    <Route path={"/"}
-                           element={<HomePage/>}/>
-
                 <Route path={"/"}
-                       element={<HomePage finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                       element={<HomePage
+                           // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                           finishedReviewing={false}
                                           setUseForm={setUseForm}/>}/>
-
-
                     <Route path={"/calendar"} element={
                         <CalendarPage vocabs={vocabs}/>}/>
                 <Route path={"/review"}
@@ -141,6 +139,12 @@ function App() {
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsLeftToReview={vocabsLeftToReview}/>}/>
 
+                        <CalendarPage
+                            vocabs={vocabs}/>}/>
+                    <Route path={"/review"}
+                           element={<ReviewPage
+                               // todaysVocabs={getTodaysVocabs()}
+                           />}/>
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}

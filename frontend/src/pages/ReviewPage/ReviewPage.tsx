@@ -3,16 +3,24 @@ import {useEffect, useState} from "react";
 import CardContainer
     from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
+import {useState} from "react";
+import CardContainer
+    from "../../components/CardContainer/CardContainer.tsx";
+import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
     vocabsLeftToReview: Vocab[]
     removeVocabFromVocabsToReview: (_id: string) => void
 }
 
+
 export default function ReviewPage(props: Readonly<Props>) {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [currentVocab, setCurrentVocab] = useState<Vocab>(props.vocabsLeftToReview[0])
     const [userInput, setUserInput] = useState<string>("")
+
+
+
 
     useEffect(() => {
         setCurrentVocab(props.vocabsLeftToReview[currentIndex])

@@ -10,6 +10,9 @@ import {Vocab} from "../../types/Vocab.ts";
 import DayPopUp
     from "../../components/DayPopUp/DayPopUp.tsx";
 import {uid} from 'uid';
+import {
+    VocabIdsOfYearMonth
+} from "../../types/VocabIdsOfYearMonth.ts";
 
 
 type Props = {
@@ -17,7 +20,7 @@ type Props = {
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
-    const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfDate[]>([])
+    const [vocabIdsOfYearMonth, setVocabIdsOfYearMonth] = useState<VocabIdsOfYearMonth>([])
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
     const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
     const [monthHeader, setMonthHeader] = useState<string>("")
@@ -41,15 +44,15 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
     function changeMonth(buttonPressed: string) {
-        const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(0, 4)
-        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5, 9)
+        const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date.substring(0, 4)
+        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date.substring(5, 9)
         const currentMonthNumber: number = parseInt(currentMonth)
         const currentYearNumber: number = parseInt(currentYear)
         let month: number = 0
         let year: number = 0
         if (buttonPressed === "previous") {
             month = currentMonthNumber > 1 ? (currentMonthNumber - 1) : 12
-            year = currentMonthNumber > 1 ? currentYear : (currentYearNumber - 1)
+            year = currentMonthNumber > 1 ? currentYearNumber : (currentYearNumber - 1)
         }
       else {
             month = currentMonthNumber < 12 ? (currentMonthNumber + 1) : 1
@@ -58,7 +61,7 @@ export default function CalendarPage(props: Readonly<Props>) {
         axios.get(`/api/calendar?year=${year.toString()}&month=${month.toString()}`)
             .then(response => setVocabIdsOfYearMonth(response.data))
             .catch(error => console.error(error))
-        setMonthHeader(getMonthHeader(month, year))
+        setMonthHeader(getMonthHeader(month.toString(), year.toString()))
     }
 
     function getMonthHeader(month: string, year: string): string {
