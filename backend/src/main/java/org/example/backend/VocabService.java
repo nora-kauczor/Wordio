@@ -19,7 +19,6 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
-    // TODO deactivateVocab
 
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();

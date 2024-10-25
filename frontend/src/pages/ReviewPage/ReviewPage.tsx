@@ -7,9 +7,8 @@ import {Vocab} from "../../types/Vocab.ts";
 type Props = {
     vocabsLeftToReview: Vocab[]
     removeVocabFromVocabsToReview: (_id: string | null) => void
-    refactorReviewDates: (vocab: Vocab) => void
+    changeReviewDates: (_id: string | null) => void
 }
-
 
 export default function ReviewPage(props: Readonly<Props>) {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
@@ -23,7 +22,7 @@ export default function ReviewPage(props: Readonly<Props>) {
 
     function checkAnswer() {
         if (currentVocab.word !== userInput) {
-            props.refactorReviewDates(currentVocab)
+            props.changeReviewDates(currentVocab._id)
         }
         setCurrentIndex(currentIndex + 1)
         props.removeVocabFromVocabsToReview(currentVocab._id)
