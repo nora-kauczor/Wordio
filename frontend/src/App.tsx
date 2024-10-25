@@ -35,20 +35,20 @@ function App() {
     }, []);
 
 
-    function getTodaysVocabs(): Vocab[] {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const today = `${year}-${month}-${day}`;
-        return vocabs.filter(vocab => vocab.reviewDates.includes(today))
-    }
+    // function getTodaysVocabs(): Vocab[] {
+    //     const date = new Date();
+    //     const year = date.getFullYear();
+    //     const month = String(date.getMonth() + 1).padStart(2, '0');
+    //     const day = String(date.getDate()).padStart(2, '0');
+    //     const today = `${year}-${month}-${day}`;
+    //     return vocabs.filter(vocab => vocab.reviewDates.includes(today))
+    // }
 
-    function getVocab(_id: string): void {
-        axios.get(`api/vocab/${_id}`)
-            .then(response => console.log("fetched with getVocab:", response.data))
-            .catch(error => console.error(error))
-    }
+    // function getVocab(_id: string): void {
+    //     axios.get(`api/vocab/${_id}`)
+    //         .then(response => console.log("fetched with getVocab:", response.data))
+    //         .catch(error => console.error(error))
+    // }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -115,7 +115,8 @@ function App() {
                             vocabs={vocabs}/>}/>
                     <Route path={"/review"}
                            element={<ReviewPage
-                               todaysVocabs={getTodaysVocabs()}/>}/>
+                               // todaysVocabs={getTodaysVocabs()}
+                           />}/>
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}

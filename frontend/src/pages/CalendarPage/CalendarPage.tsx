@@ -44,8 +44,8 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
     function changeMonth(buttonPressed: string) {
-        const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(0, 4)
-        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date?.substring(5, 9)
+        const currentYear: string | undefined = vocabIdsOfYearMonth[1][0].date.substring(0, 4)
+        const currentMonth: string | undefined = vocabIdsOfYearMonth[1][0].date.substring(5, 9)
         const currentMonthNumber: number = parseInt(currentMonth)
         const currentYearNumber: number = parseInt(currentYear)
         let month: number = 0
