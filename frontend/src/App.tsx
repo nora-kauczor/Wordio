@@ -25,10 +25,6 @@ function App() {
     const [userName, setUserName] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState("language", {defaultValue: ""});
 
-    function changeLanguage(){
-
-    }
-
     function getAllVocabsOfLanguage() {
         axios.get(`/api/vocab/language?language=${language}`)
             .then(response => setVocabs(response.data))
@@ -98,14 +94,8 @@ function App() {
 
     return (
         <div id={"app"}>
+            <Header userName={userName} logout={logout} setLanguage={setLanguage}/>
 
-            <Header userName={userName} logout={logout}/>
-            <label htmlFor={"select-language"}>Change language</label>
-            <select id={"select-language"}>
-                <option>🇪🇸 Spanish</option>
-                <option>🇫🇷 French</option>
-                <option>🇮🇹 Italian</option>
-            </select>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
