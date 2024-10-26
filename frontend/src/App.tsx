@@ -17,38 +17,41 @@ import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
+import useLocalStorageState from "use-local-storage-state";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
+    const [language, setLanguage] = useLocalStorageState("language", {defaultValue: ""});
 
-    function getAllVocabs() {
-        axios.get("/api/vocab")
+    function changeLanguage(){
+
+    }
+
+    function getAllVocabsOfLanguage() {
+        axios.get(`/api/vocab/language?language=${language}`)
             .then(response => setVocabs(response.data))
             .catch(error => console.error(error))
     }
 
     useEffect(() => {
-        getAllVocabs()
+        getAllVocabsOfLanguage()
         getUserName()
     }, []);
 
 
-    // function getTodaysVocabs(): Vocab[] {
-    //     const date = new Date();
-    //     const year = date.getFullYear();
-    //     const month = String(date.getMonth() + 1).padStart(2, '0');
-    //     const day = String(date.getDate()).padStart(2, '0');
-    //     const today = `${year}-${month}-${day}`;
-    //     return vocabs.filter(vocab => vocab.reviewDates.includes(today))
-    // }
+    function getTodaysVocabs(): Vocab[] {
+        const date: Date = new Date()
+        const year: number = date.getFullYear()
+        const month: string = String(date.getMonth() + 1).padStart(2, '0')
+        const day: string = String(date.getDate()).padStart(2, '0')
+        const today: string = `${year}-${month}-${day}`
+        const allOfTodaysVocabs: Vocab[] = vocabs
+            .filter(vocab => vocab.reviewDates.includes(today))
+        return allOfTodaysVocabs.filter(vocab => vocab.language === language)
+    }
 
-    // function getVocab(_id: string): void {
-    //     axios.get(`api/vocab/${_id}`)
-    //         .then(response => console.log("fetched with getVocab:", response.data))
-    //         .catch(error => console.error(error))
-    // }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -79,8 +82,7 @@ function App() {
     }
 
 
-
-    function getUserName():void{
+    function getUserName(): void {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
             .catch(error => console.error(error))
@@ -96,20 +98,27 @@ function App() {
 
     return (
         <div id={"app"}>
+
             <Header userName={userName} logout={logout}/>
+            <label htmlFor={"select-language"}>Change language</label>
+            <select id={"select-language"}>
+                <option>🇪🇸 Spanish</option>
+                <option>🇫🇷 French</option>
+                <option>🇮🇹 Italian</option>
+            </select>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
                        element={<LoginPage
-                          />}/>
+                       />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
-                <Route path={"/"}
-                       element={<HomePage
-                           // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
-                           finishedReviewing={false}
-                                          setUseForm={setUseForm}/>}/>
+                    <Route path={"/"}
+                           element={<HomePage
+                               // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
+                               finishedReviewing={false}
+                               setUseForm={setUseForm}/>}/>
                     <Route path={"/calendar"} element={
                         <CalendarPage
                             vocabs={vocabs}/>}/>
@@ -123,7 +132,7 @@ function App() {
                                deleteVocab={deleteVocab}
                            />}/>
 
-                    </Route>
+                </Route>
             </Routes>
         </div>
     )
