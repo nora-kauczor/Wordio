@@ -12,6 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,12 +34,30 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of());
+                "", "Spanish", List.of(LocalDate.of(2024,11,2)));
         vocabRepo.save(testVocab);
     }
 
     @Test
-    void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
+    void deactivateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/nonexistent-id"))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void deactivateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/deactivate/000"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"}
+                        """))
+                .andExpect(jsonPath("$.reviewDates").isEmpty());
+    }
+
+    @Test
+    void activateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }

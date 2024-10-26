@@ -16,6 +16,11 @@ public class VocabController {
 
     private final VocabService vocabService;
 
+    @GetMapping("/deactivate/{_id}")
+    public Vocab deactivateVocab(@PathVariable String _id){
+        return vocabService.deactivateVocab(_id);
+    }
+
     @GetMapping("/activate/{_id}")
     public Vocab activateVocab(@PathVariable String _id){
        return vocabService.activateVocab(_id);
