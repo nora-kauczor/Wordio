@@ -10,14 +10,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.containsString;
+
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.hamcrest.Matchers.not;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser
@@ -41,11 +39,11 @@ class CalendarControllerTest {
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of(date011024, date021024, date031024));
+                "", Language.SPANISH.getValue(), List.of(date011024, date021024, date031024));
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", "Spanish", List.of(date161024, date181024));
+                "", Language.SPANISH.getValue(), List.of(date161024, date181024));
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", "Spanish", List.of(date181024));
+                "", Language.SPANISH.getValue(), List.of(date181024));
         vocabRepo.save(testVocab1);
         vocabRepo.save(testVocab2);
         vocabRepo.save(testVocab3);

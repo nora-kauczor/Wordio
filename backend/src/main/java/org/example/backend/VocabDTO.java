@@ -1,7 +1,5 @@
 package org.example.backend;
 
-import java.time.LocalDate;
-import java.util.List;
 
 public record VocabDTO(
         String word,

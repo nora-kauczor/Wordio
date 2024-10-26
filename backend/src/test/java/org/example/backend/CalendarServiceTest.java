@@ -1,6 +1,5 @@
 package org.example.backend;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -25,11 +24,11 @@ class CalendarServiceTest {
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of(date011024, date021024, date031024));
+                "", Language.SPANISH.getValue(), List.of(date011024, date021024, date031024));
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", "Spanish", List.of(date161024, date181024));
+                "", Language.SPANISH.getValue(), List.of(date161024, date181024));
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", "Spanish", List.of(date181024));
+                "", Language.SPANISH.getValue(), List.of(date181024));
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
         VocabIdsOfDate[][] expected = new VocabIdsOfDate[][]{
                 {
@@ -93,11 +92,11 @@ class CalendarServiceTest {
         List<LocalDate> otherDates = new ArrayList<>(List.of());
         otherDates.add(LocalDate.of(2024, 10, 16));
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", "Spanish", reviewDates);
+                "", Language.SPANISH.getValue(), reviewDates);
         Vocab testVocab2 = new Vocab("777", "la prueba", "test",
-                "", "Spanish", reviewDates);
+                "", Language.SPANISH.getValue(), reviewDates);
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", "Spanish", otherDates);
+                "", Language.SPANISH.getValue(), otherDates);
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
         VocabIdsOfDate expected = new VocabIdsOfDate(date, List.of("000", "777"));
         VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date);
