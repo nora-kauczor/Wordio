@@ -1,6 +1,7 @@
 package org.example.backend;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public enum Language {
     SPANISH("Spanish"),
@@ -17,13 +18,17 @@ public enum Language {
         return value;
     }
 
-    public Language getEnum(String language) {
+    public static Language getEnumByString(String language) {
         Language[] ArrayOfEnums = Language.values();
-        for (int i = 1; i < ArrayOfEnums.length; i++) {
+        Language searchedEnum = null;
+
+        for (int i = 0; i < ArrayOfEnums.length; i++) {
             if (ArrayOfEnums[i].getStringOfEnum().equals(language)) {
-                return ArrayOfEnums[i];
+                searchedEnum = ArrayOfEnums[i];
             }
         }
-        return null;
+        if (searchedEnum == null){throw new NoSuchElementException();
+        }
+        return searchedEnum;
     }
 }

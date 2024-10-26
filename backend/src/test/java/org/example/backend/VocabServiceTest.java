@@ -35,8 +35,8 @@ class VocabServiceTest {
 
     private boolean checkIfVocabsHaveTheSameLanguage(List<Vocab> returnedVocabs) {
         for (int i = 0; i < returnedVocabs.size() - 1; i++) {
-            String languageOfItem = returnedVocabs.get(i).language.getValue();
-            String languageOfFollowingItem = returnedVocabs.get(i + 1).language.getValue();
+            Language languageOfItem = returnedVocabs.get(i).language;
+            Language languageOfFollowingItem = returnedVocabs.get(i + 1).language;
             if (!languageOfItem.equals(languageOfFollowingItem)) {
                 return false;
             }

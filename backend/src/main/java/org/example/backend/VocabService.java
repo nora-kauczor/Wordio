@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.example.backend.Language.getEnumByString;
+
 @RequiredArgsConstructor
 @Service
 public class VocabService {
@@ -18,8 +20,13 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
-    public List<Vocab> getAllVocabsOfLanguage(String language) {
-        List<Vocab> vocabsOfLanguage = vocabRepo.findAll().stream().filter(vocab -> vocab.language.getValue().equals(language)).toList();
+    public List<Vocab> getAllVocabsOfLanguage(String languageString) {
+        Language language = getEnumByString(languageString);
+        System.out.println("language :"+language);
+        List<Vocab> vocabsOfLanguage = vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.language.equals(language))
+                .toList();
+        System.out.println("vocabsOfLanguage :"+vocabsOfLanguage);
         if (vocabsOfLanguage.isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -35,7 +42,6 @@ public class VocabService {
     }
 
     public Vocab createVocab(VocabDTO vocabDTO) {
-
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), vocabDTO.language(), List.of());
         return vocabRepo.save(newVocab);
