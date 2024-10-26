@@ -17,6 +17,7 @@ import {
 
 type Props = {
     vocabs: Vocab[]
+    deactivateVocab: (_id:string)=> void
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -122,7 +123,8 @@ export default function CalendarPage(props: Readonly<Props>) {
                 <DayPopUp
                 day={dayOfDayPopUp}
                     vocabsOfDay={vocabsOfDayPopUp}
-                          closeDayPopUp={closeDayPopUp}/>}
+                          closeDayPopUp={closeDayPopUp}
+                deactivateVocab={props.deactivateVocab}/>}
         </div>
     )
 }

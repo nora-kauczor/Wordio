@@ -2,7 +2,6 @@ package org.example.backend;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -81,7 +79,7 @@ class VocabControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{"_id":"000", "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish", "reviewDates":[]}]
+                                          "info":"", "language":"Spanish"}]
                         """));
     }
 
@@ -92,7 +90,7 @@ class VocabControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {"_id":"000", "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish", "reviewDates":[]}
+                                          "info":"", "language":"Spanish"}
                         """));
     }
 
