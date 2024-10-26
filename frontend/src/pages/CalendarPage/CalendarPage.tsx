@@ -17,6 +17,7 @@ import {
 
 type Props = {
     vocabs: Vocab[]
+    language:string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {

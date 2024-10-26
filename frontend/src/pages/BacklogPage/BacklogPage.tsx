@@ -6,6 +6,7 @@ import VocabList
 type Props = {
     vocabs: Vocab[]
     deleteVocab: (_id: string) => void
+    language:string
 }
 
 export default function BacklogPage(props: Readonly<Props>) {

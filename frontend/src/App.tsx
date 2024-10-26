@@ -34,6 +34,10 @@ function App() {
     useEffect(() => {
         getAllVocabsOfLanguage()
         getUserName()
+    }, [language]);
+
+    useEffect(() => {
+        getUserName()
     }, []);
 
 
@@ -108,10 +112,11 @@ function App() {
                            element={<HomePage
                                // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
                                finishedReviewing={false}
-                               setUseForm={setUseForm}/>}/>
+                               setUseForm={setUseForm}
+                           language={language}/>}/>
                     <Route path={"/calendar"} element={
                         <CalendarPage
-                            vocabs={vocabs}/>}/>
+                            vocabs={vocabs} language={language}/>}/>
                     <Route path={"/review"}
                            element={<ReviewPage
                                // todaysVocabs={getTodaysVocabs()}
@@ -120,6 +125,7 @@ function App() {
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
+                               language={language}
                            />}/>
 
                 </Route>

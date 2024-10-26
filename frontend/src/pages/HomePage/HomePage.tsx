@@ -6,7 +6,8 @@ import {useState} from "react";
 
 type Props = {
     finishedReviewing: boolean
-    setUseForm: React.Dispatch<React.SetStateAction<boolean>>;
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
+    language:string
 }
 export default function HomePage(props: Readonly<Props>) {
     const [showPopUp, setShowPopUp] = useState(false)
