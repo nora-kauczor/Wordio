@@ -55,6 +55,22 @@ class VocabControllerTest {
                 .andExpect(jsonPath("$.reviewDates").isNotEmpty());
     }
 
+    @Test
+    void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Esperanto"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Spanish"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [{"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish", "reviewDates":[]}]
+                        """));
+    }
+
 
     @Test
     void getAllVocabs_ShouldReturnAllVocabs_whenCalled() throws Exception {
@@ -73,8 +89,10 @@ class VocabControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {"_id":"000", "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish", "reviewDates":[]}
-                        """));
+                                          "info":"", "language":"Spanish",  "reviewDates":[]}
+                        """))
+//                .andExpect(jsonPath("$.language").value("Spanish"))
+        ;
     }
 
 

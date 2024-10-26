@@ -22,10 +22,9 @@ public class VocabService {
 
     public List<Vocab> getAllVocabsOfLanguage(String languageString) {
         Language language = getEnumByString(languageString);
-        List<Vocab> vocabsOfLanguage = vocabRepo.findAll().stream()
+        return vocabRepo.findAll().stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .toList();
-        return vocabsOfLanguage;
     }
 
     public List<Vocab> getAllVocabs() {

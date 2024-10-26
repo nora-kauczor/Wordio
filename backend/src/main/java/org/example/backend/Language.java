@@ -1,6 +1,7 @@
 package org.example.backend;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.NoSuchElementException;
 
 public enum Language {
@@ -13,7 +14,7 @@ public enum Language {
     Language(String value) {
         this.value = value;
     }
-
+    @JsonValue
     public String getStringOfEnum() {
         return value;
     }

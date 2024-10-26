@@ -21,6 +21,11 @@ public class VocabController {
        return vocabService.activateVocab(_id);
     }
 
+    @GetMapping("/language")
+    public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language){
+        return vocabService.getAllVocabsOfLanguage(language);
+    }
+
     @GetMapping
     public List<Vocab> getAllVocabs(){
         return vocabService.getAllVocabs();
