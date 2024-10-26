@@ -29,27 +29,23 @@ class VocabServiceTest {
     @Test
     void getAllVocabsOfLanguage_shouldThrowNoSuchElementException_whenCalledWithNonexistentLanguage() {
         assertThrows(NoSuchElementException.class, () -> vocabService.getAllVocabsOfLanguage("Esperanto"));
-        verify(mockVocabRepo).findAll();
     }
 
-
-    private boolean checkIfVocabsHaveTheSameLanguage(List<Vocab> returnedVocabs) {
-        for (int i = 0; i < returnedVocabs.size() - 1; i++) {
-            Language languageOfItem = returnedVocabs.get(i).language;
-            Language languageOfFollowingItem = returnedVocabs.get(i + 1).language;
-            if (!languageOfItem.equals(languageOfFollowingItem)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Test
     void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() {
-        List<Vocab> returnedVocabs = vocabService.getAllVocabsOfLanguage("Spanish");
-        assertTrue(checkIfVocabsHaveTheSameLanguage(returnedVocabs));
-        verify(mockVocabRepo).findAll();
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", Language.SPANISH, List.of());
+        Vocab testVocab2 = new Vocab("111", "la prueba", "test",
+                "", Language.SPANISH, List.of());
+        Vocab testVocab3 = new Vocab("222", "la prueba", "test",
+                "", Language.ITALIAN, List.of());
+        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab,testVocab2,testVocab3));
+        List<Vocab> expected = List.of(testVocab, testVocab2);
+        List<Vocab> actual = vocabService.getAllVocabsOfLanguage("Spanish");
+        assertEquals(expected, actual);
     }
+
 
     @Test
     void getAllVocabs_ShouldReturnAllVocabs_whenCalled() {

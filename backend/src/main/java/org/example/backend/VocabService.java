@@ -22,14 +22,9 @@ public class VocabService {
 
     public List<Vocab> getAllVocabsOfLanguage(String languageString) {
         Language language = getEnumByString(languageString);
-        System.out.println("language :"+language);
         List<Vocab> vocabsOfLanguage = vocabRepo.findAll().stream()
-                .filter(vocab -> vocab.language.equals(language))
+                .filter(vocab -> vocab.getLanguage().equals(language))
                 .toList();
-        System.out.println("vocabsOfLanguage :"+vocabsOfLanguage);
-        if (vocabsOfLanguage.isEmpty()) {
-            throw new NoSuchElementException();
-        }
         return vocabsOfLanguage;
     }
 
