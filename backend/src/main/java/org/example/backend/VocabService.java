@@ -18,6 +18,14 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
+    public List<Vocab> getAllVocabsOfLanguage(String language) {
+        List<Vocab> vocabsOfLanguage = vocabRepo.findAll().stream().filter(vocab -> vocab.language.getValue().equals(language)).toList();
+        if (vocabsOfLanguage.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return vocabsOfLanguage;
+    }
+
     public List<Vocab> getAllVocabs() {
         return vocabRepo.findAll();
     }
@@ -27,6 +35,7 @@ public class VocabService {
     }
 
     public Vocab createVocab(VocabDTO vocabDTO) {
+
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), vocabDTO.language(), List.of());
         return vocabRepo.save(newVocab);

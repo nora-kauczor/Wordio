@@ -16,7 +16,7 @@ public class Vocab {
     String word;
     String translation;
     String info;
-    String language;
+    Language language;
     List<LocalDate> reviewDates;
 
 

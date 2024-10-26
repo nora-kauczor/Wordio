@@ -33,7 +33,7 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH.getValue(), List.of());
+                "", Language.SPANISH, List.of());
         vocabRepo.save(testVocab);
     }
 
