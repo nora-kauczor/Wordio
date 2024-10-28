@@ -14,6 +14,7 @@ public enum Language {
     Language(String value) {
         this.value = value;
     }
+
     @JsonValue
     public String getStringOfEnum() {
         return value;

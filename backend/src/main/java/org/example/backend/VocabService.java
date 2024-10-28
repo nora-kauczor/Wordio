@@ -19,21 +19,22 @@ public class VocabService {
     public Vocab changeReviewDates(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
-       List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
-       vocab.setReviewDates(newDates);
-         vocabRepo.save(vocab);
+        List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
+        vocab.setReviewDates(newDates);
+        vocabRepo.save(vocab);
         return vocabRepo.findById(_id).orElseThrow();
     }
 
     public Vocab deactivateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
-        vocab.reviewDates = List.of(); // TODO
+        vocab.setReviewDates(List.of());
         return vocabRepo.save(vocab);
     }
 
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
-        vocab.reviewDates = generateDates(LocalDate.now()); // TODO
+        List<LocalDate> dates = generateDates(LocalDate.now());
+        vocab.setReviewDates(dates);
         return vocabRepo.save(vocab);
     }
 

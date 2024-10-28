@@ -15,7 +15,7 @@ export default function Header(props: Readonly<Props>) {
 
     return (<div id={"header"}>
         <p id={"app-name"}>Wordio</p>
-        <select id={"select-language"}>
+        {props.userName &&<select id={"select-language"}>
             <option value="" disabled selected>Choose
                 language
             </option>
@@ -28,7 +28,7 @@ export default function Header(props: Readonly<Props>) {
                       onKeyDown={() => selectLanguage("French")}>🇫🇷 French</option>
             <option   onClick={() => selectLanguage("Italian")}
                       onKeyDown={() => selectLanguage("Italian")}>🇮🇹 Italian</option>
-        </select>
+        </select>}
 
         {props.userName && <button id={"logout-button"}
                                    onClick={props.logout}>logout</button>}
