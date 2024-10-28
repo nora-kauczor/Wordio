@@ -18,6 +18,8 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import useLocalStorageState from "use-local-storage-state"
 import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
+import DisplayPage
+    from "./pages/DisplayPage/DisplayPage.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -133,6 +135,10 @@ function App() {
             .catch(error => console.error(error))
     }
 
+    // console.log("todaysVocabs", todaysVocabs);
+    //
+    // console.log("vocabsLeftToReview", vocabsLeftToReview);
+
     return (
         <div id={"app"}>
             <Header userName={userName} logout={logout}/>
@@ -166,6 +172,10 @@ function App() {
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
+                           />}/>
+                    <Route path={"/display"}
+                           element={<DisplayPage
+                               vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                            />}/>
 
                 </Route>

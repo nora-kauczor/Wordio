@@ -4,7 +4,7 @@ import './VocabList.css'
 type Props = {
     vocabs: Vocab[]
     calendarMode: boolean
-    deactivateVocab:(_id:string)=> void
+    deactivateVocab?:(_id:string)=> void
     deleteVocab?: (_id: string) => void
     activateVocab?: (_id: string) => void
 }

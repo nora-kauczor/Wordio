@@ -16,30 +16,29 @@ export default function HomePage(props: Readonly<Props>) {
         <div id={"homepage"}>
             <article id={"homepage-text-and-button"}>
                 {props.finishedReviewing ?
-                    <p>Great job! You've already finished
-                        reviewing
-                        your vocabulary for today. To start
-                        learning
-                        more words click below </p> : <p>
+                    <p>You've got no vocabulary scheduled
+                        for today or you've already reviewed
+                        all of it. To start learning
+                        (more) words click below </p> : <p>
                         Nice to see you! Click below to get
                         started with your daily vocab
                         review</p>}
                 {props.finishedReviewing ?
-
                     <button
                         onClick={() => setShowPopUp(true)}
                         onKeyDown={() => setShowPopUp(true)}>
                         New vocabulary</button>
                     :
                     <button
-                    onClick={() => navigate("/review")}
-                onKeyDown={() => navigate("/review")}>Review
-            </button>
-
-            }
-        </article>
-{
-    showPopUp && <NewVocabsPopUp setUseForm={props.setUseForm} setShowPopUp={setShowPopUp}/>}
+                        onClick={() => navigate("/review")}
+                        onKeyDown={() => navigate("/review")}>Review
+                    </button>
+                }
+            </article>
+            {
+                showPopUp && <NewVocabsPopUp
+                    setUseForm={props.setUseForm}
+                    setShowPopUp={setShowPopUp}/>}
         </div>
     )
 }

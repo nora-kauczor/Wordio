@@ -12,7 +12,10 @@ type Props = {
 export default function BacklogPage(props: Readonly<Props>) {
 
     return (<div id={"backlog-page"}>
-<VocabList vocabs={props.vocabs} calendarMode={true} activateVocab={props.activateVocab} deleteVocab={props.deleteVocab()}/>
+        <VocabList vocabs={props.vocabs}
+                   calendarMode={false}
+                   activateVocab={props.activateVocab}
+                   deleteVocab={props.deleteVocab}/>
     </div>)
 
 }

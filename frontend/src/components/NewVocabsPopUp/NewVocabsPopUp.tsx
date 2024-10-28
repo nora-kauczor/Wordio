@@ -25,7 +25,9 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
                 onKeyDown={() => navigate("/backlog")}>Pick
             from backlog
         </button>
-        <button className={"new-vocabs-button"}>get random
+        <button className={"new-vocabs-button"}
+                onClick={() => navigate("/display")}
+                onKeyDown={() => navigate("/display")}>get random
             vocab
         </button>
     </div>)

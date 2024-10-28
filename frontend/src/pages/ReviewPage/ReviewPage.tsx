@@ -1,7 +1,7 @@
 import './ReviewPage.css'
 import {useEffect, useState} from "react";
-import CardContainer
-    from "../../components/CardContainer/CardContainer.tsx";
+import ReviewCardContainer
+    from "../../components/ReviewCardContainer/ReviewCardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
@@ -31,7 +31,7 @@ export default function ReviewPage(props: Readonly<Props>) {
     return (
         <div id={"review-page"}>
             {currentVocab &&
-                <CardContainer vocab={currentVocab}/>}
+                <ReviewCardContainer vocab={currentVocab}/>}
             <label htmlFor={"review-input"}></label>
             <input id={"review-input"}
                    onChange={element => setUserInput(element.target.value)}/>
