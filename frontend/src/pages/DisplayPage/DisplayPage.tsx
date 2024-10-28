@@ -5,36 +5,26 @@ import {Vocab} from "../../types/Vocab.ts";
 import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 
-
 type Props = {
-    vocabs?: Vocab[]
-    vocab?: Vocab | null
+    vocabs:Vocab[]
 }
 
 export default function DisplayPage(props: Readonly<Props>) {
-    const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
-    const [randomMode, setRandomMode] = useState<boolean>(false)
+const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
     const navigate = useNavigate()
     const location = useLocation()
-    console.log(location)
+
+    function getVocabToBeDisplayed(){
+        const path = location.pathname
+        const _id = path.substring(9)
+        return props.vocabs.find(vocab => vocab._id === _id)
+    }
+
     useEffect(() => {
-        // location auslesen und desmentsprechend die richtige vocab als displayed vocab einfügen
-
-
-        // if (props.vocab) {
-        //     setDisplayedVocab(props.vocab)
-        // }
-        // setDisplayedVocab(getRandomVocab())
-        // setRandomMode(true)
+      setDisplayedVocab(getVocabToBeDisplayed())
     }, []);
 
-
-    if (!props.vocabs && randomMode) return <p> Loading...</p>
-    if (!props.vocab && !randomMode) return <p> Loading...</p>
-
-
-
-
+if (!props.vocabs){<p>Loading...</p>}
 
     return (
         <div id={"display-page"}>

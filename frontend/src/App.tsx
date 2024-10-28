@@ -173,7 +173,7 @@ function App() {
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                            />}/>
-                    <Route path={"/display:id"}
+                    <Route path={"/display/:_id"}
                            element={<DisplayPage
                                // displayedVocab={displayedVocab}
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}

@@ -2,7 +2,7 @@ import './CardContainer.css'
 import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
-    displayedVocab: Vocab | null
+    displayedVocab: Vocab
 }
 
 

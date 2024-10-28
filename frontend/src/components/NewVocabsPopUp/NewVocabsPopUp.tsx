@@ -15,8 +15,8 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
         props.setUseForm(true)
     }
 
-    function getRandomVocab():Vocab | null{
-        if (!props.vocabs) {return null}
+    function getRandomVocab():Vocab {
+        // if (!props.vocabs) {return null}
         const numberOfVocabs: number = props.vocabs.length
         const randomIndex = Math.floor(Math.random() * numberOfVocabs)-1
         return props.vocabs[randomIndex];
