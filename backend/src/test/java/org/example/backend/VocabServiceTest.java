@@ -13,6 +13,22 @@ class VocabServiceTest {
     private final VocabService vocabService = new VocabService(mockVocabRepo);
 
     @Test
+    void changeReviewDates_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
+        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
+        assertThrows(NoSuchElementException.class, () -> vocabService.changeReviewDates("000"));
+    }
+
+    @Test
+    void changeReviewDates_shouldReturnVocabWithChangedDates_whenCalledWithId(){
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of(LocalDate.of(2024,11, 1)));
+        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
+        vocabService.changeReviewDates("000");
+        verify(mockVocabRepo).findById("000");
+    }
+
+
+    @Test
     void deactivateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
         when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
         assertThrows(NoSuchElementException.class, () -> vocabService.deactivateVocab("000"));

@@ -32,8 +32,27 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of(LocalDate.of(2024,11,2)));
+                "", "Spanish", List.of(LocalDate.of(2024,11, 1)));
         vocabRepo.save(testVocab);
+    }
+
+    @Test
+    void changeReviewDates_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/change-dates/nonexistent-id"))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void changeReviewDates_shouldReturnVocabWithNewReviewDates_whenCalledWithExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/change-dates/000"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"}
+                        """))
+                .andExpect(jsonPath("$.reviewDates").isNotEmpty())
+                .andExpect(jsonPath("$.reviewDates[0]").value("2024-11-02"));
     }
 
     @Test

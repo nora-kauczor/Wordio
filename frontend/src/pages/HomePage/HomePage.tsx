@@ -24,14 +24,22 @@ export default function HomePage(props: Readonly<Props>) {
                         Nice to see you! Click below to get
                         started with your daily vocab
                         review</p>}
-                {props.finishedReviewing ? <button
+                {props.finishedReviewing ?
+
+                    <button
+                        onClick={() => setShowPopUp(true)}
+                        onKeyDown={() => setShowPopUp(true)}>
+                        New vocabulary</button>
+                    :
+                    <button
                     onClick={() => navigate("/review")}
-                    onKeyDown={() => navigate("/review")}>New vocabulary</button> : <button
-                    onClick={() => setShowPopUp(true)}
-                    onKeyDown={() => setShowPopUp(true)}>
-                    Review</button>}
-            </article>
-            {showPopUp && <NewVocabsPopUp setUseForm={props.setUseForm} setShowPopUp={setShowPopUp}/>}
+                onKeyDown={() => navigate("/review")}>Review
+            </button>
+
+            }
+        </article>
+{
+    showPopUp && <NewVocabsPopUp setUseForm={props.setUseForm} setShowPopUp={setShowPopUp}/>}
         </div>
     )
 }
