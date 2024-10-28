@@ -9,7 +9,6 @@ type Props = {
     finishedReviewing: boolean
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     language:string
-    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     vocabs:Vocab[]
 }
 export default function HomePage(props: Readonly<Props>) {
