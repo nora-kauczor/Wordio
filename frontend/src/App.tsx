@@ -87,7 +87,7 @@ function App() {
 
 
     function activateVocab(_id: string): void {
-        axios.get(`api/vocab/activate/${_id}`)
+        axios.put(`api/vocab/activate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully activated.`))
             .then(() => getAllVocabs())
             .catch(error => console.error(error))
@@ -95,7 +95,7 @@ function App() {
 
 
     function deactivateVocab(_id:string):void {
-        axios.get(`api/vocab/deactivate/${_id}`)
+        axios.put(`api/vocab/deactivate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
             .catch(error => console.error(error))
     }
@@ -127,7 +127,7 @@ function App() {
 
 
     function changeReviewDates(_id: string | null): void {
-        axios.get(`api/vocab/change-dates/${_id}`)
+        axios.put(`api/vocab/change-dates/${_id}`)
             .then(() => console.log(`Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabs())
             .catch(error => console.error(error))

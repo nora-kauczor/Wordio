@@ -16,17 +16,17 @@ public class VocabController {
 
     private final VocabService vocabService;
 
-    @GetMapping("/change-dates/{_id}")
+    @PutMapping("/change-dates/{_id}")
     public Vocab changeReviewDates(@PathVariable String _id) {
         return vocabService.changeReviewDates(_id);
     }
 
-    @GetMapping("/deactivate/{_id}")
+    @PutMapping("/deactivate/{_id}")
     public Vocab deactivateVocab(@PathVariable String _id){
         return vocabService.deactivateVocab(_id);
     }
 
-    @GetMapping("/activate/{_id}")
+    @PutMapping("/activate/{_id}")
     public Vocab activateVocab(@PathVariable String _id){
        return vocabService.activateVocab(_id);
     }
