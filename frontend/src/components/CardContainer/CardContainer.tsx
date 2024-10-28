@@ -1,4 +1,4 @@
-import './ReviewCardContainer.css'
+import './CardContainer.css'
 import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
 }
 
 
-export default function ReviewCardContainer(props: Readonly<Props>) {
+export default function CardContainer(props: Readonly<Props>) {
     if (!props.displayedVocab) return <p> Loading...</p>
 
     return (

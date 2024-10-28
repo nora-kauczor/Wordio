@@ -3,10 +3,12 @@ import NewVocabsPopUp
     from "../../components/NewVocabsPopUp/NewVocabsPopUp.tsx";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
     finishedReviewing: boolean
-    setUseForm: React.Dispatch<React.SetStateAction<boolean>>;
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
+    vocabs:Vocab[]
 }
 export default function HomePage(props: Readonly<Props>) {
     const [showPopUp, setShowPopUp] = useState(false)
@@ -37,6 +39,7 @@ export default function HomePage(props: Readonly<Props>) {
             </article>
             {
                 showPopUp && <NewVocabsPopUp
+                vocabs={props.vocabs}
                     setUseForm={props.setUseForm}
                     setShowPopUp={setShowPopUp}/>}
         </div>

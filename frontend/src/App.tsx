@@ -42,13 +42,10 @@ function App() {
 
     function updateVocabsLeftToReview(): void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
-        // delete vocabs that have been deleted from today's
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview.filter((vocabToReview: Vocab) => updatedTodaysVocabs.find(vocabFromTodays => vocabFromTodays._id === vocabToReview._id))
-        // get vocabs that are new
         const newVocabs: Vocab[] = updatedTodaysVocabs.filter(vocabFromUpdatedOnes => todaysVocabs.find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
-        // only update today's vocabs after the above comparison
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
@@ -120,11 +117,11 @@ function App() {
     }
 
 
-    useEffect(() => {
-        if (userName) {
-            navigate("/")
-        }
-    }, [userName]);
+    // useEffect(() => {
+    //     if (userName) {
+    //         navigate("/")
+    //     }
+    // }, [userName]);
 
 
 
@@ -138,6 +135,8 @@ function App() {
     // console.log("todaysVocabs", todaysVocabs);
     //
     // console.log("vocabsLeftToReview", vocabsLeftToReview);
+
+
 
     return (
         <div id={"app"}>
@@ -154,6 +153,7 @@ function App() {
 
                     <Route path={"/"}
                            element={<HomePage
+                               vocabs={vocabs}
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}/>}/>
 
@@ -173,8 +173,9 @@ function App() {
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                            />}/>
-                    <Route path={"/display"}
+                    <Route path={"/display:id"}
                            element={<DisplayPage
+                               // displayedVocab={displayedVocab}
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                            />}/>
 
