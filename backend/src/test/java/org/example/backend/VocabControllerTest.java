@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,7 +34,7 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of());
+                "", Language.SPANISH, List.of(LocalDate.of(2024,11,1)));
         vocabRepo.save(testVocab);
     }
 
@@ -52,7 +53,6 @@ class VocabControllerTest {
                         {"_id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}
                         """))
-                .andExpect(jsonPath("$.reviewDates").isNotEmpty())
                 .andExpect(jsonPath("$.reviewDates[0]").value("2024-11-02"));
     }
 
@@ -61,7 +61,6 @@ class VocabControllerTest {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
-
 
     @Test
     void deactivateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
@@ -104,8 +103,9 @@ class VocabControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{"_id":"000", "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish", "reviewDates":[]}]
-                        """));
+                                          "info":"", "language":"Spanish"}]
+                        """))
+                .andExpect(jsonPath("$[0].reviewDates[0]").value("2024-11-01"));
     }
 
 

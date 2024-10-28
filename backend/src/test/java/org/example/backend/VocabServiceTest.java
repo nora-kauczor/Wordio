@@ -21,10 +21,12 @@ class VocabServiceTest {
     @Test
     void changeReviewDates_shouldReturnVocabWithChangedDates_whenCalledWithId(){
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of(LocalDate.of(2024,11, 1)));
+                "", Language.SPANISH, List.of(LocalDate.of(2024,11, 1)));
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
-        vocabService.changeReviewDates("000");
-        verify(mockVocabRepo).findById("000");
+        LocalDate expected = LocalDate.of(2024,11, 2);
+        LocalDate actual = vocabService.changeReviewDates("000").reviewDates.getFirst();
+        assertEquals(expected, actual);
+        verify(mockVocabRepo, times(2)).findById("000");
     }
 
 
@@ -37,7 +39,7 @@ class VocabServiceTest {
     @Test
     void deactivateVocab_shouldReturnVocabWithEmptiedReviewDates_whenCalledWithExistentId(){
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of(LocalDate.of(2024,11,15)));
+                "", Language.SPANISH, List.of(LocalDate.of(2024,11,15)));
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
         vocabService.deactivateVocab("000");
         assertTrue(testVocab.reviewDates.isEmpty());

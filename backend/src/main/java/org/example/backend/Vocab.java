@@ -21,7 +21,7 @@ public class Vocab {
 
 
 
-    public List<LocalDate> generateDates(LocalDate date) {
+    public static List<LocalDate> generateDates(LocalDate date) {
         List<LocalDate> reviewDates = new ArrayList<>();
         int daysToAdd = 0;
         for (int i = 1; i < 20; i++) {
