@@ -20,6 +20,11 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
+    public Vocab deactivateVocab(String _id) {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+        vocab.reviewDates = List.of();
+        return vocabRepo.save(vocab);
+    }
 
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
@@ -27,11 +32,7 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
-    public Vocab deactivateVocab(String _id) {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
-        vocab.reviewDates = List.of();
-        return vocabRepo.save(vocab);
-    }
+
 
     public List<Vocab> getAllVocabs() {
         return vocabRepo.findAll();

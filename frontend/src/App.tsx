@@ -53,14 +53,7 @@ function App() {
     function removeVocabFromVocabsToReview(_id: string | null): void {
         setVocabsLeftToReview(vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
     }
-    function getTodaysVocabs(): Vocab[] {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const today = `${year}-${month}-${day}`;
-        return vocabs.filter(vocab => vocab.reviewDates.includes(today))
-    }
+
 
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
@@ -71,11 +64,7 @@ function App() {
         return vocabs.filter(vocab => vocab.reviewDates.includes(today))
     }
 
-    function getVocab(_id: string): void {
-        axios.get(`api/vocab/${_id}`)
-            .then(response => console.log("fetched with getVocab:", response.data))
-            .catch(error => console.error(error))
-    }
+
     function getVocab(_id: string): void {
         axios.get(`api/vocab/${_id}`)
             .then(response => console.log("fetched with getVocab:", response.data))
@@ -90,6 +79,13 @@ function App() {
     }
 
 
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
+
+
     function activateVocab(_id: string): void {
         axios.get(`api/vocab/activate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully activated.`))
@@ -97,22 +93,10 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
-
-    function activateVocab(_id: string): void {
-        axios.get(`api/vocab/activate/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully activated.`))
-            .then(() => getVocab("670bc0ba64630f6a589cd2d4"))
-            .catch(error => console.error(error))
-    }
 
     function deactivateVocab(_id:string):void {
         axios.get(`api/vocab/deactivate/${_id}`)
-            .then(response => console.log(`Vocab ${_id} successfully deactivated.`))
+            .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
             .catch(error => console.error(error))
     }
 
@@ -140,12 +124,6 @@ function App() {
         }
     }, [userName]);
 
-
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
 
 
     function changeReviewDates(_id: string | null): void {
