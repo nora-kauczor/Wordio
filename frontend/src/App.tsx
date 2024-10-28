@@ -15,6 +15,7 @@ import BacklogPage
     from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import useLocalStorageState from "use-local-storage-state"
 import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 
@@ -22,10 +23,13 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
+    const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>("vocabsLeftToReview", {defaultValue: []})
+    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>("todaysVocabs", {defaultValue: []})
 
     function getAllVocabs() {
         axios.get("/api/vocab")
             .then(response => setVocabs(response.data))
+            .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
     }
 
@@ -34,40 +38,51 @@ function App() {
         getUserName()
     }, []);
 
+    function updateVocabsLeftToReview(): void {
+        const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
+        // delete vocabs that have been deleted from today's
+        const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview.filter((vocabToReview: Vocab) => updatedTodaysVocabs.find(vocabFromTodays => vocabFromTodays._id === vocabToReview._id))
+        // get vocabs that are new
+        const newVocabs: Vocab[] = updatedTodaysVocabs.filter(vocabFromUpdatedOnes => todaysVocabs.find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
+        const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
+        setVocabsLeftToReview(updatedVocabsToReview)
+        // only update today's vocabs after the above comparison
+        setTodaysVocabs(updatedTodaysVocabs)
+    }
 
-    // function getTodaysVocabs(): Vocab[] {
-    //     const date = new Date();
-    //     const year = date.getFullYear();
-    //     const month = String(date.getMonth() + 1).padStart(2, '0');
-    //     const day = String(date.getDate()).padStart(2, '0');
-    //     const today = `${year}-${month}-${day}`;
-    //     return vocabs.filter(vocab => vocab.reviewDates.includes(today))
-    // }
+    function removeVocabFromVocabsToReview(_id: string | null): void {
+        setVocabsLeftToReview(vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
+    }
 
-    // function getVocab(_id: string): void {
-    //     axios.get(`api/vocab/${_id}`)
-    //         .then(response => console.log("fetched with getVocab:", response.data))
-    //         .catch(error => console.error(error))
-    // }
+    function getTodaysVocabs(): Vocab[] {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const today = `${year}-${month}-${day}`;
+        return vocabs.filter(vocab => vocab.reviewDates.includes(today))
+    }
 
-    function deleteVocab(_id: string): void {
-        axios.delete(`api/vocab/${_id}`)
-            .then(response => console.log(response.data))
+    function getVocab(_id: string): void {
+        axios.get(`api/vocab/${_id}`)
+            .then(response => console.log("fetched with getVocab:", response.data))
             .catch(error => console.error(error))
     }
 
-    // function editVocab(editedVocab: Vocab): void {
-    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-    //         .then(response => console.log(response.data))
-    //         .catch(error => console.error(error))
-    // }
-    //
-    // function activateVocab(_id: string): void {
-    //     axios.get(`api/vocab/activate/${_id}`)
-    //         .then(() => console.log(`Vocab ${_id} successfully activated.`))
-    //         .then(() => getVocab("670bc0ba64630f6a589cd2d4"))
-    //         .catch(error => console.error(error))
-    // }
+    function deleteVocab(_id: string): void {
+        axios.delete(`api/vocab/${_id}`)
+            .then(() => console.log(`Vocab ${_id} successfully deleted.`))
+            .then(() => getAllVocabs())
+            .catch(error => console.error(error))
+    }
+
+
+    function activateVocab(_id: string): void {
+        axios.get(`api/vocab/activate/${_id}`)
+            .then(() => console.log(`Vocab ${_id} successfully activated.`))
+            .then(() => getAllVocabs())
+            .catch(error => console.error(error))
+    }
 
     const navigate = useNavigate();
 
@@ -79,10 +94,10 @@ function App() {
     }
 
 
-
-    function getUserName():void{
+    function getUserName(): void {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
+            .then(() => navigate("/"))
             .catch(error => console.error(error))
     }
 
@@ -94,36 +109,55 @@ function App() {
     }, [userName]);
 
 
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
+
+
+    function changeReviewDates(_id: string | null): void {
+        axios.get(`api/vocab/change-dates/${_id}`)
+            .then(() => console.log(`Vocab ${_id}'s review dates successfully updated.`))
+            .then(() => getAllVocabs())
+            .catch(error => console.error(error))
+    }
+
     return (
         <div id={"app"}>
             <Header userName={userName} logout={logout}/>
+            <div style={{height: "60px"}}/>
             {useForm && <Form/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
                        element={<LoginPage
-                          />}/>
+                       />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
-                <Route path={"/"}
-                       element={<HomePage
-                           // finishedReviewing={vocabsLeftToReview.length > 1 ? false : true}
-                           finishedReviewing={false}
-                                          setUseForm={setUseForm}/>}/>
+
+                    <Route path={"/"}
+                           element={<HomePage
+                               finishedReviewing={vocabsLeftToReview.length < 1}
+                               setUseForm={setUseForm}/>}/>
+
                     <Route path={"/calendar"} element={
-                        <CalendarPage
-                            vocabs={vocabs}/>}/>
+                        <CalendarPage vocabs={vocabs}/>}/>
+
                     <Route path={"/review"}
                            element={<ReviewPage
-                               // todaysVocabs={getTodaysVocabs()}
-                           />}/>
+                               removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
+                               vocabsLeftToReview={vocabsLeftToReview}
+                           changeReviewDates={changeReviewDates}/>}/>
+
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
                                deleteVocab={deleteVocab}
+                               activateVocab={activateVocab}
                            />}/>
 
-                    </Route>
+                </Route>
             </Routes>
         </div>
     )
