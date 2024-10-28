@@ -54,6 +54,7 @@ function App() {
         setVocabsLeftToReview(vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
     }
 
+
     function getTodaysVocabs(): Vocab[] {
         const date = new Date();
         const year = date.getFullYear();
@@ -62,6 +63,7 @@ function App() {
         const today = `${year}-${month}-${day}`;
         return vocabs.filter(vocab => vocab.reviewDates.includes(today))
     }
+
 
     function getVocab(_id: string): void {
         axios.get(`api/vocab/${_id}`)
@@ -77,10 +79,24 @@ function App() {
     }
 
 
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error))
+    }
+
+
     function activateVocab(_id: string): void {
-        axios.get(`api/vocab/activate/${_id}`)
+        axios.put(`api/vocab/activate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully activated.`))
             .then(() => getAllVocabs())
+            .catch(error => console.error(error))
+    }
+
+
+    function deactivateVocab(_id:string):void {
+        axios.put(`api/vocab/deactivate/${_id}`)
+            .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
             .catch(error => console.error(error))
     }
 
@@ -109,15 +125,9 @@ function App() {
     }, [userName]);
 
 
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
-
 
     function changeReviewDates(_id: string | null): void {
-        axios.get(`api/vocab/change-dates/${_id}`)
+        axios.put(`api/vocab/change-dates/${_id}`)
             .then(() => console.log(`Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabs())
             .catch(error => console.error(error))
@@ -142,8 +152,9 @@ function App() {
                                setUseForm={setUseForm}/>}/>
 
                     <Route path={"/calendar"} element={
-                        <CalendarPage vocabs={vocabs}/>}/>
-
+                        <CalendarPage
+                            vocabs={vocabs}
+                            deactivateVocab={deactivateVocab}/>}/>
                     <Route path={"/review"}
                            element={<ReviewPage
                                removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}

@@ -38,14 +38,14 @@ class VocabControllerTest {
 
     @Test
     void changeReviewDates_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/change-dates/nonexistent-id"))
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/change-dates/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
 
     @Test
     void changeReviewDates_shouldReturnVocabWithNewReviewDates_whenCalledWithExistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/change-dates/000"))
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/change-dates/000"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {"_id":"000", "word":"la prueba", "translation":"test",
@@ -56,15 +56,33 @@ class VocabControllerTest {
     }
 
     @Test
-    void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/nonexistent-id"))
+    void deactivateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/nonexistent-id"))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void deactivateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/000"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"}
+                        """))
+                .andExpect(jsonPath("$.reviewDates").isEmpty());
+    }
+
+    @Test
+    void activateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
 
     @Test
     void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/activate/000"))
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/000"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {"_id":"000", "word":"la prueba", "translation":"test",

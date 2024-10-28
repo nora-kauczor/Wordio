@@ -29,6 +29,23 @@ class VocabServiceTest {
 
 
     @Test
+    void deactivateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
+        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
+        assertThrows(NoSuchElementException.class, () -> vocabService.deactivateVocab("000"));
+    }
+
+    @Test
+    void deactivateVocab_shouldReturnVocabWithEmptiedReviewDates_whenCalledWithExistentId(){
+        Vocab testVocab = new Vocab("000", "la prueba", "test",
+                "", "Spanish", List.of(LocalDate.of(2024,11,15)));
+        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
+        vocabService.deactivateVocab("000");
+        assertTrue(testVocab.reviewDates.isEmpty());
+        verify(mockVocabRepo).findById("000");
+    }
+
+
+    @Test
     void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
         when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
         assertThrows(NoSuchElementException.class, () -> vocabService.activateVocab("000"));
@@ -40,6 +57,7 @@ class VocabServiceTest {
                 "", "Spanish", Collections.emptyList());
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
         vocabService.activateVocab("000");
+        assertFalse(testVocab.reviewDates.isEmpty());
         verify(mockVocabRepo).findById("000");
     }
 
