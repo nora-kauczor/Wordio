@@ -18,6 +18,7 @@ import {
 type Props = {
     vocabs: Vocab[]
     deactivateVocab: (_id:string)=> void
+    language:string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {

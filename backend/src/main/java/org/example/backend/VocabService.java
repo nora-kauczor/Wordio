@@ -7,31 +7,43 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.example.backend.Language.getEnumByString;
+import static org.example.backend.Vocab.generateDates;
+
 @RequiredArgsConstructor
 @Service
 public class VocabService {
     private final VocabRepo vocabRepo;
 
 
-    public Vocab changeReviewDates(String _id){
+    public Vocab changeReviewDates(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
-        vocab.reviewDates = vocab.generateDates(firstDayOfOldReviewDates.plusDays(1));
-        return vocabRepo.save(vocab);
+        List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
+        vocab.setReviewDates(newDates);
+        vocabRepo.save(vocab);
+        return vocabRepo.findById(_id).orElseThrow();
     }
 
     public Vocab deactivateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
-        vocab.reviewDates = List.of();
+        vocab.setReviewDates(List.of());
         return vocabRepo.save(vocab);
     }
 
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
-        vocab.reviewDates = vocab.generateDates(LocalDate.now());
+        List<LocalDate> dates = generateDates(LocalDate.now());
+        vocab.setReviewDates(dates);
         return vocabRepo.save(vocab);
     }
 
+    public List<Vocab> getAllVocabsOfLanguage(String languageString) {
+        Language language = getEnumByString(languageString);
+        return vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.getLanguage().equals(language))
+                .toList();
+    }
 
 
     public List<Vocab> getAllVocabs() {
