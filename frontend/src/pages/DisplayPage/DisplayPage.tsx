@@ -3,7 +3,11 @@ import CardContainer
     from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
 import {useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import {
+    useLocation,
+    useNavigate,
+    useParams
+} from "react-router-dom";
 
 type Props = {
     vocabs:Vocab[]
@@ -12,17 +16,12 @@ type Props = {
 export default function DisplayPage(props: Readonly<Props>) {
 const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
     const navigate = useNavigate()
-    const location = useLocation()
-
-    function getVocabToBeDisplayed(){
-        const path = location.pathname
-        const _id = path.substring(9)
-        return props.vocabs.find(vocab => vocab._id === _id)
-    }
+    const { _id } = useParams()
 
     useEffect(() => {
-      setDisplayedVocab(getVocabToBeDisplayed())
-    }, []);
+        if (!props.vocabs){return}
+      setDisplayedVocab(props.vocabs.find(vocab => vocab._id === _id?.substring(1)))
+    }, [_id, props.vocabs]);
 
 if (!props.vocabs){<p>Loading...</p>}
 

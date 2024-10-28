@@ -28,7 +28,7 @@ export default function VocabList(props: Readonly<Props>) {
                 return
             }
             props.activateVocab(_id)
-            navigate(`/display:${_id}`)
+            navigate(`/display/:${_id}`)
         }
     }
 

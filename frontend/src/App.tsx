@@ -117,12 +117,11 @@ function App() {
     }
 
 
-    // useEffect(() => {
-    //     if (userName) {
-    //         navigate("/")
-    //     }
-    // }, [userName]);
-
+    useEffect(() => {
+        if (userName) {
+            navigate("/")
+        }
+    }, [userName]);
 
 
     function changeReviewDates(_id: string | null): void {
@@ -131,11 +130,6 @@ function App() {
             .then(() => getAllVocabs())
             .catch(error => console.error(error))
     }
-
-    // console.log("todaysVocabs", todaysVocabs);
-    //
-    // console.log("vocabsLeftToReview", vocabsLeftToReview);
-
 
 
     return (
@@ -165,7 +159,7 @@ function App() {
                            element={<ReviewPage
                                removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                                vocabsLeftToReview={vocabsLeftToReview}
-                           changeReviewDates={changeReviewDates}/>}/>
+                               changeReviewDates={changeReviewDates}/>}/>
 
                     <Route path={"/backlog"}
                            element={<BacklogPage
@@ -175,12 +169,12 @@ function App() {
                            />}/>
                     <Route path={"/display/:_id"}
                            element={<DisplayPage
-                               // displayedVocab={displayedVocab}
-                               vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
+                               vocabs={vocabs}
                            />}/>
 
                 </Route>
             </Routes>
+            <div style={{height: "60px"}}/>
         </div>
     )
 }

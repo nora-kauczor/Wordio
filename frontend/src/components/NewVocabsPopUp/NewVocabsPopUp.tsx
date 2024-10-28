@@ -16,8 +16,8 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     }
 
     function getRandomVocab():Vocab {
-        // if (!props.vocabs) {return null}
-        const numberOfVocabs: number = props.vocabs.length
+        const inactiveVocabs:Vocab[] = props.vocabs.filter(vocab => vocab.reviewDates.length < 1)
+        const numberOfVocabs: number = inactiveVocabs.length
         const randomIndex = Math.floor(Math.random() * numberOfVocabs)-1
         return props.vocabs[randomIndex];
     }
@@ -25,7 +25,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     function goToDisplayPageWithRandomVocab(){
         if (!getRandomVocab() || !getRandomVocab()._id) {return}
         const _id = getRandomVocab()._id
-        navigate(`/display/${_id}`)
+        navigate(`/display/:${_id}`)
     }
 
     const navigate = useNavigate()
