@@ -14,6 +14,20 @@ import static org.example.backend.Language.getEnumByString;
 public class VocabService {
     private final VocabRepo vocabRepo;
 
+
+    public Vocab changeReviewDates(String _id){
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+        LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
+        vocab.reviewDates = vocab.generateDates(firstDayOfOldReviewDates.plusDays(1));
+        return vocabRepo.save(vocab);
+    }
+
+    public Vocab deactivateVocab(String _id) {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+        vocab.reviewDates = List.of();
+        return vocabRepo.save(vocab);
+    }
+
     public Vocab activateVocab(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         vocab.reviewDates = vocab.generateDates(LocalDate.now());
@@ -26,6 +40,8 @@ public class VocabService {
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .toList();
     }
+
+
 
     public List<Vocab> getAllVocabs() {
         return vocabRepo.findAll();

@@ -16,7 +16,17 @@ public class VocabController {
 
     private final VocabService vocabService;
 
-    @GetMapping("/activate/{_id}")
+    @PutMapping("/change-dates/{_id}")
+    public Vocab changeReviewDates(@PathVariable String _id) {
+        return vocabService.changeReviewDates(_id);
+    }
+
+    @PutMapping("/deactivate/{_id}")
+    public Vocab deactivateVocab(@PathVariable String _id){
+        return vocabService.deactivateVocab(_id);
+    }
+
+    @PutMapping("/activate/{_id}")
     public Vocab activateVocab(@PathVariable String _id){
        return vocabService.activateVocab(_id);
     }
@@ -42,19 +52,19 @@ public class VocabController {
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id){
+    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id) {
         return vocabService.editVocab(editedVocab);
     }
 
     @DeleteMapping("/{_id}")
-    public String deleteVocab(@PathVariable String _id){
-       return vocabService.deleteVocab(_id);
+    public String deleteVocab(@PathVariable String _id) {
+        return vocabService.deleteVocab(_id);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
-    public ErrorMessage handleElementNotFoundException(){
+    public ErrorMessage handleElementNotFoundException() {
         return new ErrorMessage("No matches for given ID.");
     }
-    
+
 }
