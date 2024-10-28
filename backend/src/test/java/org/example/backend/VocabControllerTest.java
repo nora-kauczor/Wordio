@@ -2,6 +2,7 @@ package org.example.backend;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,7 +34,7 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", "Spanish", List.of(LocalDate.of(2024,11, 1)));
+                "", Language.SPANISH, List.of(LocalDate.of(2024,11,1)));
         vocabRepo.save(testVocab);
     }
 
@@ -51,7 +53,6 @@ class VocabControllerTest {
                         {"_id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}
                         """))
-                .andExpect(jsonPath("$.reviewDates").isNotEmpty())
                 .andExpect(jsonPath("$.reviewDates[0]").value("2024-11-02"));
     }
 
@@ -60,7 +61,6 @@ class VocabControllerTest {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
-
 
     @Test
     void deactivateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
@@ -89,6 +89,23 @@ class VocabControllerTest {
                                           "info":"", "language":"Spanish"}
                         """))
                 .andExpect(jsonPath("$.reviewDates").isNotEmpty());
+    }
+
+    @Test
+    void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Esperanto"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Spanish"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [{"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"}]
+                        """))
+                .andExpect(jsonPath("$[0].reviewDates[0]").value("2024-11-01"));
     }
 
 
