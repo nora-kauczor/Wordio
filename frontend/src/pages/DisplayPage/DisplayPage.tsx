@@ -23,7 +23,7 @@ const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
       setDisplayedVocab(props.vocabs.find(vocab => vocab._id === _id?.substring(1)))
     }, [_id, props.vocabs]);
 
-if (!props.vocabs){<p>Loading...</p>}
+if (!props.vocabs) <p>Loading...</p>
 
     return (
         <div id={"display-page"}>
