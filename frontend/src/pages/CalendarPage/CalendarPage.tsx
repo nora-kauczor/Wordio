@@ -26,26 +26,23 @@ export default function CalendarPage(props: Readonly<Props>) {
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
     const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
 
-    // useEffect(() => {
-    //     getMonth()
-    // }, []);
-    //
-    // if (!month) {
-    //     return <p>Loading calendar...</p>
-    // }
-    //
-    // async function getMonth() {
-    //     const today = new Date();
-    //     const year = today.getFullYear().toString();
-    //     const month = (today.getMonth() + 1).toString();
-    //     axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}`)
-    //         .then(response => setMonth(response.data))
-    //         .catch(error => console.error(error))
-    // }
+    useEffect(() => {
+        if (!props.language) {return}
+        getMonth()
+    }, [props.language]);
 
-    axios.get(`/api/calendar?year=2024&month=11&language=Spanish`)
-        .then(response => console.log(response.data))
-        .catch(error => console.error(error))
+    if (!month) {
+        return <p>Loading calendar...</p>
+    }
+
+    async function getMonth() {
+        const today = new Date();
+        const year = today.getFullYear().toString();
+        const month = (today.getMonth() + 1).toString();
+        axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}`)
+            .then(response => setMonth(response.data))
+            .catch(error => console.error(error))
+    }
 
     function changeMonth(clickedButton: string):void {
         if (!month) {
@@ -66,6 +63,7 @@ export default function CalendarPage(props: Readonly<Props>) {
         }
         axios.get(`/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}`)
             .then(response => setMonth(response.data))
+            .then(response => console.log(response))
             .catch(error => console.error(error))
     }
 
