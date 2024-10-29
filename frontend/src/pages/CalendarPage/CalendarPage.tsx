@@ -38,12 +38,12 @@ export default function CalendarPage(props: Readonly<Props>) {
     //     const today = new Date();
     //     const year = today.getFullYear().toString();
     //     const month = (today.getMonth() + 1).toString();
-    //     axios.get(`/api/calendar?year=${year}&month=${month}`)
+    //     axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}`)
     //         .then(response => setMonth(response.data))
     //         .catch(error => console.error(error))
     // }
 
-    axios.get(`/api/calendar?year=2024&month=11`)
+    axios.get(`/api/calendar?year=2024&month=11&language=Spanish`)
         .then(response => console.log(response.data))
         .catch(error => console.error(error))
 
@@ -64,7 +64,7 @@ export default function CalendarPage(props: Readonly<Props>) {
             newMonth = currentMonthNumber < 12 ? (currentMonthNumber + 1) : 1
             newYear = currentMonthNumber < 12 ? currentYearNumber : (currentYearNumber + 1)
         }
-        axios.get(`/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}`)
+        axios.get(`/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}`)
             .then(response => setMonth(response.data))
             .catch(error => console.error(error))
     }
