@@ -46,8 +46,7 @@
 #invisible-dot {color: var(--secondary-color);}
 
 #plus {
-    font-size: 1.25em;
-
-    padding: 0;
+    font-size: 1em;
+    padding: 3px;
     margin: 0;
 }
