@@ -86,16 +86,19 @@ function getMonth() {
 
     return (
         <div id={"calendar-page"}>
-            <div id={"button-container"}>
+            <div id={"button-and-header-container"}>
                 <button
+                    className={"calendar-button"}
                     onClick={() => changeMonth("previous")}
-                    onKeyDown={() => changeMonth("previous")}>previous
+                    onKeyDown={() => changeMonth("previous")}>◀︎
                 </button>
-                <button onClick={() => changeMonth("next")}
-                        onKeyDown={() => changeMonth("next")}>next
+                {month && <h2>{month.yearMonthName}</h2>}
+                <button className={"calendar-button"}
+                        onClick={() => changeMonth("next")}
+                        onKeyDown={() => changeMonth("next")}>▶︎
                 </button>
             </div>
-            {month && <h2>{month.yearMonthName}</h2>}
+
             <article id={"weeks-wrapper"}>
                 {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek =>
                     <CalendarWeek
@@ -109,6 +112,7 @@ function getMonth() {
                     vocabsOfDay={vocabsOfDayPopUp}
                     closeDayPopUp={closeDayPopUp}
                     deactivateVocab={props.deactivateVocab}/>}
+        <button id={"back-button"}>← Back</button>
         </div>
     )
 }
