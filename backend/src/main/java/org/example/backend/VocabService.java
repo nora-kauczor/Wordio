@@ -15,7 +15,6 @@ import static org.example.backend.Vocab.generateDates;
 public class VocabService {
     private final VocabRepo vocabRepo;
 
-
     public Vocab changeReviewDates(String _id) {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow();
         LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();

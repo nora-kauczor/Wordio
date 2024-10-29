@@ -22,6 +22,7 @@ public class CalendarService {
 
     public Month getMonth(YearMonth yearMonth, String languageString) {
         Language language = Language.getEnumByString(languageString);
+        System.out.println(language);
         List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth, language);
         VocabIdsOfDate[][] vocabIdsOfMonth = createEmptyCalendar();
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
@@ -46,6 +47,7 @@ public class CalendarService {
 
     public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language) {
         List<Vocab> allVocabs = vocabRepo.findAll();
+        System.out.println(allVocabs);
         List<Vocab> vocabsOfDate = allVocabs.stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .filter(vocab ->
