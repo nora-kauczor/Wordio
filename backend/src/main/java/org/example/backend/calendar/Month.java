@@ -30,3 +30,4 @@ public record Month
         return Objects.hash(yearMonthName, Arrays.deepHashCode(vocabIdsOfMonth));
     }
 }
+
