@@ -1,15 +1,20 @@
 import './CardContainer.css'
 import {Vocab} from "../../types/Vocab.ts";
+
 type Props = {
-    vocab:Vocab
+    displayedVocab: Vocab
 }
 
-// rename ReviewCardContainer
-export default function CardContainer(props:Readonly<Props>){
-    return(
+
+export default function CardContainer(props: Readonly<Props>) {
+    if (!props.displayedVocab) return <p> Loading...</p>
+
+    return (
         <div id={"card-container"}>
-            <article id={"word-card"} className={"card"}>{props.vocab.word}</article>
-            <article id={"translation-card"} className={"card"}>{props.vocab.translation}</article>
+            <article id={"word-card"}
+                     className={"card"}>{props.displayedVocab.word}</article>
+            <article id={"translation-card"}
+                     className={"card"}>{props.displayedVocab.translation}</article>
         </div>
     )
 }

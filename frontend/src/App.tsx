@@ -18,6 +18,8 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
+import DisplayPage
+    from "./pages/DisplayPage/DisplayPage.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -53,6 +55,7 @@ function App() {
                 .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
+        // only update today's vocabs after the above comparison
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
@@ -78,10 +81,10 @@ function App() {
             .catch(error => console.error(error))
     }
 
-
     function deactivateVocab(_id:string):void {
         axios.put(`api/vocab/deactivate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
+            .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
@@ -92,7 +95,6 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    changeReviewDates("670bc0ba64630f6a589cd2c3");
 
     const navigate = useNavigate();
 
@@ -134,12 +136,12 @@ function App() {
             .catch(error => console.error(error))
     }
 
-
     function editVocab(editedVocab: Vocab): void {
         axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
             .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
+
+
+
 
     return (
         <div id={"app"}>
@@ -157,6 +159,7 @@ function App() {
 
                     <Route path={"/"}
                            element={<HomePage
+                               vocabs={vocabs}
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
                                language={language}/>}/>
@@ -178,9 +181,14 @@ function App() {
                                activateVocab={activateVocab}
                                language={language}
                            />}/>
+                    <Route path={"/display/:_id"}
+                           element={<DisplayPage
+                               vocabs={vocabs}
+                           />}/>
 
                 </Route>
             </Routes>
+            <div style={{height: "60px"}}/>
         </div>
     )
 }
