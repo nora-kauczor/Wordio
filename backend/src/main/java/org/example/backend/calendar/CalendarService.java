@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +18,28 @@ public class CalendarService {
 
     private final VocabRepo vocabRepo;
 
-    public VocabIdsOfDate[][] getVocabsOfMonth(YearMonth yearMonth) {
+//    public VocabIdsOfDate[][] getVocabsOfMonth(YearMonth yearMonth) {
+//        List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth);
+//        VocabIdsOfDate[][] vocabsOfMonth = createEmptyCalendar();
+//        DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
+//        int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
+//        fillWeek1(vocabsOfMonth, idsAndDates, calendarIndexOfFirstDay);
+//        fillWeek2To4(vocabsOfMonth, idsAndDates);
+//        fillWeek5(vocabsOfMonth, idsAndDates);
+//        return vocabsOfMonth;
+//    }
+
+    public Month getVocabsOfMonth(YearMonth yearMonth) {
         List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth);
-        VocabIdsOfDate[][] vocabsOfMonth = createEmptyCalendar();
+        VocabIdsOfDate[][] vocabIdsOfMonth = createEmptyCalendar();
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
         int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
-        fillWeek1(vocabsOfMonth, idsAndDates, calendarIndexOfFirstDay);
-        fillWeek2To4(vocabsOfMonth, idsAndDates);
-        fillWeek5(vocabsOfMonth, idsAndDates);
-        return vocabsOfMonth;
+        fillWeek1(vocabIdsOfMonth, idsAndDates, calendarIndexOfFirstDay);
+        fillWeek2To4(vocabIdsOfMonth, idsAndDates);
+        fillWeek5(vocabIdsOfMonth, idsAndDates);
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("MMMM yyyy");
+        String yearMonthName = yearMonth.format(formatter);
+        return new Month(yearMonthName, vocabIdsOfMonth);
     }
 
     private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth) {

@@ -5,6 +5,7 @@ import org.example.backend.Vocab;
 import org.example.backend.VocabRepo;
 import org.junit.jupiter.api.Test;
 
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ class CalendarServiceTest {
 
 
     @Test
-    void getVocabsOfMonth() {
+    void getVocabsOfMonth_ShouldReturnMonthObjectWithYearMonthName_whenCalledWithYearMonth() {
         LocalDate date011024 = LocalDate.of(2024, 10, 1);
         LocalDate date021024 = LocalDate.of(2024, 10, 2);
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
@@ -33,7 +34,29 @@ class CalendarServiceTest {
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
                 "", Language.SPANISH, List.of(date181024));
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
-        VocabIdsOfDate[][] expected = new VocabIdsOfDate[][]{
+        String expectedYearMonthName = "October 2024";
+        VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[5][7];
+        Month expected = new Month(expectedYearMonthName, expectedVocabIdsOfMonth);
+        Month actual = calendarService.getVocabsOfMonth(YearMonth.of(2024, 10));
+        assertEquals(expected.yearMonthName(), actual.yearMonthName());
+    }
+
+    @Test
+    void getVocabsOfMonth_ShouldReturnMonthObjectWith2DWithDatesOfYearMonth_whenCalledWithYearMonth() {
+        LocalDate date011024 = LocalDate.of(2024, 10, 1);
+        LocalDate date021024 = LocalDate.of(2024, 10, 2);
+        LocalDate date031024 = LocalDate.of(2024, 10, 3);
+        LocalDate date161024 = LocalDate.of(2024, 10, 16);
+        LocalDate date181024 = LocalDate.of(2024, 10, 18);
+        Vocab testVocab1 = new Vocab("000", "la prueba", "test",
+                "", Language.SPANISH, List.of(date011024, date021024, date031024));
+        Vocab testVocab2 = new Vocab("111", "la prueba", "test",
+                "", Language.SPANISH, List.of(date161024, date181024));
+        Vocab testVocab3 = new Vocab("222", "la prueba", "test",
+                "", Language.SPANISH, List.of(date181024));
+        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
+        String expectedYearMonthName = "October 2024";
+        VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[][]{
                 {
                         null,
                         new VocabIdsOfDate(LocalDate.of(2024, 10, 1), List.of("000")),
@@ -79,11 +102,11 @@ class CalendarServiceTest {
                         null,
                         null
                 }
-
-
         };
-        VocabIdsOfDate[][] actual = calendarService.getVocabsOfMonth(YearMonth.of(2024, 10));
-        assertArrayEquals(expected[0], actual[0]);
+
+        Month expected = new Month(expectedYearMonthName, expectedVocabIdsOfMonth);
+        Month actual = calendarService.getVocabsOfMonth(YearMonth.of(2024, 10));
+        assertArrayEquals(expected.vocabIdsOfMonth()[0], actual.vocabIdsOfMonth()[0]);
     }
 
 

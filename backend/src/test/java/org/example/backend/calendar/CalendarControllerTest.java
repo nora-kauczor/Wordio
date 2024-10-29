@@ -53,6 +53,7 @@ class CalendarControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
+                        {"yearMonthName": "October 2024", "vocabIdsOfMonth":
                         [
                             [
                                 null,
@@ -100,7 +101,7 @@ class CalendarControllerTest {
                                 null
                             ]
                         ]
-                        
+                        }
                         """));
     }
 
