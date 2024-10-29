@@ -92,7 +92,7 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    changeReviewDates("670bc0ba64630f6a589cd2c3");
+
 
     const navigate = useNavigate();
 

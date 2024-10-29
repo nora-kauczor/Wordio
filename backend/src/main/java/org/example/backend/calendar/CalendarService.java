@@ -3,6 +3,7 @@ package org.example.backend.calendar;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.Vocab;
 import org.example.backend.VocabRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -12,24 +13,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
 public class CalendarService {
 
     private final VocabRepo vocabRepo;
 
-//    public VocabIdsOfDate[][] getVocabsOfMonth(YearMonth yearMonth) {
-//        List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth);
-//        VocabIdsOfDate[][] vocabsOfMonth = createEmptyCalendar();
-//        DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
-//        int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
-//        fillWeek1(vocabsOfMonth, idsAndDates, calendarIndexOfFirstDay);
-//        fillWeek2To4(vocabsOfMonth, idsAndDates);
-//        fillWeek5(vocabsOfMonth, idsAndDates);
-//        return vocabsOfMonth;
-//    }
+    @Autowired
+    public CalendarService(VocabRepo vocabRepo) {
+        this.vocabRepo = vocabRepo;
+    }
 
-    public Month getVocabsOfMonth(YearMonth yearMonth) {
+    public Month getMonth(YearMonth yearMonth) {
         List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth);
         VocabIdsOfDate[][] vocabIdsOfMonth = createEmptyCalendar();
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();

@@ -21,7 +21,7 @@ class CalendarServiceTest {
 
 
     @Test
-    void getVocabsOfMonth_ShouldReturnMonthObjectWithYearMonthName_whenCalledWithYearMonth() {
+    void getMonth_ShouldReturnMonthObjectWithYearMonthName_whenCalledWithYearMonth() {
         LocalDate date011024 = LocalDate.of(2024, 10, 1);
         LocalDate date021024 = LocalDate.of(2024, 10, 2);
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
@@ -37,7 +37,7 @@ class CalendarServiceTest {
         String expectedYearMonthName = "October 2024";
         VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[5][7];
         Month expected = new Month(expectedYearMonthName, expectedVocabIdsOfMonth);
-        Month actual = calendarService.getVocabsOfMonth(YearMonth.of(2024, 10));
+        Month actual = calendarService.getMonth(YearMonth.of(2024, 10));
         assertEquals(expected.yearMonthName(), actual.yearMonthName());
     }
 
@@ -105,7 +105,7 @@ class CalendarServiceTest {
         };
 
         Month expected = new Month(expectedYearMonthName, expectedVocabIdsOfMonth);
-        Month actual = calendarService.getVocabsOfMonth(YearMonth.of(2024, 10));
+        Month actual = calendarService.getMonth(YearMonth.of(2024, 10));
         assertArrayEquals(expected.vocabIdsOfMonth()[0], actual.vocabIdsOfMonth()[0]);
     }
 

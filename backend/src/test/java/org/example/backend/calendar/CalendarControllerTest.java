@@ -35,7 +35,7 @@ class CalendarControllerTest {
 
 
     @Test
-    void getVocabsOfMonth_shouldReturnArrayOfCurrentMonth_whenCalledWithYearMonthNow() throws Exception {
+    void getMonth_shouldReturnMonth_whenCalledWithYearMonthNow() throws Exception {
         LocalDate date011024 = LocalDate.of(2024, 10, 1);
         LocalDate date021024 = LocalDate.of(2024, 10, 2);
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
