@@ -25,9 +25,11 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
-    const [language, setLanguage] = useLocalStorageState("language", {defaultValue: ""});
+    const [language, setLanguage] = useLocalStorageState("language", {defaultValue: "Spanish"});
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>("vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>("todaysVocabs", {defaultValue: []})
+    const navigate = useNavigate();
+
 
     function getAllVocabsOfLanguage() {
         axios.get(`/api/vocab/language?language=${language}`)
@@ -36,14 +38,28 @@ function App() {
             .catch(error => console.error(error))
     }
 
+    function getUserName():void{
+        axios.get("/api/vocab/auth")
+            .then(response => setUserName(response.data.name))
+            .then(() => navigate("/"))
+            .catch(error => console.error(error))
+    }
+
     useEffect(() => {
         getAllVocabsOfLanguage()
         getUserName()
-    }, [language]);
+    }, []);
 
     useEffect(() => {
-        getUserName()
-    }, []);
+        if (userName) {
+            navigate("/")
+        }
+    }, [userName]);
+
+    useEffect(() => {
+        getAllVocabsOfLanguage()
+    }, [language]);
+
 
     function updateVocabsLeftToReview(): void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
@@ -95,29 +111,12 @@ function App() {
     }
 
 
-    const navigate = useNavigate();
-
     function logout() {
         setUserName("")
         const host = window.location.host ===
         'localhost:5173' ? 'http://localhost:8080' : window.location.origin
         window.open(host + '/api/auth/logout', '_self')
     }
-
-    function getUserName():void{
-        axios.get("/api/vocab/auth")
-            .then(response => setUserName(response.data.name))
-            .then(() => navigate("/"))
-            .catch(error => console.error(error))
-    }
-
-
-    useEffect(() => {
-        if (userName) {
-            navigate("/")
-        }
-    }, [userName]);
-
 
 
 
@@ -155,28 +154,25 @@ function App() {
                        />}/>
                 <Route element={<ProtectedRoutes
                     userName={userName}/>}>
-
                     <Route path={"/"}
                            element={<HomePage
                                vocabs={vocabs}
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
                                language={language}/>}/>
-
                     <Route path={"/calendar"} element={
                         <CalendarPage
                             vocabs={vocabs} language={language}
                             deactivateVocab={deactivateVocab}/>}/>
-
                     <Route path={"/review"}
                            element={<ReviewPage
                                removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                                vocabsLeftToReview={vocabsLeftToReview}
                                changeReviewDates={changeReviewDates}/>}/>
-
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
+                               deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                                language={language}
                            />}/>

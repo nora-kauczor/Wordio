@@ -25,17 +25,19 @@ export default function CalendarPage(props: Readonly<Props>) {
     const [month, setMonth] = useState<Month>()
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
     const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
+console.log(month)
 
     useEffect(() => {
         if (!props.language) {return}
         getMonth()
-    }, [props.language]);
+    }, []);
 
     if (!month) {
         return <p>Loading calendar...</p>
     }
 
-    async function getMonth() {
+
+function getMonth() {
         const today = new Date();
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
@@ -48,8 +50,8 @@ export default function CalendarPage(props: Readonly<Props>) {
         if (!month) {
             return
         }
-        const currentYear: string | undefined = month.vocabIdsOfYearMonth[1][0].date.substring(0, 4)
-        const currentMonth: string | undefined = month.vocabIdsOfYearMonth[1][0].date.substring(5, 9)
+        const currentYear: string | undefined = month.vocabIdsOfMonth[1][0].date.substring(0, 4)
+        const currentMonth: string | undefined = month.vocabIdsOfMonth[1][0].date.substring(5, 9)
         const currentMonthNumber: number = parseInt(currentMonth)
         const currentYearNumber: number = parseInt(currentYear)
         let newMonth: number = 0
@@ -95,7 +97,7 @@ export default function CalendarPage(props: Readonly<Props>) {
             </div>
             {month && <h2>{month.yearMonthName}</h2>}
             <article id={"weeks-wrapper"}>
-                {month && month.vocabIdsOfYearMonth.map(vocabIdsOfWeek =>
+                {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek =>
                     <CalendarWeek
                         key={uid()}
                         vocabIdsOfWeek={vocabIdsOfWeek}

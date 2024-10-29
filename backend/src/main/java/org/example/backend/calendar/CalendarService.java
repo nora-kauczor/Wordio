@@ -2,6 +2,7 @@ package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.Language;
+import org.example.backend.LanguageNotFoundException;
 import org.example.backend.Vocab;
 import org.example.backend.VocabRepo;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,8 @@ public class CalendarService {
     private final VocabRepo vocabRepo;
 
 
-    public Month getMonth(YearMonth yearMonth, String languageString) {
+    public Month getMonth(YearMonth yearMonth, String languageString) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
-        System.out.println(language);
         List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth, language);
         VocabIdsOfDate[][] vocabIdsOfMonth = createEmptyCalendar();
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
