@@ -1,9 +1,11 @@
 import './NewVocabsPopUp.css'
 import {useNavigate} from "react-router-dom";
+import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
     setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>;
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>;
+    vocabs:Vocab[]
 }
 
 export default function NewVocabsPopUp(props: Readonly<Props>) {
@@ -11,6 +13,19 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     function handleClick() {
         props.setShowPopUp(false)
         props.setUseForm(true)
+    }
+
+    function getRandomVocab():Vocab {
+        const inactiveVocabs:Vocab[] = props.vocabs.filter(vocab => vocab.reviewDates.length < 1)
+        const numberOfVocabs: number = inactiveVocabs.length
+        const randomIndex = Math.floor(Math.random() * numberOfVocabs)-1
+        return props.vocabs[randomIndex];
+    }
+
+    function goToDisplayPageWithRandomVocab(){
+        if (!getRandomVocab() || !getRandomVocab()._id) {return}
+        const _id = getRandomVocab()._id
+        navigate(`/display/:${_id}`)
     }
 
     const navigate = useNavigate()
@@ -25,7 +40,9 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
                 onKeyDown={() => navigate("/backlog")}>Pick
             from backlog
         </button>
-        <button className={"new-vocabs-button"}>get random
+        <button className={"new-vocabs-button"}
+                onClick={goToDisplayPageWithRandomVocab}
+                onKeyDown={goToDisplayPageWithRandomVocab}>get random
             vocab
         </button>
     </div>)
