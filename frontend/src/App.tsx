@@ -18,6 +18,8 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
+import DisplayPage
+    from "./pages/DisplayPage/DisplayPage.tsx";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -78,10 +80,10 @@ function App() {
             .catch(error => console.error(error))
     }
 
-
     function deactivateVocab(_id:string):void {
         axios.put(`api/vocab/deactivate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
+            .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
@@ -91,7 +93,6 @@ function App() {
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
-
 
 
     const navigate = useNavigate();
@@ -157,6 +158,7 @@ function App() {
 
                     <Route path={"/"}
                            element={<HomePage
+                               vocabs={vocabs}
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
                                language={language}/>}/>
@@ -178,9 +180,14 @@ function App() {
                                activateVocab={activateVocab}
                                language={language}
                            />}/>
+                    <Route path={"/display/:_id"}
+                           element={<DisplayPage
+                               vocabs={vocabs}
+                           />}/>
 
                 </Route>
             </Routes>
+            <div style={{height: "60px"}}/>
         </div>
     )
 }

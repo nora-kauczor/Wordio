@@ -2,7 +2,7 @@ package org.example.backend;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.NoSuchElementException;
+
 
 public enum Language {
     SPANISH("Spanish"),
@@ -20,7 +20,7 @@ public enum Language {
         return value;
     }
 
-    public static Language getEnumByString(String language) {
+    public static Language getEnumByString(String language) throws LanguageNotFoundException {
         Language[] ArrayOfEnums = Language.values();
         Language searchedEnum = null;
 
@@ -29,7 +29,7 @@ public enum Language {
                 searchedEnum = ArrayOfEnums[i];
             }
         }
-        if (searchedEnum == null){throw new NoSuchElementException();
+        if (searchedEnum == null){throw new LanguageNotFoundException("Parameter invalid.");
         }
         return searchedEnum;
     }
