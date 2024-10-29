@@ -1,9 +1,9 @@
 package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Language;
 import org.example.backend.Vocab;
 import org.example.backend.VocabRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -13,19 +13,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class CalendarService {
 
     private final VocabRepo vocabRepo;
 
-    @Autowired
-    public CalendarService(VocabRepo vocabRepo) {
-        this.vocabRepo = vocabRepo;
-    }
 
-    public Month getMonth(YearMonth yearMonth) {
-        List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth);
+    public Month getMonth(YearMonth yearMonth, String languageString) {
+        Language language = Language.getEnumByString(languageString);
+        List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth, language);
         VocabIdsOfDate[][] vocabIdsOfMonth = createEmptyCalendar();
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
         int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
@@ -37,19 +34,21 @@ public class CalendarService {
         return new Month(yearMonthName, vocabIdsOfMonth);
     }
 
-    private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth) {
+    private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth, Language language) {
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
         for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
             LocalDate day = yearMonth.atDay(i);
-            VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day);
+            VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day, language);
             idsAndDates.add(idsAndDateOfDay);
         }
         return idsAndDates;
     }
 
-    public VocabIdsOfDate getVocabIdsOfDate(LocalDate date) {
+    public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language) {
         List<Vocab> allVocabs = vocabRepo.findAll();
-        List<Vocab> vocabsOfDate = allVocabs.stream().filter(vocab ->
+        List<Vocab> vocabsOfDate = allVocabs.stream()
+                .filter(vocab -> vocab.getLanguage().equals(language))
+                .filter(vocab ->
                 vocab.getReviewDates().stream().anyMatch(reviewDate -> reviewDate.equals(date))).toList();
         List<String> ids = vocabsOfDate.stream().map(vocab -> vocab.get_id()).toList();
         return new VocabIdsOfDate(date, ids);

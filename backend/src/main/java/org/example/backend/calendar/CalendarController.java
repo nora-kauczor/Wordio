@@ -16,7 +16,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping
-    public Month getMonth(@RequestParam String month, @RequestParam String year) {
-        return calendarService.getMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)));
+    public Month getMonth(@RequestParam String month, @RequestParam String year, @RequestParam String language) {
+        return calendarService.getMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)), language);
     }
 }

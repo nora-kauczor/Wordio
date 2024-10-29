@@ -47,10 +47,13 @@ class CalendarControllerTest {
                 "", Language.SPANISH, List.of(date161024, date181024));
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
                 "", Language.SPANISH, List.of(date181024));
+        Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
+                "", Language.ITALIAN, List.of(date181024));
         vocabRepo.save(testVocab1);
         vocabRepo.save(testVocab2);
         vocabRepo.save(testVocab3);
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10"))
+        vocabRepo.save(vocabDifferentLanguage);
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                         {"yearMonthName": "October 2024", "vocabIdsOfMonth":
