@@ -1,6 +1,8 @@
-package org.example.backend;
+package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Vocab;
+import org.example.backend.VocabRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -39,8 +41,8 @@ public class CalendarService {
     public VocabIdsOfDate getVocabIdsOfDate(LocalDate date) {
         List<Vocab> allVocabs = vocabRepo.findAll();
         List<Vocab> vocabsOfDate = allVocabs.stream().filter(vocab ->
-                vocab.reviewDates.stream().anyMatch(reviewDate -> reviewDate.equals(date))).toList();
-        List<String> ids = vocabsOfDate.stream().map(vocab -> vocab._id).toList();
+                vocab.getReviewDates().stream().anyMatch(reviewDate -> reviewDate.equals(date))).toList();
+        List<String> ids = vocabsOfDate.stream().map(vocab -> vocab.get_id()).toList();
         return new VocabIdsOfDate(date, ids);
     }
 
