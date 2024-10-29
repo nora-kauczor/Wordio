@@ -13,13 +13,12 @@ class VocabServiceTest {
     private final VocabService vocabService = new VocabService(mockVocabRepo);
 
     @Test
-    void changeReviewDates_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
-        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
-        assertThrows(NoSuchElementException.class, () -> vocabService.changeReviewDates("000"));
+    void changeReviewDates_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
+        assertThrows(IdNotFoundException.class, () -> vocabService.changeReviewDates("000"));
     }
 
     @Test
-    void changeReviewDates_shouldReturnVocabWithChangedDates_whenCalledWithId(){
+    void changeReviewDates_shouldReturnVocabWithChangedDates_whenCalledWithId() throws IdNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, List.of(LocalDate.of(2024,11, 1)));
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
@@ -31,13 +30,12 @@ class VocabServiceTest {
 
 
     @Test
-    void deactivateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
-        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
-        assertThrows(NoSuchElementException.class, () -> vocabService.deactivateVocab("000"));
+    void deactivateVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
+        assertThrows(IdNotFoundException.class, () -> vocabService.deactivateVocab("000"));
     }
 
     @Test
-    void deactivateVocab_shouldReturnVocabWithEmptiedReviewDates_whenCalledWithExistentId(){
+    void deactivateVocab_shouldReturnVocabWithEmptiedReviewDates_whenCalledWithExistentId() throws IdNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, List.of(LocalDate.of(2024,11,15)));
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
@@ -48,13 +46,12 @@ class VocabServiceTest {
 
 
     @Test
-    void activateVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
-        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
-        assertThrows(NoSuchElementException.class, () -> vocabService.activateVocab("000"));
+    void activateVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
+        assertThrows(IdNotFoundException.class, () -> vocabService.activateVocab("000"));
     }
 
     @Test
-    void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() {
+    void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws IdNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, Collections.emptyList());
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
@@ -64,13 +61,13 @@ class VocabServiceTest {
     }
 
     @Test
-    void getAllVocabsOfLanguage_shouldThrowNoSuchElementException_whenCalledWithNonexistentLanguage() {
-        assertThrows(NoSuchElementException.class, () -> vocabService.getAllVocabsOfLanguage("Esperanto"));
+    void getAllVocabsOfLanguage_shouldThrowLanguageNotFoundException_whenCalledWithNonexistentLanguage() {
+        assertThrows(LanguageNotFoundException.class, () -> vocabService.getAllVocabsOfLanguage("Esperanto"));
     }
 
 
     @Test
-    void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() {
+    void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws LanguageNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, List.of());
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
@@ -108,9 +105,8 @@ class VocabServiceTest {
     }
 
     @Test
-    void getVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
-        when(mockVocabRepo.findById("000")).thenThrow(NoSuchElementException.class);
-        assertThrows(NoSuchElementException.class, () -> vocabService.getVocab("000"));
+    void getVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
+        assertThrows(IdNotFoundException.class, () -> vocabService.getVocab("000"));
         verify(mockVocabRepo).findById("000");
     }
 
@@ -128,7 +124,7 @@ class VocabServiceTest {
     }
 
     @Test
-    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() {
+    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws IdNotFoundException {
         Vocab editedVocab = new Vocab("000", "la prueba", "test",
                 "added infotext", Language.SPANISH, List.of());
         when(mockVocabRepo.save(editedVocab)).thenReturn(editedVocab);
@@ -140,22 +136,22 @@ class VocabServiceTest {
     }
 
     @Test
-    void editVocab_shouldThrowNoSuchElementException_whenCalledWithVocabWithNonexistentId() {
+    void editVocab_shouldThrowIdNotFoundException_whenCalledWithVocabWithNonexistentId() {
         Vocab testVocab = new Vocab("ID that is not in the DB", "la prueba", "test",
                 "", Language.SPANISH, List.of());
-        assertThrows(NoSuchElementException.class, () -> vocabService.editVocab(testVocab));
+        assertThrows(IdNotFoundException.class, () -> vocabService.editVocab(testVocab));
         verify(mockVocabRepo).existsById("ID that is not in the DB");
     }
 
     @Test
-    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId() {
+    void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId() throws IdNotFoundException {
         when(mockVocabRepo.existsById("000")).thenReturn(true);
         vocabService.deleteVocab("000");
         verify(mockVocabRepo).deleteById("000");
     }
 
     @Test
-    void deleteVocab_shouldReturnString_whenCalledWithId() {
+    void deleteVocab_shouldReturnString_whenCalledWithId() throws IdNotFoundException {
         when(mockVocabRepo.existsById("000")).thenReturn(true);
         String expected = "Vocab successfully deleted.";
         String actual = vocabService.deleteVocab("000");
@@ -163,8 +159,8 @@ class VocabServiceTest {
     }
 
     @Test
-    void deleteVocab_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() {
-        assertThrows(NoSuchElementException.class, () -> vocabService.deleteVocab("000"));
+    void deleteVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
+        assertThrows(IdNotFoundException.class, () -> vocabService.deleteVocab("000"));
         verify(mockVocabRepo).existsById("000");
     }
 

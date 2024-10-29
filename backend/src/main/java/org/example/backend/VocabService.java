@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 import static org.example.backend.Language.getEnumByString;
 import static org.example.backend.Vocab.generateDates;
@@ -16,8 +16,8 @@ public class VocabService {
     private final VocabRepo vocabRepo;
 
 
-    public Vocab changeReviewDates(String _id) {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+    public Vocab changeReviewDates(String _id) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
         vocab.setReviewDates(newDates);
@@ -25,20 +25,20 @@ public class VocabService {
         return vocabRepo.findById(_id).orElseThrow();
     }
 
-    public Vocab deactivateVocab(String _id) {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+    public Vocab deactivateVocab(String _id) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         vocab.setReviewDates(List.of());
         return vocabRepo.save(vocab);
     }
 
-    public Vocab activateVocab(String _id) {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow();
+    public Vocab activateVocab(String _id) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         List<LocalDate> dates = generateDates(LocalDate.now());
         vocab.setReviewDates(dates);
         return vocabRepo.save(vocab);
     }
 
-    public List<Vocab> getAllVocabsOfLanguage(String languageString) {
+    public List<Vocab> getAllVocabsOfLanguage(String languageString) throws LanguageNotFoundException {
         Language language = getEnumByString(languageString);
         return vocabRepo.findAll().stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
@@ -50,8 +50,8 @@ public class VocabService {
         return vocabRepo.findAll();
     }
 
-    public Vocab getVocab(String id) {
-        return vocabRepo.findById(id).orElseThrow();
+    public Vocab getVocab(String id) throws IdNotFoundException {
+        return vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
     }
 
     public Vocab createVocab(VocabDTO vocabDTO) {
@@ -60,16 +60,16 @@ public class VocabService {
         return vocabRepo.save(newVocab);
     }
 
-    public Vocab editVocab(Vocab editedVocab) {
+    public Vocab editVocab(Vocab editedVocab) throws IdNotFoundException {
         if (!vocabRepo.existsById(editedVocab._id)) {
-            throw new NoSuchElementException();
+            throw new IdNotFoundException("ID not found.");
         }
         return vocabRepo.save(editedVocab);
     }
 
-    public String deleteVocab(String _id) {
+    public String deleteVocab(String _id) throws IdNotFoundException {
         if (!vocabRepo.existsById(_id)) {
-            throw new NoSuchElementException();
+            throw new IdNotFoundException("ID not found.");
         }
         vocabRepo.deleteById(_id);
         return "Vocab successfully deleted.";
