@@ -24,6 +24,7 @@ const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
 
 if (!props.vocabs) return <p>Loading...</p>
 
+
     return (
         <div id={"display-page"}>
             <p>You've just activated this vocab. Take your time to memorize it:</p>
