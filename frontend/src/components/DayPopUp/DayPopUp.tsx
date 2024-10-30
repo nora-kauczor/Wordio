@@ -1,8 +1,8 @@
 import {Vocab} from "../../types/Vocab.ts";
 import VocabList from "../VocabList/VocabList.tsx";
 import './DayPopUp.css'
-import {Simulate} from "react-dom/test-utils";
-import volumeChange = Simulate.volumeChange;
+
+
 type Props = {
     day:string
     vocabsOfDay: Vocab[]
