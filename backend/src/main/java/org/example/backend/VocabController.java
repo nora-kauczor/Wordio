@@ -52,7 +52,7 @@ public class VocabController {
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.MethodNotAllowedException, LanguageNotFoundException {
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
 
@@ -62,8 +62,8 @@ public class VocabController {
     }
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    @ExceptionHandler(MethodNotAllowedException.class)
-    public ErrorMessage handleMethodNotAllowedException() {
+    @ExceptionHandler(VocabIsNotEditableException.class)
+    public ErrorMessage handleVocabIsNotEditableException() {
         return new ErrorMessage("Method not allowed");
     }
 

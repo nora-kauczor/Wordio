@@ -61,12 +61,12 @@ public class VocabService {
         return vocabRepo.save(newVocab);
     }
 
-    public Vocab editVocab(VocabDTOEdit vocabDTO) throws IdNotFoundException, MethodNotAllowedException, LanguageNotFoundException {
+    public Vocab editVocab(VocabDTOEdit vocabDTO) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         if (!vocabRepo.existsById(vocabDTO._id())) {
             throw new IdNotFoundException("ID not found.");
         }
         if (!vocabDTO.editable()) {
-            throw new MethodNotAllowedException("Method not allowed.");
+            throw new VocabIsNotEditableException("Method not allowed.");
         }
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
