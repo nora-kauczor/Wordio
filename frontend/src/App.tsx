@@ -1,27 +1,23 @@
 import './App.css'
 import {
-    Route,
-    Routes, useNavigate
+    Route, Routes, useNavigate
 } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
-import CalendarPage
-    from "./pages/CalendarPage/CalendarPage.tsx";
+import CalendarPage from "./pages/CalendarPage/CalendarPage.tsx";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
-import BacklogPage
-    from "./pages/BacklogPage/BacklogPage.tsx";
+import BacklogPage from "./pages/BacklogPage/BacklogPage.tsx";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
-import DisplayPage
-    from "./pages/DisplayPage/DisplayPage.tsx";
+import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
 
-function App() {
+export default function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
@@ -61,7 +57,6 @@ function App() {
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes,
             ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
-        // only update today's vocabs after the above comparison
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
@@ -145,55 +140,54 @@ function App() {
     function editVocab(editedVocab: Vocab): void {
         axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
             .then(response => console.log(response.data))
-
-
-        return (<div id={"app"}>
-                <Header userName={userName} logout={logout}
-                        setLanguage={setLanguage}/>
-                <div style={{height: "60px"}}/>
-                {useForm && <Form/>}
-                <NavBar setUseForm={setUseForm}/>
-                <Routes>
-                    <Route path={"/login"}
-                           element={<LoginPage
-                           />}/>
-                    <Route element={<ProtectedRoutes
-                        userName={userName}/>}>
-
-                        <Route path={"/"}
-                               element={<HomePage
-                                   vocabs={vocabs}
-                                   finishedReviewing={vocabsLeftToReview.length <
-                                       1}
-                                   setUseForm={setUseForm}
-                                   language={language}/>}/>
-
-                        <Route path={"/calendar"} element={<CalendarPage
-                            vocabs={vocabs} language={language}
-                            deactivateVocab={deactivateVocab}/>}/>
-
-                        <Route path={"/review"}
-                               element={<ReviewPage
-                                   removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
-                                   vocabsLeftToReview={vocabsLeftToReview}
-                                   changeReviewDates={changeReviewDates}/>}/>
-
-                        <Route path={"/backlog"}
-                               element={<BacklogPage
-                                   vocabs={vocabs.filter(
-                                       vocab => vocab.reviewDates.length === 0)}
-                                   activateVocab={activateVocab}
-                                   language={language}
-                               />}/>
-                        <Route path={"/display/:_id"}
-                               element={<DisplayPage
-                                   vocabs={vocabs}
-                               />}/>
-
-                    </Route>
-                </Routes>
-                <div style={{height: "60px"}}/>
-            </div>)
     }
-}
-export default App
+
+        return (
+            <div id={"app"}>
+            <Header userName={userName} logout={logout}
+                    setLanguage={setLanguage}/>
+            <div style={{height: "60px"}}/>
+            {useForm && <Form/>}
+            <NavBar setUseForm={setUseForm}/>
+            <Routes>
+                <Route path={"/login"}
+                       element={<LoginPage
+                       />}/>
+                <Route element={<ProtectedRoutes
+                    userName={userName}/>}>
+
+                    <Route path={"/"}
+                           element={<HomePage
+                               vocabs={vocabs}
+                               finishedReviewing={vocabsLeftToReview.length < 1}
+                               setUseForm={setUseForm}
+                               language={language}/>}/>
+
+                    <Route path={"/calendar"} element={<CalendarPage
+                        vocabs={vocabs} language={language}
+                        deactivateVocab={deactivateVocab}/>}/>
+
+                    <Route path={"/review"}
+                           element={<ReviewPage
+                               removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
+                               vocabsLeftToReview={vocabsLeftToReview}
+                               changeReviewDates={changeReviewDates}/>}/>
+
+                    <Route path={"/backlog"}
+                           element={<BacklogPage
+                               vocabs={vocabs.filter(
+                                   vocab => vocab.reviewDates.length === 0)}
+                               activateVocab={activateVocab}
+                               language={language}
+                           />}/>
+                    <Route path={"/display/:_id"}
+                           element={<DisplayPage
+                               vocabs={vocabs}
+                           />}/>
+
+                </Route>
+            </Routes>
+            <div style={{height: "60px"}}/>
+        </div>
+        )
+    }
