@@ -1,5 +1,8 @@
-package org.example.backend;
+package org.example.backend.calendar;
 
+import org.example.backend.Language;
+import org.example.backend.Vocab;
+import org.example.backend.VocabRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +35,7 @@ class CalendarControllerTest {
 
 
     @Test
-    void getVocabsOfMonth_shouldReturnArrayOfCurrentMonth_whenCalledWithYearMonthNow() throws Exception {
+    void getMonth_shouldReturnMonth_whenCalledWithYearMonthNow() throws Exception {
         LocalDate date011024 = LocalDate.of(2024, 10, 1);
         LocalDate date021024 = LocalDate.of(2024, 10, 2);
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
@@ -44,12 +47,16 @@ class CalendarControllerTest {
                 "", Language.SPANISH, List.of(date161024, date181024), false);
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
                 "", Language.SPANISH, List.of(date181024), false);
+        Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
+                "", Language.ITALIAN, List.of(date181024), false);
         vocabRepo.save(testVocab1);
         vocabRepo.save(testVocab2);
         vocabRepo.save(testVocab3);
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10"))
+        vocabRepo.save(vocabDifferentLanguage);
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
+                        {"yearMonthName": "October 2024", "vocabIdsOfMonth":
                         [
                             [
                                 null,
@@ -97,7 +104,7 @@ class CalendarControllerTest {
                                 null
                             ]
                         ]
-                        
+                        }
                         """));
     }
 

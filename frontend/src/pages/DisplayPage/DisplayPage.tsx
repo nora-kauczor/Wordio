@@ -4,7 +4,6 @@ import CardContainer
 import {Vocab} from "../../types/Vocab.ts";
 import {useEffect, useState} from "react";
 import {
-    useLocation,
     useNavigate,
     useParams
 } from "react-router-dom";
@@ -25,11 +24,12 @@ const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
 
 if (!props.vocabs) return <p>Loading...</p>
 
+
     return (
         <div id={"display-page"}>
             <p>You've just activated this vocab. Take your time to memorize it:</p>
             <CardContainer displayedVocab={displayedVocab}/>
-            <p>Finished? Click the button below to go bakc to the homepage</p>
+            <p>Finished? Click the button below to go back to the homepage</p>
             <button onClick={()=>navigate("/")}>Go back to Home</button>
         </div>
     )

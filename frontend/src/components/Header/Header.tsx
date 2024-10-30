@@ -16,7 +16,7 @@ export default function Header(props: Readonly<Props>) {
     return (<div id={"header"}>
         <p id={"app-name"}>Wordio</p>
         {props.userName &&<select id={"select-language"}>
-            <option value="" disabled selected>Choose
+            <option value="" disabled>Choose
                 language
             </option>
             <option

@@ -6,6 +6,7 @@ import './LoginPage.css'
 export default function LoginPage() {
 
     function login() {
+        console.log("login button was clicked.")
         const host = window.location.host === "localhost:5173" ?
             "http://localhost:8080"
             : window.location.origin

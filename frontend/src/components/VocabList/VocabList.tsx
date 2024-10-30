@@ -8,7 +8,6 @@ type Props = {
     deactivateVocab?: (_id: string) => void
     deleteVocab?: (_id: string) => void
     activateVocab?: (_id: string) => void
-    setDisplayedVocab: React.Dispatch<React.SetStateAction<Vocab>>;
 }
 
 export default function VocabList(props: Readonly<Props>) {

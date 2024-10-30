@@ -22,6 +22,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -35,7 +36,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/vocab").authenticated()
+//                        .requestMatchers("/api/vocab").authenticated()
                         .requestMatchers("/api/vocab/login").permitAll()
                         .requestMatchers("/api/vocab/auth").permitAll()
                         .requestMatchers("/api/vocab/**").authenticated()

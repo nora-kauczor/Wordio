@@ -1,17 +1,52 @@
 #calendar-day-wrapper {
-    height: 100px;
+    height: 90px;
     width: 50px;
-
+    display: flex;
 }
 
 #calendar-day {
+    top: 0;
     margin: 0;
-    padding: 0;
     height: 100%;
     width: 100%;
     font-size: 0.75rem;
     border: 1px solid gray;
     border-radius: 0;
     color: black;
-    background-color: var(--secondary-color)
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+
+#calendar-date {
+    margin: 0;
+}
+
+#dot-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    margin: 0;
+    padding: 0;
+
+}
+
+
+.dot {
+    color: #4CAF50;
+    padding: 0;
+    margin: 0;
+    font-size: 1.5em;
+}
+
+#invisible-dot {color: var(--secondary-color);}
+
+#plus {
+    font-size: 1em;
+    padding: 3px;
+    margin: 0;
 }
