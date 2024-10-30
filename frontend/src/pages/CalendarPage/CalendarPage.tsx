@@ -23,9 +23,10 @@ type Props = {
 
 export default function CalendarPage(props: Readonly<Props>) {
     const [month, setMonth] = useState<Month>()
-    const [vocabsOfDayPopUp, setVocabsOfDayPopUp] = useState<Vocab[]>([])
-    const [dayOfDayPopUp, setDayOfDayPopUp] = useState<string>("")
-console.log(month)
+    const [vocabsOfDayPopUp, setVocabsOfDayPopUp] =
+        useState<Vocab[]>([])
+    const [dayOfDayPopUp, setDayOfDayPopUp] =
+        useState<string>("")
 
     useEffect(() => {
         if (!props.language) {return}
@@ -41,7 +42,8 @@ function getMonth() {
         const today = new Date();
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
-        axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}`)
+        axios.get(`/api/calendar?year=${year}&month=${month}
+        &language=${props.language}`)
             .then(response => setMonth(response.data))
             .catch(error => console.error(error))
     }
@@ -50,32 +52,43 @@ function getMonth() {
         if (!month) {
             return
         }
-        const currentYear: string | undefined = month.vocabIdsOfMonth[1][0].date.substring(0, 4)
-        const currentMonth: string | undefined = month.vocabIdsOfMonth[1][0].date.substring(5, 9)
-        const currentMonthNumber: number = parseInt(currentMonth)
-        const currentYearNumber: number = parseInt(currentYear)
+        const currentYear: string | undefined =
+            month.vocabIdsOfMonth[1][0].date.substring(0, 4)
+        const currentMonth: string | undefined =
+            month.vocabIdsOfMonth[1][0].date.substring(5, 9)
+        const currentMonthNumber: number =
+            parseInt(currentMonth)
+        const currentYearNumber: number =
+            parseInt(currentYear)
         let newMonth: number = 0
         let newYear: number = 0
         if (clickedButton === "previous") {
-            newMonth = currentMonthNumber > 1 ? (currentMonthNumber - 1) : 12
-            newYear = currentMonthNumber > 1 ? currentYearNumber : (currentYearNumber - 1)
+            newMonth = currentMonthNumber > 1 ?
+                (currentMonthNumber - 1) : 12
+            newYear = currentMonthNumber > 1 ?
+                currentYearNumber : (currentYearNumber - 1)
         } else {
-            newMonth = currentMonthNumber < 12 ? (currentMonthNumber + 1) : 1
-            newYear = currentMonthNumber < 12 ? currentYearNumber : (currentYearNumber + 1)
+            newMonth = currentMonthNumber < 12 ?
+                (currentMonthNumber + 1) : 1
+            newYear = currentMonthNumber < 12 ?
+                currentYearNumber : (currentYearNumber + 1)
         }
-        axios.get(`/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}`)
+        axios.get(`/api/calendar?year=${newYear.toString()}&
+        month=${newMonth.toString()}&language=${props.language}`)
             .then(response => setMonth(response.data))
             .then(response => console.log(response))
             .catch(error => console.error(error))
     }
 
-    function openDayPopUpAndPassItVocabs(vocabIdsOfDate: VocabIdsOfDate): void {
+    function openDayPopUpAndPassItVocabs(
+        vocabIdsOfDate: VocabIdsOfDate): void {
         if (!vocabIdsOfDate.date) {
             return
         }
         setDayOfDayPopUp(vocabIdsOfDate.date)
         const ids: string[] | null = vocabIdsOfDate.vocabIds;
-        const vocabs: Vocab[] = props.vocabs.filter(vocab => vocab._id && ids?.includes(vocab._id))
+        const vocabs: Vocab[] = props.vocabs.filter(
+            vocab => vocab._id && ids?.includes(vocab._id))
         setVocabsOfDayPopUp(vocabs)
     }
 
@@ -98,13 +111,14 @@ function getMonth() {
                         onKeyDown={() => changeMonth("next")}>▶︎
                 </button>
             </div>
-
             <article id={"weeks-wrapper"}>
-                {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek =>
+                {month && month.vocabIdsOfMonth.map(
+                    vocabIdsOfWeek =>
                     <CalendarWeek
                         key={uid()}
                         vocabIdsOfWeek={vocabIdsOfWeek}
-                        openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
+                        openDayPopUpAndPassItVocabs={
+                        openDayPopUpAndPassItVocabs}/>)}
             </article>
             {vocabsOfDayPopUp.length > 0 &&
                 <DayPopUp

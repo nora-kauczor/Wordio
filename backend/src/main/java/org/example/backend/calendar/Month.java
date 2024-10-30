@@ -22,7 +22,8 @@ public record Month
         if (o == null || getClass() != o.getClass())
             return false;
         Month month = (Month) o;
-        return Objects.equals(yearMonthName, month.yearMonthName) && Objects.deepEquals(vocabIdsOfMonth, month.vocabIdsOfMonth);
+        return Objects.equals(yearMonthName, month.yearMonthName) &&
+               Objects.deepEquals(vocabIdsOfMonth, month.vocabIdsOfMonth);
     }
 
     @Override
