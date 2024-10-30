@@ -87,7 +87,7 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.reviewDates.includes(today))
+            .filter(vocab => vocab.reviewDates?.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
@@ -141,6 +141,7 @@ function App() {
     }
 
     function createVocab(newVocab: Vocab): void {
+        setUseForm(false)
         axios.post("/api/vocab", newVocab)
             .then(() => console.log("New vocab was successfully created."))
             .then(() => getAllVocabsOfLanguage())
@@ -148,6 +149,8 @@ function App() {
     }
 
     function editVocab(editedVocab: Vocab): void {
+        setVocabToEdit(undefined)
+        setUseForm(false)
         axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
             .then(
                 () => console.log(`Vocab ${editedVocab._id} successfully edited.`))
@@ -157,10 +160,12 @@ function App() {
 
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
 
-    function openForm(_id:string){
+    function openForm(_id:string | undefined){
         setUseForm(true)
-        const vocab = vocabs.find(vocab => vocab._id === _id)
-        setVocabToEdit(vocab)
+        if (!_id) {
+            const vocab = vocabs.find(vocab => vocab._id === _id)
+            setVocabToEdit(vocab)
+        }
     }
 
         return (

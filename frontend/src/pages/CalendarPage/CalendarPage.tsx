@@ -98,9 +98,6 @@ function getMonth() {
         setDayOfDayPopUp("")
     }
 
-    function closeDayPopUpOpenForm():void {
-        props.setUseForm(true)
-    }
 
     return (
         <div id={"calendar-page"}>

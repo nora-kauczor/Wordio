@@ -9,8 +9,8 @@ type Props = {
     deactivateVocab?: (_id: string) => void
     deleteVocab?: (_id: string) => void
     activateVocab?: (_id: string) => void
-    openForm:(_id:string) => void
-    closeDayPopUp?:() => void
+    openForm: (_id: string) => void
+    closeDayPopUp?: () => void
 }
 
 export default function VocabList(props: Readonly<Props>) {
@@ -31,13 +31,14 @@ export default function VocabList(props: Readonly<Props>) {
         props.deactivateVocab(_id)
     }
 
-    function handleClickEdit(_id: string | null){
-        if (!_id) {return}
-if (props.closeDayPopUp)
-        {
+    function handleClickEdit(_id: string | null) {
+        if (!_id) {
+            return
+        }
+        if (props.closeDayPopUp) {
             props.closeDayPopUp()
         }
-openForm(_id)
+        props.openForm(_id)
     }
 
     function handleClickDelete(_id: string | null) {
@@ -57,9 +58,9 @@ openForm(_id)
             </div>
             <div className={"list-item-button-wrapper"}>
                 {vocab.editable && vocab._id ? <button
-                    onClick={()=>handleClickEdit(vocab._id)}
-                    onKeyDown={()=>handleClickEdit(vocab._id)}
-                >delete</button> : <button/>}
+                    onClick={() => handleClickEdit(vocab._id)}
+                    onKeyDown={() => handleClickEdit(vocab._id)}
+                >edit</button> : <button/>}
                 <button
                     onClick={() => vocab._id &&
                         (props.calendarMode ? handleClickDeactivate(vocab._id) :
@@ -69,8 +70,8 @@ openForm(_id)
                             handleClickActivate(vocab._id))}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
                 {vocab.editable && vocab._id ? <button
-                onClick={()=>handleClickDelete(vocab._id)}
-                onKeyDown={()=>handleClickDelete(vocab._id)}
+                    onClick={() => handleClickDelete(vocab._id)}
+                    onKeyDown={() => handleClickDelete(vocab._id)}
                 >delete</button> : <button/>}
             </div>
         </li>)}
