@@ -3,7 +3,6 @@ package org.example.backend;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.MethodNotAllowedException;
 
 
 import java.util.List;
@@ -48,12 +47,12 @@ public class VocabController {
     }
 
     @PostMapping
-    public Vocab createVocab(@RequestBody VocabDTO vocabDTO){
+    public Vocab createVocab(@RequestBody VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         return vocabService.createVocab(vocabDTO);
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.MethodNotAllowedException {
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.MethodNotAllowedException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
 

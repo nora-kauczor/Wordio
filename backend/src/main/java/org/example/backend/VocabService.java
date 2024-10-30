@@ -57,7 +57,7 @@ public class VocabService {
     public Vocab createVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(),language, List.of(), true);
+                vocabDTO.info(), language, List.of(), true);
         return vocabRepo.save(newVocab);
     }
 
@@ -65,13 +65,14 @@ public class VocabService {
         if (!vocabRepo.existsById(vocabDTO._id())) {
             throw new IdNotFoundException("ID not found.");
         }
-        if (!vocabDTO.editable()){
+        if (!vocabDTO.editable()) {
             throw new MethodNotAllowedException("Method not allowed.");
         }
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(),language, vocabDTO.reviewDates(), true);
-        return vocabRepo.save(editedVocab);
+                vocabDTO.info(), language, vocabDTO.reviewDates(), true);
+        vocabRepo.save(editedVocab);
+        return vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
     }
 
     public String deleteVocab(String _id) throws IdNotFoundException {

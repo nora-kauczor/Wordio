@@ -195,7 +195,7 @@ class VocabControllerTest {
                                 { "_id":"123","word":"la prueba", "translation":"test",
                                                                           "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  false}
                                 """))
-                .andExpect(status().isMethodNotAllowed());
+        .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
