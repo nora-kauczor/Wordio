@@ -1,11 +1,13 @@
 import './NewVocabsPopUp.css'
 import {useNavigate} from "react-router-dom";
 import {Vocab} from "../../types/Vocab.ts";
+import React from "react";
 
 type Props = {
-    setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>;
-    setUseForm: React.Dispatch<React.SetStateAction<boolean>>;
     vocabs:Vocab[]
+    setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
 export default function NewVocabsPopUp(props: Readonly<Props>) {

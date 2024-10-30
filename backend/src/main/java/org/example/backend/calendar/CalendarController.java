@@ -1,6 +1,7 @@
-package org.example.backend;
+package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.LanguageNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +17,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping
-    public VocabIdsOfDate[][] getVocabsOfMonth(@RequestParam String month, @RequestParam String year) {
-        return calendarService.getVocabsOfMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)));
+    public Month getMonth(@RequestParam String month, @RequestParam String year, @RequestParam String language) throws LanguageNotFoundException {
+        return calendarService.getMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)), language);
     }
 }
