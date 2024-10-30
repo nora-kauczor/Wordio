@@ -3,11 +3,13 @@ import {Vocab} from "../../types/Vocab.ts";
 import VocabList
     from "../../components/VocabList/VocabList.tsx";
 
+
 type Props = {
     vocabs: Vocab[]
     deleteVocab: (_id: string) => void
     activateVocab: (_id: string) => void
     language:string
+    openForm:(_id:string) => void
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
@@ -16,7 +18,8 @@ export default function BacklogPage(props: Readonly<Props>) {
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}
                    activateVocab={props.activateVocab}
-                   deleteVocab={props.deleteVocab}/>
+                   deleteVocab={props.deleteVocab}
+        openForm={props.openForm}/>
     </div>)
 
 }

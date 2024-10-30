@@ -1,5 +1,5 @@
 import './CalendarPage.css'
-import {useEffect, useState} from "react";
+import  {useEffect, useState} from "react";
 import axios from "axios";
 import CalendarWeek
     from "../../components/CalendarWeek/CalendarWeek.tsx";
@@ -19,6 +19,7 @@ type Props = {
     vocabs: Vocab[]
     deactivateVocab: (_id: string) => void
     language: string
+    openForm:(_id:string) => void
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -97,6 +98,10 @@ function getMonth() {
         setDayOfDayPopUp("")
     }
 
+    function closeDayPopUpOpenForm():void {
+        props.setUseForm(true)
+    }
+
     return (
         <div id={"calendar-page"}>
             <div id={"button-and-header-container"}>
@@ -125,6 +130,7 @@ function getMonth() {
                     day={dayOfDayPopUp}
                     vocabsOfDay={vocabsOfDayPopUp}
                     closeDayPopUp={closeDayPopUp}
+                    openForm={props.openForm}
                     deactivateVocab={props.deactivateVocab}/>}
         <button id={"back-button"}>← Back</button>
         </div>

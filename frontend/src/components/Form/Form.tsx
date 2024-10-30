@@ -3,9 +3,8 @@ import {Vocab} from "../../types/Vocab.ts";
 import React, {useEffect, useState} from "react";
 
 type Props = {
-    editMode: boolean
     language: string
-    oldVocab?: Vocab
+    vocabToEdit: Vocab | undefined
     createVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
 }
@@ -16,24 +15,24 @@ export default function Form(props: Readonly<Props>) {
     const [translationInput, setTranslationInput] = useState<string>("")
     const [infoInput, setInfoInput] = useState<string>("")
     useEffect(() => {
-        if (!props.oldVocab) {
+        if (!props.vocabToEdit) {
             return
         }
-        setWordInput(props.oldVocab.word)
-        setTranslationInput(props.oldVocab.translation)
-        setInfoInput(props.oldVocab.info)
+        setWordInput(props.vocabToEdit.word)
+        setTranslationInput(props.vocabToEdit.translation)
+        setInfoInput(props.vocabToEdit.info)
     }, []);
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        if (props.editMode) {
+        if (props.vocabToEdit) {
             const editedVocab: Vocab = {
-                _id: props.oldVocab._id,
+                _id: props.vocabToEdit._id,
                 word: wordInput,
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                reviewDates: props.oldVocab.reviewDates,
+                reviewDates: props.vocabToEdit.reviewDates,
                 editable: true
             }
             props.editVocab(editedVocab)

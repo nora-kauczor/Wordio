@@ -155,12 +155,20 @@ function App() {
             .catch(error => console.error(error))
     }
 
+    const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
+
+    function openForm(_id:string){
+        setUseForm(true)
+        const vocab = vocabs.find(vocab => vocab._id === _id)
+        setVocabToEdit(vocab)
+    }
+
         return (
             <div id={"app"}>
             <Header userName={userName} logout={logout}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
-            {useForm && <Form language={language} editVocab={editVocab} createVocab={createVocab} editMode={false}/>}
+            {useForm && <Form language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
@@ -174,8 +182,8 @@ function App() {
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
                                language={language}/>}/>
-
                     <Route path={"/calendar"} element={<CalendarPage
+                        openForm={openForm}
                         vocabs={vocabs}
                         language={language}
                         deactivateVocab={deactivateVocab}/>}/>
@@ -192,12 +200,12 @@ function App() {
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                                language={language}
+                               openForm={openForm}
                            />}/>
                     <Route path={"/display/:_id"}
                            element={<DisplayPage
                                vocabs={vocabs}
                            />}/>
-
                 </Route>
             </Routes>
             <div style={{height: "60px"}}/>
