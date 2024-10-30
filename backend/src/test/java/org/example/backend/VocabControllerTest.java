@@ -155,9 +155,20 @@ class VocabControllerTest {
 
     }
 
+    @Test
+    void createVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                { "word":"la prueba", "translation":"test",
+                                                                          "info":"", "language":"Esperanto", "editable":  true}
+                                """))
+                .andExpect(status().isNotFound());
+    }
+
 
     @Test
-    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws Exception {
+    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -196,6 +207,17 @@ class VocabControllerTest {
                                                                           "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  false}
                                 """))
         .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/000")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                { "_id":"000","word":"la prueba", "translation":"test",
+                                                                          "info":"", "language":"Esperanto", "reviewDates":[], "editable":  true}
+                                """))
+                .andExpect(status().isNotFound());
     }
 
     @Test

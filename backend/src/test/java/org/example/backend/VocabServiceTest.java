@@ -123,7 +123,12 @@ class VocabServiceTest {
         verify(mockVocabRepo).save(any(Vocab.class));
     }
 
-    // TODO void createVocab_throwsLanguageNotFoundException_when...
+    @Test
+    void createVocab_throwsLanguageNotFoundException_whenCalledWithVocabWithNonExistentLanguage(){
+        VocabDTOCreate testDTO = new VocabDTOCreate("la prueba", "test",
+                "", "Esperanto", true);
+        assertThrows(LanguageNotFoundException.class, () -> vocabService.createVocab(testDTO));
+    }
 
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, org.example.backend.VocabIsNotEditableException, LanguageNotFoundException {
@@ -150,8 +155,16 @@ class VocabServiceTest {
     void editVocab_shouldThrowVocabIsNotEditableException_whenCalledWithNonEditableVocab() {
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
                 "added infotext", "Spanish", List.of(), false);
-        when(!mockVocabRepo.existsById(vocabDTO._id())).thenReturn(true);
+        when(mockVocabRepo.existsById(vocabDTO._id())).thenReturn(true);
         assertThrows(VocabIsNotEditableException.class, () -> vocabService.editVocab(vocabDTO));
+    }
+
+    @Test
+    void editVocab_throwsLanguageNotFoundException_whenCalledWithVocabWithNonExistentLanguage(){
+        VocabDTOEdit testDTO = new VocabDTOEdit("000", "la prueba", "test",
+                "", "Esperanto", List.of(), true);
+        when(mockVocabRepo.existsById(testDTO._id())).thenReturn(true);
+        assertThrows(LanguageNotFoundException.class, () -> vocabService.editVocab(testDTO));
     }
 
     @Test
