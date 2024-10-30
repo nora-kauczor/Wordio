@@ -140,19 +140,27 @@ function App() {
             .catch(error => console.error(error))
     }
 
+    function createVocab(newVocab: Vocab): void {
+        axios.post("/api/vocab", newVocab)
+            .then(() => console.log("New vocab was successfully created."))
+            .then(() => getAllVocabsOfLanguage())
+            .catch(error => console.log(error))
+    }
 
-
-    // function editVocab(editedVocab: Vocab): void {
-    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-    //         .then(response => console.log(response.data))
-    // }
+    function editVocab(editedVocab: Vocab): void {
+        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+            .then(
+                () => console.log(`Vocab ${editedVocab._id} successfully edited.`))
+            .then(() => getAllVocabsOfLanguage())
+            .catch(error => console.error(error))
+    }
 
         return (
             <div id={"app"}>
             <Header userName={userName} logout={logout}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
-            {useForm && <Form/>}
+            {useForm && <Form language={language} editVocab={editVocab} createVocab={createVocab} editMode={false}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
@@ -180,7 +188,7 @@ function App() {
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(
-                                   vocab => vocab.reviewDates.length === 0)}
+                                   vocab => vocab.reviewDates?.length === 0)}
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                                language={language}
