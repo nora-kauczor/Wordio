@@ -31,7 +31,7 @@ export default function ReviewPage(props: Readonly<Props>) {
     return (
         <div id={"review-page"}>
             {currentVocab &&
-                <CardContainer vocab={currentVocab}/>}
+                <CardContainer displayedVocab={currentVocab}/>}
             <label htmlFor={"review-input"}></label>
             <input id={"review-input"}
                    onChange={element => setUserInput(element.target.value)}/>
