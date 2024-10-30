@@ -120,7 +120,6 @@ function App() {
             .catch(error => console.error(error))
     }
 
-
     function logout() {
         setUserName("")
         const host = window.location.host ===
