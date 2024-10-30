@@ -5,4 +5,5 @@ export type Vocab = {
     info: string,
     language: string,
     reviewDates: string[]
+    editable: boolean;
 }

@@ -61,6 +61,12 @@ public class VocabController {
         return vocabService.deleteVocab(_id);
     }
 
+//    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+//    @ExceptionHandler(.class)
+//    public ErrorMessage handle.() {
+//        return new ErrorMessage("Method not allowed");
+//    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(IdNotFoundException.class)
     public ErrorMessage handleIdNotFoundException() {

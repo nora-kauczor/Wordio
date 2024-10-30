@@ -39,11 +39,11 @@ class CalendarControllerTest {
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(date011024, date021024, date031024));
+                "", Language.SPANISH, List.of(date011024, date021024, date031024), false);
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(date161024, date181024));
+                "", Language.SPANISH, List.of(date161024, date181024), false);
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, List.of(date181024));
+                "", Language.SPANISH, List.of(date181024), false);
         vocabRepo.save(testVocab1);
         vocabRepo.save(testVocab2);
         vocabRepo.save(testVocab3);

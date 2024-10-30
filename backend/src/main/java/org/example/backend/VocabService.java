@@ -56,13 +56,16 @@ public class VocabService {
 
     public Vocab createVocab(VocabDTO vocabDTO) {
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), vocabDTO.language(), List.of());
+                vocabDTO.info(), vocabDTO.language(), List.of(), true);
         return vocabRepo.save(newVocab);
     }
 
     public Vocab editVocab(Vocab editedVocab) throws IdNotFoundException {
         if (!vocabRepo.existsById(editedVocab._id)) {
             throw new IdNotFoundException("ID not found.");
+        }
+        if (!editedVocab.editable){
+            throw new
         }
         return vocabRepo.save(editedVocab);
     }

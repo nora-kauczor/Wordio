@@ -14,22 +14,26 @@ type Props = {
 export default function VocabList(props: Readonly<Props>) {
     const navigate = useNavigate()
 
-    function handleClick(_id: string | null): void {
-        if (!_id) {
+    function handleClickActivate(_id: string | null): void {
+        if (!_id || !props.activateVocab) {
             return
         }
-        if (props.calendarMode) {
-            if (!props.deactivateVocab) {
-                return
-            }
-            props.deactivateVocab(_id)
-        } else {
-            if (!props.activateVocab) {
-                return
-            }
-            props.activateVocab(_id)
-            navigate(`/display/:${_id}`)
+        props.activateVocab(_id)
+        navigate(`/display/:${_id}`)
+    }
+
+    function handleClickDeactivate(_id: string | null): void {
+        if (!_id || !props.deactivateVocab) {
+            return
         }
+        props.deactivateVocab(_id)
+    }
+
+    function handleClickDelete(_id) {
+        if (!_id || !props.deleteVocab) {
+            return
+        }
+        props.deleteVocab(_id)
     }
 
     return (<ul id={"vocab-list"}>
@@ -42,9 +46,17 @@ export default function VocabList(props: Readonly<Props>) {
             </div>
             <div className={"list-item-button-wrapper"}>
                 <button
-                    onClick={() => vocab._id && handleClick(vocab._id)}
-                    onKeyDown={() => vocab._id && handleClick(vocab._id)}>
+                    onClick={() => vocab._id &&
+                        (props.calendarMode ? handleClickDeactivate(vocab._id) :
+                            handleClickActivate(vocab._id))}
+                    onKeyDown={() => vocab._id &&
+                        (props.calendarMode ? handleClickDeactivate(vocab._id) :
+                            handleClickActivate(vocab._id))}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
+                {vocab.editable ? <button
+                onClick={()=>handleClickDelete(vocab._id)}
+                onKeyDown={()=>handleClickDelete(vocab._id)}
+                >delete</button> : <button/>}
             </div>
         </li>)}
     </ul>)
