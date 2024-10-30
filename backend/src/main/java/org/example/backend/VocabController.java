@@ -3,6 +3,7 @@ package org.example.backend;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.MethodNotAllowedException;
 
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class VocabController {
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id) throws IdNotFoundException {
+    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.MethodNotAllowedException {
         return vocabService.editVocab(editedVocab);
     }
 
@@ -61,11 +62,11 @@ public class VocabController {
         return vocabService.deleteVocab(_id);
     }
 
-//    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-//    @ExceptionHandler(.class)
-//    public ErrorMessage handle.() {
-//        return new ErrorMessage("Method not allowed");
-//    }
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(MethodNotAllowedException.class)
+    public ErrorMessage handleMethodNotAllowedException() {
+        return new ErrorMessage("Method not allowed");
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(IdNotFoundException.class)

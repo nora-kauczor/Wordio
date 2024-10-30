@@ -187,10 +187,12 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturn405_whenCalledWithNonEditableVocab() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/id-of-non-editable-vocab")
+        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), false);
+        vocabRepo.save(nonEditableVocab);
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "_id":"nonexistent-id","word":"la prueba", "translation":"test",
+                                { "_id":"123","word":"la prueba", "translation":"test",
                                                                           "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  false}
                                 """))
                 .andExpect(status().isMethodNotAllowed());

@@ -124,7 +124,7 @@ class VocabServiceTest {
     }
 
     @Test
-    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws IdNotFoundException {
+    void editVocab_shouldReturnEditedVocab_whenCalledWithThisVeryVocab() throws IdNotFoundException, org.example.backend.MethodNotAllowedException {
         Vocab editedVocab = new Vocab("000", "la prueba", "test",
                 "added infotext", Language.SPANISH, List.of(), true);
         when(mockVocabRepo.save(editedVocab)).thenReturn(editedVocab);
@@ -138,18 +138,19 @@ class VocabServiceTest {
     @Test
     void editVocab_shouldThrowIdNotFoundException_whenCalledWithVocabWithNonexistentId() {
         Vocab testVocab = new Vocab("ID that is not in the DB", "la prueba", "test",
-                "", Language.SPANISH, List.of(), false);
+                "", Language.SPANISH, List.of(), true);
         assertThrows(IdNotFoundException.class, () -> vocabService.editVocab(testVocab));
         verify(mockVocabRepo).existsById("ID that is not in the DB");
     }
 
-//    @Test
-//    void editVocab_shouldThrow_whenCalledWithNonEditableVocab() {
-//        Vocab testVocab = new Vocab("ID of non editable vocab", "la prueba", "test",
-//                "", Language.SPANISH, List.of(), false);
-//        assertThrows(.class, () -> vocabService.editVocab(testVocab));
-//        verify(mockVocabRepo).existsById("ID of non editable vocab");
-//    }
+    @Test
+    void editVocab_shouldThrowMethodNotAllowedException_whenCalledWithNonEditableVocab() {
+        Vocab testVocab = new Vocab("ID of non editable vocab", "la prueba", "test",
+                "", Language.SPANISH, List.of(), false);
+        when(!mockVocabRepo.existsById(testVocab._id)).thenReturn(true);
+        assertThrows(MethodNotAllowedException.class, () -> vocabService.editVocab(testVocab));
+        verify(mockVocabRepo).existsById("ID of non editable vocab");
+    }
 
     @Test
     void deleteVocab_shouldTriggerDeletionOfVocab_whenCalledWithId() throws IdNotFoundException {
