@@ -25,9 +25,12 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
-    const [language, setLanguage] = useLocalStorageState("language", {defaultValue: ""});
-    const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>("vocabsLeftToReview", {defaultValue: []})
-    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>("todaysVocabs", {defaultValue: []})
+    const [language, setLanguage] = useLocalStorageState("language",
+        {defaultValue: ""});
+    const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
+        "vocabsLeftToReview", {defaultValue: []})
+    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
+        "todaysVocabs", {defaultValue: []})
 
     function getAllVocabsOfLanguage() {
         axios.get(`/api/vocab/language?language=${language}`)
@@ -49,18 +52,22 @@ function App() {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
-                .find(vocabFromTodays => vocabFromTodays._id === vocabToReview._id))
+                .find(vocabFromTodays => vocabFromTodays._id ===
+                    vocabToReview._id))
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabFromUpdatedOnes => todaysVocabs
-                .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
-        const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
+                .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id !=
+                    vocabFromUpdatedOnes._id))
+        const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes,
+            ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
         // only update today's vocabs after the above comparison
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
     function removeVocabFromVocabsToReview(_id: string | null): void {
-        setVocabsLeftToReview(vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
+        setVocabsLeftToReview(
+            vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
     }
 
     function getTodaysVocabs(): Vocab[] {
@@ -81,7 +88,7 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    function deactivateVocab(_id:string):void {
+    function deactivateVocab(_id: string): void {
         axios.put(`api/vocab/deactivate/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
             .then(() => getAllVocabsOfLanguage())
@@ -90,7 +97,8 @@ function App() {
 
     function changeReviewDates(_id: string | null): void {
         axios.put(`api/vocab/change-dates/${_id}`)
-            .then(() => console.log(`Vocab ${_id}'s review dates successfully updated.`))
+            .then(() => console.log(
+                `Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -100,12 +108,12 @@ function App() {
 
     function logout() {
         setUserName("")
-        const host = window.location.host ===
-        'localhost:5173' ? 'http://localhost:8080' : window.location.origin
+        const host = window.location.host === 'localhost:5173' ?
+            'http://localhost:8080' : window.location.origin
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    function getUserName():void{
+    function getUserName(): void {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
             .then(() => navigate("/"))
@@ -120,12 +128,10 @@ function App() {
     }, [userName]);
 
 
-
-
-
     function getVocab(_id: string): void {
         axios.get(`api/vocab/${_id}`)
-            .then(response => console.log("fetched with getVocab:", response.data))
+            .then(response => console.log("fetched with getVocab:",
+                response.data))
             .catch(error => console.error(error))
     }
 
@@ -141,56 +147,53 @@ function App() {
             .then(response => console.log(response.data))
 
 
+        return (<div id={"app"}>
+                <Header userName={userName} logout={logout}
+                        setLanguage={setLanguage}/>
+                <div style={{height: "60px"}}/>
+                {useForm && <Form/>}
+                <NavBar setUseForm={setUseForm}/>
+                <Routes>
+                    <Route path={"/login"}
+                           element={<LoginPage
+                           />}/>
+                    <Route element={<ProtectedRoutes
+                        userName={userName}/>}>
 
+                        <Route path={"/"}
+                               element={<HomePage
+                                   vocabs={vocabs}
+                                   finishedReviewing={vocabsLeftToReview.length <
+                                       1}
+                                   setUseForm={setUseForm}
+                                   language={language}/>}/>
 
-    return (
-        <div id={"app"}>
-            <Header userName={userName} logout={logout}
-                    setLanguage={setLanguage}/>
-            <div style={{height: "60px"}}/>
-            {useForm && <Form/>}
-            <NavBar setUseForm={setUseForm}/>
-            <Routes>
-                <Route path={"/login"}
-                       element={<LoginPage
-                       />}/>
-                <Route element={<ProtectedRoutes
-                    userName={userName}/>}>
-
-                    <Route path={"/"}
-                           element={<HomePage
-                               vocabs={vocabs}
-                               finishedReviewing={vocabsLeftToReview.length < 1}
-                               setUseForm={setUseForm}
-                               language={language}/>}/>
-
-                    <Route path={"/calendar"} element={
-                        <CalendarPage
+                        <Route path={"/calendar"} element={<CalendarPage
                             vocabs={vocabs} language={language}
                             deactivateVocab={deactivateVocab}/>}/>
 
-                    <Route path={"/review"}
-                           element={<ReviewPage
-                               removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
-                               vocabsLeftToReview={vocabsLeftToReview}
-                               changeReviewDates={changeReviewDates}/>}/>
+                        <Route path={"/review"}
+                               element={<ReviewPage
+                                   removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
+                                   vocabsLeftToReview={vocabsLeftToReview}
+                                   changeReviewDates={changeReviewDates}/>}/>
 
-                    <Route path={"/backlog"}
-                           element={<BacklogPage
-                               vocabs={vocabs.filter(vocab => vocab.reviewDates.length === 0)}
-                               activateVocab={activateVocab}
-                               language={language}
-                           />}/>
-                    <Route path={"/display/:_id"}
-                           element={<DisplayPage
-                               vocabs={vocabs}
-                           />}/>
+                        <Route path={"/backlog"}
+                               element={<BacklogPage
+                                   vocabs={vocabs.filter(
+                                       vocab => vocab.reviewDates.length === 0)}
+                                   activateVocab={activateVocab}
+                                   language={language}
+                               />}/>
+                        <Route path={"/display/:_id"}
+                               element={<DisplayPage
+                                   vocabs={vocabs}
+                               />}/>
 
-                </Route>
-            </Routes>
-            <div style={{height: "60px"}}/>
-        </div>
-    )
+                    </Route>
+                </Routes>
+                <div style={{height: "60px"}}/>
+            </div>)
+    }
 }
-
 export default App
