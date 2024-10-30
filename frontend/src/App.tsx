@@ -130,12 +130,12 @@ function App() {
     }
 
 
-    function getVocab(_id: string): void {
-        axios.get(`api/vocab/${_id}`)
-            .then(
-                response => console.log("fetched with getVocab:", response.data))
-            .catch(error => console.error(error))
-    }
+    // function getVocab(_id: string): void {
+    //     axios.get(`api/vocab/${_id}`)
+    //         .then(
+    //             response => console.log("fetched with getVocab:", response.data))
+    //         .catch(error => console.error(error))
+    // }
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
@@ -146,11 +146,11 @@ function App() {
     }
 
 
-    function editVocab(editedVocab: Vocab): void {
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error))
-    }
+    // function editVocab(editedVocab: Vocab): void {
+    //     axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+    //         .then(response => console.log(response.data))
+    //         .catch(error => console.error(error))
+    // }
 
     return (
         <div id={"app"}>
