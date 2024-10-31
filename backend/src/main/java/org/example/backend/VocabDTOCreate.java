@@ -1,10 +1,9 @@
 package org.example.backend;
 
-
-public record VocabDTO(
+public record VocabDTOCreate(
         String word,
         String translation,
         String info,
-        Language language) {
+        String language,
+        boolean editable) {
 }
-

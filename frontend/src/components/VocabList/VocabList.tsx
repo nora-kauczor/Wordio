@@ -2,33 +2,50 @@ import {Vocab} from "../../types/Vocab.ts";
 import './VocabList.css'
 import {useNavigate} from "react-router-dom";
 
+
 type Props = {
     vocabs: Vocab[]
     calendarMode: boolean
     deactivateVocab?: (_id: string) => void
     deleteVocab?: (_id: string) => void
     activateVocab?: (_id: string) => void
+    openForm: (_id: string) => void
+    closeDayPopUp?: () => void
 }
 
 export default function VocabList(props: Readonly<Props>) {
     const navigate = useNavigate()
 
-    function handleClick(_id: string | null): void {
+    function handleClickActivate(_id: string | null): void {
+        if (!_id || !props.activateVocab) {
+            return
+        }
+        props.activateVocab(_id)
+        navigate(`/display/:${_id}`)
+    }
+
+    function handleClickDeactivate(_id: string | null): void {
+        if (!_id || !props.deactivateVocab) {
+            return
+        }
+        props.deactivateVocab(_id)
+    }
+
+    function handleClickEdit(_id: string | null) {
         if (!_id) {
             return
         }
-        if (props.calendarMode) {
-            if (!props.deactivateVocab) {
-                return
-            }
-            props.deactivateVocab(_id)
-        } else {
-            if (!props.activateVocab) {
-                return
-            }
-            props.activateVocab(_id)
-            navigate(`/display/:${_id}`)
+        if (props.closeDayPopUp) {
+            props.closeDayPopUp()
         }
+        props.openForm(_id)
+    }
+
+    function handleClickDelete(_id: string | null) {
+        if (!_id || !props.deleteVocab) {
+            return
+        }
+        props.deleteVocab(_id)
     }
 
     return (<ul id={"vocab-list"}>
@@ -40,10 +57,22 @@ export default function VocabList(props: Readonly<Props>) {
                 <p>{vocab.translation}</p>
             </div>
             <div className={"list-item-button-wrapper"}>
+                {vocab.editable && vocab._id ? <button
+                    onClick={() => handleClickEdit(vocab._id)}
+                    onKeyDown={() => handleClickEdit(vocab._id)}
+                >edit</button> : <button/>}
                 <button
-                    onClick={() => vocab._id && handleClick(vocab._id)}
-                    onKeyDown={() => vocab._id && handleClick(vocab._id)}>
+                    onClick={() => vocab._id &&
+                        (props.calendarMode ? handleClickDeactivate(vocab._id) :
+                            handleClickActivate(vocab._id))}
+                    onKeyDown={() => vocab._id &&
+                        (props.calendarMode ? handleClickDeactivate(vocab._id) :
+                            handleClickActivate(vocab._id))}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
+                {vocab.editable && vocab._id ? <button
+                    onClick={() => handleClickDelete(vocab._id)}
+                    onKeyDown={() => handleClickDelete(vocab._id)}
+                >delete</button> : <button/>}
             </div>
         </li>)}
     </ul>)

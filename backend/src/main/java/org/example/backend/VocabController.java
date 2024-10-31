@@ -47,18 +47,24 @@ public class VocabController {
     }
 
     @PostMapping
-    public Vocab createVocab(@RequestBody VocabDTO vocabDTO){
+    public Vocab createVocab(@RequestBody VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         return vocabService.createVocab(vocabDTO);
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody Vocab editedVocab, @PathVariable String _id) throws IdNotFoundException {
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
 
     @DeleteMapping("/{_id}")
     public String deleteVocab(@PathVariable String _id) throws IdNotFoundException {
         return vocabService.deleteVocab(_id);
+    }
+
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(VocabIsNotEditableException.class)
+    public ErrorMessage handleVocabIsNotEditableException() {
+        return new ErrorMessage("Method not allowed");
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

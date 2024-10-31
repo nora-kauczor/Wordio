@@ -4,5 +4,6 @@ export type Vocab = {
     translation: string,
     info: string,
     language: string,
-    reviewDates: string[]
+    reviewDates?: string[]
+    editable: boolean;
 }

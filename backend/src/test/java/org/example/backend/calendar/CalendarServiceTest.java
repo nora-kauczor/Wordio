@@ -5,8 +5,6 @@ import org.example.backend.LanguageNotFoundException;
 import org.example.backend.Vocab;
 import org.example.backend.VocabRepo;
 import org.junit.jupiter.api.Test;
-
-
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -29,13 +27,13 @@ class CalendarServiceTest {
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(date011024, date021024, date031024));
+                "", Language.SPANISH, List.of(date011024, date021024, date031024), false);
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(date161024, date181024));
+                "", Language.SPANISH, List.of(date161024, date181024), false);
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, List.of(date181024));
+                "", Language.SPANISH, List.of(date181024), false);
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, List.of(date181024));
+                "", Language.ITALIAN, List.of(date181024), false);
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
         String expectedYearMonthName = "October 2024";
         VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[5][7];
@@ -52,13 +50,13 @@ class CalendarServiceTest {
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(date011024, date021024, date031024));
+                "", Language.SPANISH, List.of(date011024, date021024, date031024), false);
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(date161024, date181024));
+                "", Language.SPANISH, List.of(date161024, date181024), false);
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, List.of(date181024));
+                "", Language.SPANISH, List.of(date181024), false);
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, List.of(date181024));
+                "", Language.ITALIAN, List.of(date181024), false);
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
         String expectedYearMonthName = "October 2024";
         VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[][]{
@@ -123,14 +121,15 @@ class CalendarServiceTest {
         List<LocalDate> otherDates = new ArrayList<>(List.of());
         otherDates.add(LocalDate.of(2024, 10, 16));
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, reviewDates);
+                "", Language.SPANISH, reviewDates, false);
         Vocab testVocab2 = new Vocab("777", "la prueba", "test",
-                "", Language.SPANISH, reviewDates);
+                "", Language.SPANISH, reviewDates, false);
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, otherDates);
+                "", Language.SPANISH, otherDates, false);
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, reviewDates);
+                "", Language.ITALIAN, reviewDates, false);
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
+        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
         VocabIdsOfDate expected = new VocabIdsOfDate(date, List.of("000", "777"));
         VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date, Language.SPANISH);
         assertEquals(expected, actual);
