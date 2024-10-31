@@ -1,6 +1,9 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.exception.VocabIsNotEditableException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

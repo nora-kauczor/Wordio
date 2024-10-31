@@ -1,6 +1,9 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.exception.VocabIsNotEditableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +55,7 @@ public class VocabController {
     }
 
     @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, org.example.backend.VocabIsNotEditableException, LanguageNotFoundException {
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
 

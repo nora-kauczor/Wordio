@@ -1,5 +1,6 @@
 package org.example.backend;
 
+import org.example.backend.exception.LanguageNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
