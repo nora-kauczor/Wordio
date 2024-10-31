@@ -1,8 +1,10 @@
 package org.example.backend.dictionaryapi.models;
 
-public record Response(Results results) {
+import java.util.List;
 
-
+public record Response(
+       String id,
+List<Result> result,
+       String word
+) {
 }
-
-

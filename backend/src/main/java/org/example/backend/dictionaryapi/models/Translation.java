@@ -1,17 +1,10 @@
 package org.example.backend.dictionaryapi.models;
 
-public record Translation(String text, String language, String type) {
-}
+import java.util.List;
 
-/*
-{
-                          "text": "string",
-                          "language": "string",
-                          "toneGroups": [
-                            {
-                              "tones": []
-                            }
-                          ],
-                          "type": "string"
-                        }
-                        */
+public record Translation(
+        List<GrammaticalFeature> grammaticalFeatures,
+        String language, // Zielsprache, z.B. "es"
+        String text // word (Übersetzung)
+) {
+}
