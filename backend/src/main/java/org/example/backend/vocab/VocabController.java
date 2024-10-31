@@ -18,21 +18,6 @@ public class VocabController {
 
     private final VocabService vocabService;
 
-    @PutMapping("/change-dates/{_id}")
-    public Vocab changeReviewDates(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.changeReviewDates(_id);
-    }
-
-    @PutMapping("/deactivate/{_id}")
-    public Vocab deactivateVocab(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.deactivateVocab(_id);
-    }
-
-    @PutMapping("/activate/{_id}")
-    public Vocab activateVocab(@PathVariable String _id) throws IdNotFoundException {
-       return vocabService.activateVocab(_id);
-    }
-
     @GetMapping("/language")
     public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language) throws LanguageNotFoundException {
         return vocabService.getAllVocabsOfLanguage(language);
@@ -57,12 +42,24 @@ public class VocabController {
     public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
+    @PutMapping("/change-dates/{_id}")
+    public Vocab changeReviewDates(@PathVariable String _id) throws IdNotFoundException {
+        return vocabService.changeReviewDates(_id);
+    }
+
+    @PutMapping("/deactivate/{_id}")
+    public Vocab deactivateVocab(@PathVariable String _id) throws IdNotFoundException {
+        return vocabService.deactivateVocab(_id);
+    }
+
+    @PutMapping("/activate/{_id}")
+    public Vocab activateVocab(@PathVariable String _id) throws IdNotFoundException {
+        return vocabService.activateVocab(_id);
+    }
 
     @DeleteMapping("/{_id}")
     public String deleteVocab(@PathVariable String _id) throws IdNotFoundException {
         return vocabService.deleteVocab(_id);
     }
-
-
 
 }

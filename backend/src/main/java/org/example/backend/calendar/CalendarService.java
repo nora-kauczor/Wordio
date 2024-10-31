@@ -47,7 +47,6 @@ public class CalendarService {
 
     public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language) {
         List<Vocab> allVocabs = vocabRepo.findAll();
-        System.out.println(allVocabs);
         List<Vocab> vocabsOfDate = allVocabs.stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .filter(vocab ->
@@ -84,11 +83,5 @@ public class CalendarService {
             }
         }
     }
-
-
-
-
-
-
 
 }

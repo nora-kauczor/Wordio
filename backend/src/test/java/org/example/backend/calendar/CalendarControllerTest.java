@@ -34,6 +34,7 @@ class CalendarControllerTest {
     private VocabRepo vocabRepo;
 
 
+
     @Test
     void getMonth_shouldReturnMonth_whenCalledWithYearMonthNow() throws Exception {
         LocalDate date011024 = LocalDate.of(2024, 10, 1);
@@ -108,5 +109,10 @@ class CalendarControllerTest {
                         """));
     }
 
+    @Test
+    void getMonth_ShouldReturn404_whenCalledWithNonExistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Esperanto"))
+                .andExpect(status().isNotFound());
+    }
 
 }
