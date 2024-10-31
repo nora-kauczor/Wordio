@@ -40,6 +40,5 @@ public class DictionaryService {
         return response;
     }
 
-
 }
 
