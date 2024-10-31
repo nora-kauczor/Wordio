@@ -1,11 +1,9 @@
 package org.example.backend.vocab;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.ErrorMessage;
 import org.example.backend.exception.IdNotFoundException;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.exception.VocabIsNotEditableException;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -63,24 +61,6 @@ public class VocabController {
     @DeleteMapping("/{_id}")
     public String deleteVocab(@PathVariable String _id) throws IdNotFoundException {
         return vocabService.deleteVocab(_id);
-    }
-
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    @ExceptionHandler(VocabIsNotEditableException.class)
-    public ErrorMessage handleVocabIsNotEditableException() {
-        return new ErrorMessage("Method not allowed");
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(IdNotFoundException.class)
-    public ErrorMessage handleIdNotFoundException() {
-        return new ErrorMessage("ID not found.");
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(LanguageNotFoundException.class)
-    public ErrorMessage handleLanguageNotFoundException() {
-        return new ErrorMessage("Language not found.");
     }
 
 
