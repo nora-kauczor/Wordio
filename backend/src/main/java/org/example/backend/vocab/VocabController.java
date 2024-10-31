@@ -1,6 +1,7 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.ErrorMessage;
 import org.example.backend.exception.IdNotFoundException;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.exception.VocabIsNotEditableException;

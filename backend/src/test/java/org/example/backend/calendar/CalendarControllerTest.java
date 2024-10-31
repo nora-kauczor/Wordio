@@ -1,8 +1,8 @@
 package org.example.backend.calendar;
 
-import org.example.backend.Language;
-import org.example.backend.Vocab;
-import org.example.backend.VocabRepo;
+import org.example.backend.vocab.Language;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

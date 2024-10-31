@@ -1,10 +1,10 @@
 package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.Language;
+import org.example.backend.vocab.Language;
 import org.example.backend.exception.LanguageNotFoundException;
-import org.example.backend.Vocab;
-import org.example.backend.VocabRepo;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;

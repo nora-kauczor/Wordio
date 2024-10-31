@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.example.backend.exception.LanguageNotFoundException;

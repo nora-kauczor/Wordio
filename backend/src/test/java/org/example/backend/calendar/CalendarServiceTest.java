@@ -1,9 +1,9 @@
 package org.example.backend.calendar;
 
-import org.example.backend.Language;
+import org.example.backend.vocab.Language;
 import org.example.backend.exception.LanguageNotFoundException;
-import org.example.backend.Vocab;
-import org.example.backend.VocabRepo;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.YearMonth;

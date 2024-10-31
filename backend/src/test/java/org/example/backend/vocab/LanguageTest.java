@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
 import org.example.backend.exception.LanguageNotFoundException;
 import org.junit.jupiter.api.Test;
