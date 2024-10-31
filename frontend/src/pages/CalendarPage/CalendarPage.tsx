@@ -29,10 +29,11 @@ export default function CalendarPage(props: Readonly<Props>) {
     const [dayOfDayPopUp, setDayOfDayPopUp] =
         useState<string>("")
 
+
     useEffect(() => {
         if (!props.language) {return}
         getMonth()
-    }, []);
+    }, [props.language]);
 
     if (!month) {
         return <p>Loading calendar...</p>
@@ -43,8 +44,7 @@ function getMonth() {
         const today = new Date();
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
-        axios.get(`/api/calendar?year=${year}&month=${month}
-        &language=${props.language}`)
+        axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}`)
             .then(response => setMonth(response.data))
             .catch(error => console.error(error))
     }
