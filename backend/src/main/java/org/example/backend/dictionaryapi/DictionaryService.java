@@ -2,7 +2,6 @@ package org.example.backend.dictionaryapi;
 
 
 import org.example.backend.dictionaryapi.models.Response;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
