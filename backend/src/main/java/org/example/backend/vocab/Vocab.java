@@ -12,13 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Vocab {
-    @Id String _id;
-    String word;
-    String translation;
-    String info;
-    Language language;
-    List<LocalDate> reviewDates;
-    boolean editable;
+    @Id private String _id;
+    private String word;
+    private String translation;
+    private String info;
+    private Language language;
+    private List<LocalDate> reviewDates;
+    private String createdBy;
 
 
 

@@ -5,5 +5,5 @@ public record VocabDTOCreate(
         String translation,
         String info,
         String language,
-        boolean editable) {
+        String createdBy) {
 }

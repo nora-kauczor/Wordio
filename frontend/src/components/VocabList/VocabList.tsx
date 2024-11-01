@@ -57,7 +57,7 @@ export default function VocabList(props: Readonly<Props>) {
                 <p>{vocab.translation}</p>
             </div>
             <div className={"list-item-button-wrapper"}>
-                {vocab.editable && vocab._id ? <button
+                {vocab.createdBy != "Wordio" && vocab._id ? <button
                     onClick={() => handleClickEdit(vocab._id)}
                     onKeyDown={() => handleClickEdit(vocab._id)}
                 >edit</button> : <button/>}
@@ -69,7 +69,7 @@ export default function VocabList(props: Readonly<Props>) {
                         (props.calendarMode ? handleClickDeactivate(vocab._id) :
                             handleClickActivate(vocab._id))}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
-                {vocab.editable && vocab._id ? <button
+                {vocab.createdBy != "Wordio" && vocab._id ? <button
                     onClick={() => handleClickDelete(vocab._id)}
                     onKeyDown={() => handleClickDelete(vocab._id)}
                 >delete</button> : <button/>}
