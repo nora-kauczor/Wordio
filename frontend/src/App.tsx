@@ -22,7 +22,7 @@ function App() {
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState("language",
-        {defaultValue: "Spanish"});
+        {defaultValue: ""});
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
         "vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
@@ -44,9 +44,10 @@ function App() {
     }
 
     useEffect(() => {
-
         getUserName()
-        getAllVocabsOfLanguage()
+        if (language) {
+            getAllVocabsOfLanguage()
+        }
     }, []);
 
     useEffect(() => {
@@ -165,6 +166,7 @@ function App() {
         return (
             <div id={"app"}>
             <Header userName={userName} logout={logout}
+                    language={language}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
             {useForm && <Form userName={userName} language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
@@ -180,7 +182,8 @@ function App() {
                                vocabs={vocabs}
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
-                               language={language}/>}/>
+                               language={language}
+                           setLanguage={setLanguage} />}/>
                     <Route path={"/calendar"} element={<CalendarPage
                         openForm={openForm}
                         vocabs={vocabs}
