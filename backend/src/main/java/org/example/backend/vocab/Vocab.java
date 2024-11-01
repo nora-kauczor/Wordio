@@ -18,7 +18,7 @@ public class Vocab {
     String info;
     Language language;
     List<LocalDate> reviewDates;
-    boolean editable;
+    String createdBy;
 
 
 

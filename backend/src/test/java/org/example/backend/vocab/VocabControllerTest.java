@@ -34,7 +34,7 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024, 11, 1)), true);
+                "", Language.SPANISH, List.of(LocalDate.of(2024, 11, 1)), "maxi-muster");
         vocabRepo.save(testVocab);
     }
 
@@ -161,7 +161,7 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "word":"la prueba", "translation":"test",
-                                                                          "info":"", "language":"Esperanto", "editable":  true}
+                                                                          "info":"", "language":"Esperanto","createdBy":  "maxi-muster"}
                                 """))
                 .andExpect(status().isNotFound());
     }
@@ -173,12 +173,12 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"000","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  true}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "maxi-muster"}
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         { "_id":"000", "word":"la prueba", "translation":"test",
-                                                                  "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  true}
+                                                                  "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "maxi-muster"}
                         """));
 
     }
@@ -190,7 +190,7 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"nonexistent-id","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  true}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  ""}
                                 """))
                 .andExpect(status().isNotFound());
     }
@@ -198,13 +198,13 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturn405_whenCalledWithNonEditableVocab() throws Exception {
-        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), false);
+        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), "");
         vocabRepo.save(nonEditableVocab);
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"123","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  false}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  ""}
                                 """))
         .andExpect(status().isMethodNotAllowed());
     }
@@ -215,7 +215,7 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"000","word":"la prueba", "translation":"test",
-                                                                          "info":"", "language":"Esperanto", "reviewDates":[], "editable":  true}
+                                                                          "info":"", "language":"Esperanto", "reviewDates":[], "createdBy":  "maxi-muster"}
                                 """))
                 .andExpect(status().isNotFound());
     }

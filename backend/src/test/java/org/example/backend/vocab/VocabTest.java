@@ -14,7 +14,7 @@ class VocabTest {
     @Test
     void generateDates_shouldReturnListOfDates_whenCalledWithDate() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(), false);
+                "", Language.SPANISH, List.of(), "");
         testVocab.reviewDates = generateDates(LocalDate.now());
         LocalDate date1 = testVocab.reviewDates.get(0);
         LocalDate date2 = testVocab.reviewDates.get(1);
