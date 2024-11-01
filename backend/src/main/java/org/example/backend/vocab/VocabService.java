@@ -60,7 +60,7 @@ public class VocabService {
         Language language = Language.getEnumByString(vocabDTO.language());
         List<LocalDate> dates = generateDates(LocalDate.now());
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, dates, true);
+                vocabDTO.info(), language, dates, vocabDTO.createdBy());
         return vocabRepo.save(newVocab);
     }
 
