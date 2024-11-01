@@ -21,7 +21,7 @@ public class VocabService {
 
     public Vocab changeReviewDates(String _id) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
+        LocalDate firstDayOfOldReviewDates = vocab.getReviewDates().getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
         vocab.setReviewDates(newDates);
         vocabRepo.save(vocab);
@@ -49,18 +49,10 @@ public class VocabService {
     }
 
 
-    public List<Vocab> getAllVocabs() {
-        return vocabRepo.findAll();
-    }
-
-    public Vocab getVocab(String id) throws IdNotFoundException {
-        return vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-    }
-
     public Vocab createVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, List.of(), true);
+                vocabDTO.info(), language, List.of(), vocabDTO.createdBy());
         return vocabRepo.save(newVocab);
     }
 
@@ -76,12 +68,12 @@ public class VocabService {
         if (!vocabRepo.existsById(vocabDTO._id())) {
             throw new IdNotFoundException("ID not found.");
         }
-        if (!vocabDTO.editable()) {
+        if (vocabDTO.createdBy().equals("Wordio")) {
             throw new VocabIsNotEditableException("Method not allowed.");
         }
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, vocabDTO.reviewDates(), true);
+                vocabDTO.info(), language, vocabDTO.reviewDates(), vocabDTO.createdBy());
         vocabRepo.save(editedVocab);
         return vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
     }

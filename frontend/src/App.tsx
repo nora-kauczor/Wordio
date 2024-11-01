@@ -5,7 +5,7 @@ import {
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
 import CalendarPage from "./pages/CalendarPage/CalendarPage.tsx";
-import axios, {create} from "axios";
+import axios from "axios";
 import {useEffect, useState} from "react";
 import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
@@ -30,7 +30,7 @@ function App() {
     const navigate = useNavigate()
 
     function getAllVocabsOfLanguage() {
-        axios.get(`/api/vocab/language?language=${language}`)
+        axios.get(`/api/vocab?language=${language}`)
             .then(response => setVocabs(response.data))
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
@@ -121,6 +121,7 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
+
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
             .then(() => console.log(`Vocab ${_id} successfully deleted.`))
@@ -143,9 +144,8 @@ function App() {
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
-            .then(() => console.log(
-                `Vocab ${editedVocab._id} successfully edited.`))
+        axios.put(`api/vocab/`, editedVocab)
+            .then(() => console.log(`Vocab ${editedVocab._id} successfully edited.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -164,7 +164,7 @@ function App() {
             <Header userName={userName} logout={logout}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
-            {useForm && <Form language={language} editVocab={editVocab}
+            {useForm && <Form userName={userName} language={language} editVocab={editVocab}
                               createVocab={createVocab}
                               vocabToEdit={vocabToEdit}/>}
             <NavBar setUseForm={setUseForm}/>

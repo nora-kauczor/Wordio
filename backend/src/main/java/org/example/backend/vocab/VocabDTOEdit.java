@@ -11,6 +11,6 @@ public record VocabDTOEdit(
         String info,
         String language,
         List<LocalDate> reviewDates,
-        boolean editable) {
+        String createdBy) {
 }
 

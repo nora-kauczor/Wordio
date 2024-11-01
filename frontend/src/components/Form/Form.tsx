@@ -8,6 +8,7 @@ type Props = {
     createVocab: (vocab: Vocab) => void
     createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
+    userName: string
 }
 
 export default function Form(props: Readonly<Props>) {
@@ -33,7 +34,7 @@ export default function Form(props: Readonly<Props>) {
                 info: infoInput,
                 language: props.language,
                 reviewDates: props.vocabToEdit.reviewDates,
-                createdBy: "test"
+                createdBy: props.userName
             }
             props.editVocab(editedVocab)
         } else {
@@ -43,7 +44,7 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                createdBy: "test"
+                createdBy: props.userName
             }
             if (clickedButton === "create") {
                 props.createVocab(newVocab)
