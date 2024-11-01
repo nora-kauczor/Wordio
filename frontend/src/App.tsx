@@ -141,6 +141,7 @@ function App() {
     function createAndActivateVocab(newVocab: Vocab): void {
         setUseForm(false)
         axios.post("/api/vocab/activate", newVocab)
+            .then(response => navigate(`/display/:${response.data._id}`))
             .then(() => console.log("New vocab was successfully created and activated."))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.log(error))

@@ -50,7 +50,6 @@ export default function Form(props: Readonly<Props>) {
                 props.createVocab(newVocab)
             } else {
                 props.createAndActivateVocab(newVocab)
-                // TODO go to display page? geht aber nicht weil es noch keine id hat?
             }
         }
     }
