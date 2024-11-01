@@ -38,8 +38,8 @@ public class VocabController {
         return vocabService.createVocab(vocabDTO);
     }
 
-    @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
+    @PutMapping
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
     @PutMapping("/change-dates/{_id}")

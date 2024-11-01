@@ -152,7 +152,7 @@ function App() {
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+        axios.put(`api/vocab/`, editedVocab)
             .then(
                 () => console.log(`Vocab ${editedVocab._id} successfully edited.`))
             .then(() => getAllVocabsOfLanguage())
