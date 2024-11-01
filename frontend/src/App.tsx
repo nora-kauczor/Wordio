@@ -138,9 +138,13 @@ function App() {
             .catch(error => console.log(error))
     }
 
-    // function createAndActivate(newVocab: Vocab): void {
-    //
-    // }
+    function createAndActivateVocab(newVocab: Vocab): void {
+        setUseForm(false)
+        axios.post("/api/vocab/activate", newVocab)
+            .then(() => console.log("New vocab was successfully created and activated."))
+            .then(() => getAllVocabsOfLanguage())
+            .catch(error => console.log(error))
+    }
 
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
@@ -168,6 +172,7 @@ function App() {
             <div style={{height: "60px"}}/>
             {useForm && <Form userName={userName} language={language} editVocab={editVocab}
                               createVocab={createVocab}
+                              createAndActivateVocab={createAndActivateVocab}
                               vocabToEdit={vocabToEdit}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
@@ -184,6 +189,7 @@ function App() {
                                language={language}
                            setLanguage={setLanguage} />}/>
                     <Route path={"/calendar"} element={<CalendarPage
+                        setUseForm={setUseForm}
                         openForm={openForm}
                         vocabs={vocabs}
                         language={language}
@@ -201,6 +207,7 @@ function App() {
                                activateVocab={activateVocab}
                                language={language}
                                openForm={openForm}
+                               setUseForm={setUseForm}
                            />}/>
                     <Route path={"/display/:_id"}
                            element={<DisplayPage
