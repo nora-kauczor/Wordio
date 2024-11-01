@@ -21,8 +21,9 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
-    const [language, setLanguage] = useLocalStorageState("language",
-        {defaultValue: ""});
+    // const [language, setLanguage] = useLocalStorageState("language",
+    //     {defaultValue: ""});
+    const [language, setLanguage] = useState<string>("")
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
         "vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
@@ -162,9 +163,11 @@ function App() {
         }
     }
 
+
         return (
             <div id={"app"}>
             <Header userName={userName} logout={logout}
+                    language={language}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
             {useForm && <Form language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}

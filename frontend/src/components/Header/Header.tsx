@@ -1,26 +1,25 @@
 import './Header.css'
-import React from "react";
 
 type Props = {
     userName: string
     logout: () => void
+    language: string
     setLanguage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function Header(props: Readonly<Props>) {
 
+    function handleChange(event: React.ChangeEvent<HTMLSelectElement>){
+        props.setLanguage(event.target.value)
+    }
+
     return (<div id={"header"}>
         <p id={"app-name"}>Wordio</p>
-        {props.userName && props.setLanguage && <select id={"select-language"}>
-            <option
-                onClick={() => props.setLanguage("Spanish")}
-                onKeyDown={() => props.setLanguage("Spanish")}>🇪🇸
-                Spanish
-            </option>
-            <option   onClick={() => props.setLanguage("French")}
-                      onKeyDown={() => props.setLanguage("French")}>🇫🇷 French</option>
-            <option   onClick={() => props.setLanguage("Italian")}
-                      onKeyDown={() => props.setLanguage("Italian")}>🇮🇹 Italian</option>
+        {props.userName && props.language &&
+            <select id={"select-language"} value={props.language} onChange={handleChange}>
+            <option value={"Spanish"}>🇪🇸 Spanish</option>
+            <option value={"French"}>🇫🇷 French</option>
+            <option value={"Italian"}>🇮🇹 Italian</option>
         </select>}
 
         {props.userName && <button id={"logout-button"}

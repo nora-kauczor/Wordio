@@ -18,28 +18,33 @@ export default function HomePage(props: Readonly<Props>) {
     const navigate = useNavigate()
 
     return (<div id={"homepage"}>
-            <article id={"homepage-text-and-button"}>
-                {props.finishedReviewing ? <p>You've got no vocabulary scheduled
+        <article id={"homepage-text-and-button"}>
+            {props.finishedReviewing && props.language &&
+                <p>You've got no vocabulary scheduled
                     for today or you've already reviewed
                     all of it. To start learning
-                    (more) words click below </p> : <p>
-                    Nice to see you! Click below to get
+                    (more) words click below </p>}
+
+            {!props.finishedReviewing && props.language &&
+                <p>Nice to see you! Click below to get
                     started with your daily vocab
                     review</p>}
-                {props.finishedReviewing ? <button
-                    onClick={() => setShowPopUp(true)}
-                    onKeyDown={() => setShowPopUp(true)}>
-                    New vocabulary</button> : <button
-                    onClick={() => navigate("/review")}
-                    onKeyDown={() => navigate("/review")}>Review
-                </button>}
-            </article>
-            {showPopUp && props.vocabs && <NewVocabsPopUp
-                vocabs={props.vocabs}
-                setUseForm={props.setUseForm}
-                setShowPopUp={setShowPopUp}/>}
-            {!props.language &&
-                <PickLanguagePopUp setLanguage={props.setLanguage}/>}
+            {props.finishedReviewing && props.language && <button
+                onClick={() => setShowPopUp(true)}
+                onKeyDown={() => setShowPopUp(true)}>
+                New vocabulary</button>}
+            {!props.finishedReviewing && props.language &&
+                <button
+                onClick={() => navigate("/review")}
+                onKeyDown={() => navigate("/review")}>Review
+            </button>}
+        </article>
+        {showPopUp && props.vocabs && <NewVocabsPopUp
+            vocabs={props.vocabs}
+            setUseForm={props.setUseForm}
+            setShowPopUp={setShowPopUp}/>}
+        {!props.language &&
+            <PickLanguagePopUp setLanguage={props.setLanguage}/>}
 
-        </div>)
+    </div>)
 }

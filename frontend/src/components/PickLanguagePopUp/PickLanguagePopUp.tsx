@@ -1,5 +1,5 @@
 import React from "react";
-
+import './PickLanguagePopUp.css'
 type Props = {
     setLanguage: React.Dispatch<React.SetStateAction<string>>
 }
