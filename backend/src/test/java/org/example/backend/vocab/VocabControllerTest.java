@@ -162,7 +162,7 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"nonexistent-id","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  ""}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "Wordio"}
                                 """))
                 .andExpect(status().isNotFound());
     }
@@ -170,13 +170,13 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturn405_whenCalledWithNonEditableVocab() throws Exception {
-        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), "");
+        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), "Wordio");
         vocabRepo.save(nonEditableVocab);
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"123","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  ""}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "Wordio"}
                                 """))
         .andExpect(status().isMethodNotAllowed());
     }

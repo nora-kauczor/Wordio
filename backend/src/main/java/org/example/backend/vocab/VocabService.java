@@ -60,7 +60,7 @@ public class VocabService {
         if (!vocabRepo.existsById(vocabDTO._id())) {
             throw new IdNotFoundException("ID not found.");
         }
-        if (vocabDTO.createdBy().isEmpty()) {
+        if (vocabDTO.createdBy().equals("Wordio")) {
             throw new VocabIsNotEditableException("Method not allowed.");
         }
         Language language = Language.getEnumByString(vocabDTO.language());

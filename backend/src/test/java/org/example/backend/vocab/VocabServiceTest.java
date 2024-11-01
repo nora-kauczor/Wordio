@@ -23,7 +23,7 @@ class VocabServiceTest {
     @Test
     void changeReviewDates_shouldReturnVocabWithChangedDates_whenCalledWithId() throws IdNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024,11, 1)), "");
+                "", Language.SPANISH, List.of(LocalDate.of(2024,11, 1)), "Wordio");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
         LocalDate expected = LocalDate.of(2024,11, 2);
         LocalDate actual = vocabService.changeReviewDates("000").getReviewDates().getFirst();
@@ -40,7 +40,7 @@ class VocabServiceTest {
     @Test
     void deactivateVocab_shouldReturnVocabWithEmptiedReviewDates_whenCalledWithExistentId() throws IdNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024,11,15)), "");
+                "", Language.SPANISH, List.of(LocalDate.of(2024,11,15)), "Wordio");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
         vocabService.deactivateVocab("000");
         assertTrue(testVocab.getReviewDates().isEmpty());
@@ -56,7 +56,7 @@ class VocabServiceTest {
     @Test
     void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws IdNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, Collections.emptyList(), "");
+                "", Language.SPANISH, Collections.emptyList(), "Wordio");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
         vocabService.activateVocab("000");
         assertFalse(testVocab.getReviewDates().isEmpty());
@@ -72,11 +72,11 @@ class VocabServiceTest {
     @Test
     void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws LanguageNotFoundException {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "");
+                "", Language.SPANISH, List.of(), "Wordio");
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "");
+                "", Language.SPANISH, List.of(), "Wordio");
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.ITALIAN, List.of(), "");
+                "", Language.ITALIAN, List.of(), "Wordio");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab,testVocab2,testVocab3));
         List<Vocab> expected = List.of(testVocab, testVocab2);
         List<Vocab> actual = vocabService.getAllVocabsOfLanguage("Spanish");
@@ -125,7 +125,7 @@ class VocabServiceTest {
     @Test
     void editVocab_shouldThrowVocabIsNotEditableException_whenCalledWithNonEditableVocab() {
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", List.of(), "");
+                "added infotext", "Spanish", List.of(), "Wordio");
         when(mockVocabRepo.existsById(vocabDTO._id())).thenReturn(true);
         assertThrows(VocabIsNotEditableException.class, () -> vocabService.editVocab(vocabDTO));
     }
