@@ -1,7 +1,7 @@
 package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.LanguageNotFoundException;
+import org.example.backend.exception.LanguageNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

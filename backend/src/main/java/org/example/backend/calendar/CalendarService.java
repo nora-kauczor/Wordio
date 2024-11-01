@@ -1,10 +1,10 @@
 package org.example.backend.calendar;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.Language;
-import org.example.backend.LanguageNotFoundException;
-import org.example.backend.Vocab;
-import org.example.backend.VocabRepo;
+import org.example.backend.vocab.Language;
+import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -47,7 +47,6 @@ public class CalendarService {
 
     public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language) {
         List<Vocab> allVocabs = vocabRepo.findAll();
-        System.out.println(allVocabs);
         List<Vocab> vocabsOfDate = allVocabs.stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .filter(vocab ->
@@ -84,11 +83,5 @@ public class CalendarService {
             }
         }
     }
-
-
-
-
-
-
 
 }

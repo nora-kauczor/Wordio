@@ -1,8 +1,8 @@
 package org.example.backend.calendar;
 
-import org.example.backend.Language;
-import org.example.backend.Vocab;
-import org.example.backend.VocabRepo;
+import org.example.backend.vocab.Language;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,6 +32,7 @@ class CalendarControllerTest {
 
     @Autowired
     private VocabRepo vocabRepo;
+
 
 
     @Test
@@ -108,5 +109,10 @@ class CalendarControllerTest {
                         """));
     }
 
+    @Test
+    void getMonth_ShouldReturn404_whenCalledWithNonExistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Esperanto"))
+                .andExpect(status().isNotFound());
+    }
 
 }

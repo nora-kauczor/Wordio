@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

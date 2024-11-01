@@ -1,14 +1,17 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.exception.VocabIsNotEditableException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-import static org.example.backend.Language.getEnumByString;
-import static org.example.backend.Vocab.generateDates;
+import static org.example.backend.vocab.Language.getEnumByString;
+import static org.example.backend.vocab.Vocab.generateDates;
 
 @RequiredArgsConstructor
 @Service

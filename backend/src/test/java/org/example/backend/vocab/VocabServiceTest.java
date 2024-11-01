@@ -1,5 +1,8 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
+import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.exception.VocabIsNotEditableException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -131,7 +134,7 @@ class VocabServiceTest {
     }
 
     @Test
-    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, org.example.backend.VocabIsNotEditableException, LanguageNotFoundException {
+    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
                 "added infotext", "Spanish", List.of(), true);
         when(mockVocabRepo.existsById("000")).thenReturn(true);

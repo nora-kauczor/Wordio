@@ -1,10 +1,11 @@
 package org.example.backend.calendar;
 
-import org.example.backend.Language;
-import org.example.backend.LanguageNotFoundException;
-import org.example.backend.Vocab;
-import org.example.backend.VocabRepo;
+import org.example.backend.vocab.Language;
+import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -114,7 +115,13 @@ class CalendarServiceTest {
 
 
     @Test
-    void getVocabIdsOfDate() {
+    void getMonth_ShouldThrowLanguageNotFoundException_whenCalledWithNonExistentLanguage()  {
+        assertThrows(LanguageNotFoundException.class, () -> calendarService.getMonth(YearMonth.of(2024, 12), "Esperanto"));
+    }
+
+
+    @Test
+    void getVocabIdsOfDate_ShouldReturnIdsOFAllVocabsOfALanguageThatAreToBeReviewedAtCertainDate_whenCalledWithDateAndLanguage() {
         List<LocalDate> reviewDates = new ArrayList<>(List.of());
         LocalDate date = LocalDate.of(2024, 10, 18);
         reviewDates.add(date);
@@ -129,7 +136,6 @@ class CalendarServiceTest {
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
                 "", Language.ITALIAN, reviewDates, false);
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
-        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3));
         VocabIdsOfDate expected = new VocabIdsOfDate(date, List.of("000", "777"));
         VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date, Language.SPANISH);
         assertEquals(expected, actual);

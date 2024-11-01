@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.vocab;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
