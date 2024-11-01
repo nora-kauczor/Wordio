@@ -22,7 +22,7 @@ function App() {
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState("language",
-        {defaultValue: ""});
+        {defaultValue: "Spanish"});
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
         "vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
@@ -44,8 +44,9 @@ function App() {
     }
 
     useEffect(() => {
-        getAllVocabsOfLanguage()
+
         getUserName()
+        getAllVocabsOfLanguage()
     }, []);
 
     useEffect(() => {
