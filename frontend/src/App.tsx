@@ -30,7 +30,7 @@ function App() {
     const navigate = useNavigate()
 
     function getAllVocabsOfLanguage() {
-        axios.get(`/api/vocab/language?language=${language}`)
+        axios.get(`/api/vocab?language=${language}`)
             .then(response => setVocabs(response.data))
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
@@ -126,6 +126,7 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
+
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
             .then(
@@ -145,7 +146,7 @@ function App() {
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
-        axios.put(`api/vocab/${editedVocab._id}`, editedVocab)
+        axios.put(`api/vocab/`, editedVocab)
             .then(
                 () => console.log(`Vocab ${editedVocab._id} successfully edited.`))
             .then(() => getAllVocabsOfLanguage())
@@ -162,14 +163,13 @@ function App() {
         }
     }
 
-
         return (
             <div id={"app"}>
             <Header userName={userName} logout={logout}
                     language={language}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
-            {useForm && <Form language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
+            {useForm && <Form userName={userName} language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}

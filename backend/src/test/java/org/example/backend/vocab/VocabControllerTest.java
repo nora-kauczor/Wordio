@@ -34,7 +34,7 @@ class VocabControllerTest {
     @BeforeEach
     void setUp() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024, 11, 1)), true);
+                "", Language.SPANISH, List.of(LocalDate.of(2024, 11, 1)), "maxi-muster");
         vocabRepo.save(testVocab);
     }
 
@@ -93,13 +93,13 @@ class VocabControllerTest {
 
     @Test
     void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Esperanto"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Esperanto"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Spanish"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Spanish"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{"_id":"000", "word":"la prueba", "translation":"test",
@@ -108,34 +108,6 @@ class VocabControllerTest {
                 .andExpect(jsonPath("$[0].reviewDates[0]").value("2024-11-01"));
     }
 
-
-    @Test
-    void getAllVocabs_ShouldReturnAllVocabs_whenCalled() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-                        [{"_id":"000", "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish"}]
-                        """));
-    }
-
-
-    @Test
-    void getVocab_shouldReturnSpecificVocab_whenCalledWithItsId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/000"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-                        {"_id":"000", "word":"la prueba", "translation":"test",
-                                          "info":"", "language":"Spanish"}
-                        """));
-    }
-
-
-    @Test
-    void getVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/nonexistent-id"))
-                .andExpect(status().isNotFound());
-    }
 
 
     @Test
@@ -161,7 +133,7 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "word":"la prueba", "translation":"test",
-                                                                          "info":"", "language":"Esperanto", "editable":  true}
+                                                                          "info":"", "language":"Esperanto","createdBy":  "maxi-muster"}
                                 """))
                 .andExpect(status().isNotFound());
     }
@@ -169,16 +141,16 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/000")
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"000","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  true}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "maxi-muster"}
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         { "_id":"000", "word":"la prueba", "translation":"test",
-                                                                  "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  true}
+                                                                  "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "maxi-muster"}
                         """));
 
     }
@@ -186,11 +158,11 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/nonexistent-id")
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"nonexistent-id","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  true}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "Wordio"}
                                 """))
                 .andExpect(status().isNotFound());
     }
@@ -198,24 +170,24 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturn405_whenCalledWithNonEditableVocab() throws Exception {
-        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), false);
+        Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, List.of(), "Wordio");
         vocabRepo.save(nonEditableVocab);
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/123")
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"123","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "editable":  false}
+                                                                          "info":"added infotext", "language":"Spanish", "reviewDates":[], "createdBy":  "Wordio"}
                                 """))
         .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/000")
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "_id":"000","word":"la prueba", "translation":"test",
-                                                                          "info":"", "language":"Esperanto", "reviewDates":[], "editable":  true}
+                                                                          "info":"", "language":"Esperanto", "reviewDates":[], "createdBy":  "maxi-muster"}
                                 """))
                 .andExpect(status().isNotFound());
     }

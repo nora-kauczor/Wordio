@@ -18,19 +18,9 @@ public class VocabController {
 
     private final VocabService vocabService;
 
-    @GetMapping("/language")
+    @GetMapping
     public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language) throws LanguageNotFoundException {
         return vocabService.getAllVocabsOfLanguage(language);
-    }
-
-    @GetMapping
-    public List<Vocab> getAllVocabs(){
-        return vocabService.getAllVocabs();
-    }
-
-    @GetMapping("/{_id}")
-    public Vocab getVocab(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.getVocab(_id);
     }
 
     @PostMapping
@@ -38,8 +28,8 @@ public class VocabController {
         return vocabService.createVocab(vocabDTO);
     }
 
-    @PutMapping("/{_id}")
-    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @PathVariable String _id) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
+    @PutMapping
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
     @PutMapping("/change-dates/{_id}")
