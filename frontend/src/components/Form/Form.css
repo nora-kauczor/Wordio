@@ -1,1 +1,24 @@
-#form {display: flex; flex-direction: column;}
+#form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 70%;
+    height: 40%;
+}
+
+#input-and-label-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    margin: 0;
+    padding: 15px 2px 2px 5px;
+}
+
+input {
+    margin: 0;
+    padding: 0;
+    border-radius: 0.3rem;
+}

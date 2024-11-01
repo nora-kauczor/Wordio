@@ -24,7 +24,6 @@ export default function HomePage(props: Readonly<Props>) {
                     for today or you've already reviewed
                     all of it. To start learning
                     (more) words click below </p>}
-
             {!props.finishedReviewing && props.language &&
                 <p>Nice to see you! Click below to get
                     started with your daily vocab

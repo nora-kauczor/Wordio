@@ -31,7 +31,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     }
 
     const navigate = useNavigate()
-    return (<div id={"new-vocabs-popup"}>
+    return (<div id={"new-vocabs-popup"} className={"pop-up"}>
         <button className={"new-vocabs-button"}
                 onClick={handleClick}
                 onKeyDown={handleClick}>Enter new

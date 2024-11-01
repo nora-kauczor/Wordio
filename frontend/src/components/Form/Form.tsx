@@ -8,6 +8,7 @@ type Props = {
     createVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
     userName: string
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function Form(props: Readonly<Props>) {
@@ -65,17 +66,20 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(value)
     }
 
-    return (<form id={"form"} onSubmit={handleSubmit}>
-        <label htmlFor={"word-input"}>Word</label>
+    return (<form id={"form"} onSubmit={handleSubmit} className={"pop-up"}>
+        <button onClick={()=>props.setUseForm(false)}>✕</button>
+        <div id={"input-and-label-wrapper"}>
+        <label htmlFor={"word-input"}>Your Vocab</label>
         <input name={"word"} id={"word-input"} value={wordInput}
                onChange={handleChange}/>
-        <label htmlFor={"translation-input"}>Translation</label>
+        <label htmlFor={"translation-input"}>Translation into English</label>
         <input name={"translation"} id={"translation-input"}
                value={translationInput} onChange={handleChange}/>
         <label htmlFor={"info-input"}>Additional info, e.g.
             "colloquial"</label>
         <input name={"info"} id={"info-input"} value={infoInput}
                onChange={handleChange}/>
+        </div>
         <button>Submit</button>
     </form>)
 }
