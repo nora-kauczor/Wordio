@@ -9,25 +9,18 @@ type Props = {
 
 export default function Header(props: Readonly<Props>) {
 
-    function selectLanguage(language: string): void {
-        props.setLanguage(language)
-    }
-
     return (<div id={"header"}>
         <p id={"app-name"}>Wordio</p>
-        {props.userName &&<select id={"select-language"}>
-            <option value="" disabled>Choose
-                language
-            </option>
+        {props.userName && props.setLanguage && <select id={"select-language"}>
             <option
-                onClick={() => selectLanguage("Spanish")}
-                onKeyDown={() => selectLanguage("Spanish")}>🇪🇸
+                onClick={() => props.setLanguage("Spanish")}
+                onKeyDown={() => props.setLanguage("Spanish")}>🇪🇸
                 Spanish
             </option>
-            <option   onClick={() => selectLanguage("French")}
-                      onKeyDown={() => selectLanguage("French")}>🇫🇷 French</option>
-            <option   onClick={() => selectLanguage("Italian")}
-                      onKeyDown={() => selectLanguage("Italian")}>🇮🇹 Italian</option>
+            <option   onClick={() => props.setLanguage("French")}
+                      onKeyDown={() => props.setLanguage("French")}>🇫🇷 French</option>
+            <option   onClick={() => props.setLanguage("Italian")}
+                      onKeyDown={() => props.setLanguage("Italian")}>🇮🇹 Italian</option>
         </select>}
 
         {props.userName && <button id={"logout-button"}
