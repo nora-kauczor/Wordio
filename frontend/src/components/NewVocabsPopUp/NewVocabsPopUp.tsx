@@ -18,7 +18,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     }
 
     function getRandomVocab():Vocab {
-        const inactiveVocabs:Vocab[] = props.vocabs.filter(vocab => vocab.reviewDates.length < 1)
+        const inactiveVocabs:Vocab[] = props.vocabs.filter(vocab => vocab.reviewDates && vocab.reviewDates?.length < 1)
         const numberOfVocabs: number = inactiveVocabs.length
         const randomIndex = Math.floor(Math.random() * numberOfVocabs)-1
         return props.vocabs[randomIndex];
