@@ -93,13 +93,13 @@ class VocabControllerTest {
 
     @Test
     void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Esperanto"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Esperanto"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/language?language=Spanish"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Spanish"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{"_id":"000", "word":"la prueba", "translation":"test",

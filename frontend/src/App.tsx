@@ -30,7 +30,7 @@ function App() {
     const navigate = useNavigate()
 
     function getAllVocabsOfLanguage() {
-        axios.get(`/api/vocab/language?language=${language}`)
+        axios.get(`/api/vocab?language=${language}`)
             .then(response => setVocabs(response.data))
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))

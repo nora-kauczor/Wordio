@@ -18,7 +18,7 @@ public class VocabController {
 
     private final VocabService vocabService;
 
-    @GetMapping("/language")
+    @GetMapping
     public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language) throws LanguageNotFoundException {
         return vocabService.getAllVocabsOfLanguage(language);
     }
