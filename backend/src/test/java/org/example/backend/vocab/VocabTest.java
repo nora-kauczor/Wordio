@@ -15,10 +15,10 @@ class VocabTest {
     void generateDates_shouldReturnListOfDates_whenCalledWithDate() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, List.of(), "");
-        testVocab.reviewDates = generateDates(LocalDate.now());
-        LocalDate date1 = testVocab.reviewDates.get(0);
-        LocalDate date2 = testVocab.reviewDates.get(1);
-        LocalDate date5 = testVocab.reviewDates.get(4);
+        testVocab.setReviewDates(generateDates(LocalDate.now()));
+        LocalDate date1 = testVocab.getReviewDates().get(0);
+        LocalDate date2 = testVocab.getReviewDates().get(1);
+        LocalDate date5 = testVocab.getReviewDates().get(4);
         assertEquals(date2, date1.plusDays(1));
         assertEquals(date5, date1.plusDays(10));
     }

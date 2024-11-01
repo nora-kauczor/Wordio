@@ -21,7 +21,7 @@ public class VocabService {
 
     public Vocab changeReviewDates(String _id) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        LocalDate firstDayOfOldReviewDates = vocab.reviewDates.getFirst();
+        LocalDate firstDayOfOldReviewDates = vocab.getReviewDates().getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
         vocab.setReviewDates(newDates);
         vocabRepo.save(vocab);
