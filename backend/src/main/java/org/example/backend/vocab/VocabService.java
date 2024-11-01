@@ -64,6 +64,14 @@ public class VocabService {
         return vocabRepo.save(newVocab);
     }
 
+    public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
+        Language language = Language.getEnumByString(vocabDTO.language());
+        List<LocalDate> dates = generateDates(LocalDate.now());
+        Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
+                vocabDTO.info(), language, dates, true);
+        return vocabRepo.save(newVocab);
+    }
+
     public Vocab editVocab(VocabDTOEdit vocabDTO) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         if (!vocabRepo.existsById(vocabDTO._id())) {
             throw new IdNotFoundException("ID not found.");

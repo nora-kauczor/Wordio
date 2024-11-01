@@ -6,6 +6,7 @@ type Props = {
     language: string
     vocabToEdit: Vocab | undefined
     createVocab: (vocab: Vocab) => void
+    createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
 }
 
@@ -44,7 +45,12 @@ export default function Form(props: Readonly<Props>) {
                 language: props.language,
                 createdBy: "test"
             }
-            props.createVocab(newVocab)
+            if (clickedButton === "create") {
+                props.createVocab(newVocab)
+            } else {
+                props.createAndActivateVocab(newVocab)
+                // TODO go to display page? geht aber nicht weil es noch keine id hat?
+            }
         }
     }
 
