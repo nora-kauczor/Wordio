@@ -24,8 +24,7 @@ public class VocabService {
         LocalDate firstDayOfOldReviewDates = vocab.getReviewDates().getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
         vocab.setReviewDates(newDates);
-        vocabRepo.save(vocab);
-        return vocabRepo.findById(_id).orElseThrow();
+        return vocabRepo.save(vocab);
     }
 
     public Vocab deactivateVocab(String _id) throws IdNotFoundException {
@@ -74,8 +73,7 @@ public class VocabService {
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), language, vocabDTO.reviewDates(), vocabDTO.createdBy());
-        vocabRepo.save(editedVocab);
-        return vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
+        return vocabRepo.save(editedVocab);
     }
 
     public String deleteVocab(String _id) throws IdNotFoundException {
