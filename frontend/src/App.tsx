@@ -21,9 +21,8 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>("")
-    // const [language, setLanguage] = useLocalStorageState("language",
-    //     {defaultValue: ""});
-    const [language, setLanguage] = useState<string>("")
+    const [language, setLanguage] = useLocalStorageState("language",
+        {defaultValue: ""});
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
         "vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
