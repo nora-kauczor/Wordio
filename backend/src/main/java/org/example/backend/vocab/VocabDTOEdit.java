@@ -3,6 +3,7 @@ package org.example.backend.vocab;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public record VocabDTOEdit(
         String _id,
@@ -10,7 +11,9 @@ public record VocabDTOEdit(
         String translation,
         String info,
         String language,
-        List<LocalDate> reviewDates,
+         Map<String, List<LocalDate>> datesPerUser,
         String createdBy) {
 }
+
+
 

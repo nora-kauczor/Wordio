@@ -21,9 +21,9 @@ public class CalendarService {
     private final VocabRepo vocabRepo;
 
 
-    public Month getMonth(YearMonth yearMonth, String languageString) throws LanguageNotFoundException {
+    public Month getMonth(YearMonth yearMonth, String languageString, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
-        List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth, language);
+        List<VocabIdsOfDate> idsAndDates = getVocabIdsOfMonth(yearMonth, language, userName);
         VocabIdsOfDate[][] vocabIdsOfMonth = createEmptyCalendar();
         DayOfWeek weekdayOfFirstDay = yearMonth.atDay(1).getDayOfWeek();
         int calendarIndexOfFirstDay = weekdayOfFirstDay.getValue() - 1;
@@ -35,22 +35,23 @@ public class CalendarService {
         return new Month(yearMonthName, vocabIdsOfMonth);
     }
 
-    private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth, Language language) {
+    private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth, Language language, String userName) {
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
         for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
             LocalDate day = yearMonth.atDay(i);
-            VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day, language);
+            VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day, language, userName);
             idsAndDates.add(idsAndDateOfDay);
         }
         return idsAndDates;
     }
 
-    public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language) {
+    public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language, String userName) {
         List<Vocab> allVocabs = vocabRepo.findAll();
         List<Vocab> vocabsOfDate = allVocabs.stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .filter(vocab ->
-                vocab.getReviewDates().stream().anyMatch(reviewDate -> reviewDate.equals(date))).toList();
+                vocab.getDatesPerUser().get(userName).stream()
+                        .anyMatch(reviewDate -> reviewDate.equals(date))).toList();
         List<String> ids = vocabsOfDate.stream().map(vocab -> vocab.get_id()).toList();
         return new VocabIdsOfDate(date, ids);
     }

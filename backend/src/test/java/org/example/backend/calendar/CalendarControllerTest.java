@@ -16,7 +16,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,19 +44,25 @@ class CalendarControllerTest {
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
+        Map<String, List<LocalDate>> datesPerUser1 = new HashMap<>();
+        datesPerUser1.put("jane-doe", List.of(date011024, date021024, date031024));
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(date011024, date021024, date031024), "");
+                "", Language.SPANISH, datesPerUser1, "");
+        Map<String, List<LocalDate>> datesPerUser2 = new HashMap<>();
+        datesPerUser2.put("jane-doe", List.of(date161024, date181024));
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(date161024, date181024), "");
+                "", Language.SPANISH, datesPerUser2, "");
+        Map<String, List<LocalDate>> datesPerUser3 = new HashMap<>();
+        datesPerUser3.put("jane-doe", List.of(date181024));
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, List.of(date181024), "");
+                "", Language.SPANISH, datesPerUser3, "");
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, List.of(date181024), "");
+                "", Language.ITALIAN, datesPerUser3, "");
         vocabRepo.save(testVocab1);
         vocabRepo.save(testVocab2);
         vocabRepo.save(testVocab3);
         vocabRepo.save(vocabDifferentLanguage);
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish&user=jane-doe"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                         {"yearMonthName": "October 2024", "vocabIdsOfMonth":
@@ -111,7 +119,7 @@ class CalendarControllerTest {
 
     @Test
     void getMonth_ShouldReturn404_whenCalledWithNonExistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Esperanto"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Esperanto&user=jane-doe"))
                 .andExpect(status().isNotFound());
     }
 

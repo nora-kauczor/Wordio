@@ -17,7 +17,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping
-    public Month getMonth(@RequestParam String month, @RequestParam String year, @RequestParam String language) throws LanguageNotFoundException {
-        return calendarService.getMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)), language);
+    public Month getMonth(@RequestParam String year, @RequestParam String month, @RequestParam String language, @RequestParam String user) throws LanguageNotFoundException {
+        return calendarService.getMonth(YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)), language,user);
     }
 }
