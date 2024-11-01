@@ -4,6 +4,6 @@ export type Vocab = {
     translation: string,
     info: string,
     language: string,
-    reviewDates?: string[]
+    datesPerUser?: { [userName: string]: string[] }
     createdBy: string;
 }

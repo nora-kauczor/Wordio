@@ -89,12 +89,12 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.reviewDates?.includes(today))
+            .filter(vocab => vocab.datesPerUser?.userName.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
     function activateVocab(_id: string): void {
-        axios.put(`api/vocab/activate/${_id}`)
+        axios.put(`api/vocab/activate/${_id}?user=${userName}`)
             .then(() =>
                 console.log(`Vocab ${_id} successfully activated.`))
             .then(() => getAllVocabsOfLanguage())
@@ -102,7 +102,7 @@ function App() {
     }
 
     function deactivateVocab(_id: string): void {
-        axios.put(`api/vocab/deactivate/${_id}`)
+        axios.put(`api/vocab/deactivate/${_id}?user=${userName}`)
             .then(() =>
                 console.log(`Vocab ${_id} successfully deactivated.`))
             .then(() => getAllVocabsOfLanguage())
@@ -110,7 +110,7 @@ function App() {
     }
 
     function changeReviewDates(_id: string | null): void {
-        axios.put(`api/vocab/change-dates/${_id}`)
+        axios.put(`api/vocab/change-dates/${_id}?user=${userName}`)
             .then(() =>
                 console.log(`Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabsOfLanguage())
