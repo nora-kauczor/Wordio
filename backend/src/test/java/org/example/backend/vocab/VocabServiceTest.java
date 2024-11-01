@@ -83,34 +83,6 @@ class VocabServiceTest {
         assertEquals(expected, actual);
     }
 
-
-    @Test
-    void getAllVocabs_ShouldReturnAllVocabs_whenCalled() {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "");
-        List<Vocab> testListOfVocabs = List.of(testVocab);
-        when(mockVocabRepo.findAll()).thenReturn(testListOfVocabs);
-        assertEquals(testListOfVocabs, vocabService.getAllVocabs());
-        verify(mockVocabRepo).findAll();
-    }
-
-    @Test
-    void getVocab_shouldReturnSpecificVocab_whenCalledWithItsId() {
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "");
-        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
-        Optional<Vocab> expected = Optional.of(testVocab);
-        Optional<Vocab> actual = mockVocabRepo.findById("000");
-        assertEquals(expected, actual);
-        verify(mockVocabRepo).findById("000");
-    }
-
-    @Test
-    void getVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
-        assertThrows(IdNotFoundException.class, () -> vocabService.getVocab("000"));
-        verify(mockVocabRepo).findById("000");
-    }
-
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws LanguageNotFoundException {
         VocabDTOCreate testDTO = new VocabDTOCreate("la prueba", "test",

@@ -48,13 +48,6 @@ public class VocabService {
                 .toList();
     }
 
-    public List<Vocab> getAllVocabs() {
-        return vocabRepo.findAll();
-    }
-
-    public Vocab getVocab(String id) throws IdNotFoundException {
-        return vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-    }
 
     public Vocab createVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());

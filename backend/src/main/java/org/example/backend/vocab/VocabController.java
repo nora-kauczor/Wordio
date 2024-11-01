@@ -23,16 +23,6 @@ public class VocabController {
         return vocabService.getAllVocabsOfLanguage(language);
     }
 
-    @GetMapping
-    public List<Vocab> getAllVocabs(){
-        return vocabService.getAllVocabs();
-    }
-
-    @GetMapping("/{_id}")
-    public Vocab getVocab(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.getVocab(_id);
-    }
-
     @PostMapping
     public Vocab createVocab(@RequestBody VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         return vocabService.createVocab(vocabDTO);

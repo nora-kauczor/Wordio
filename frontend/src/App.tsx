@@ -126,13 +126,6 @@ function App() {
     }
 
 
-    // function getVocab(_id: string): void {
-    //     axios.get(`api/vocab/${_id}`)
-    //         .then(response => console.log("fetched with getVocab:",
-    //             response.data))
-    //         .catch(error => console.error(error))
-    // }
-
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
             .then(
