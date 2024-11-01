@@ -23,8 +23,7 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(props.vocabToEdit.info)
     }, []);
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault()
+    function handleClick(clickedButton: string) {
         if (props.vocabToEdit) {
             const editedVocab: Vocab = {
                 _id: props.vocabToEdit._id,
@@ -33,7 +32,7 @@ export default function Form(props: Readonly<Props>) {
                 info: infoInput,
                 language: props.language,
                 reviewDates: props.vocabToEdit.reviewDates,
-                editable: true
+                createdBy: "test"
             }
             props.editVocab(editedVocab)
         } else {
@@ -43,7 +42,7 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                editable: true
+                createdBy: "test"
             }
             props.createVocab(newVocab)
         }
@@ -64,7 +63,8 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(value)
     }
 
-    return (<form id={"form"} onSubmit={handleSubmit}>
+    return (
+        <div id={"form"}>
         <label htmlFor={"word-input"}>Word</label>
         <input name={"word"} id={"word-input"} value={wordInput}
                onChange={handleChange}/>
@@ -75,6 +75,13 @@ export default function Form(props: Readonly<Props>) {
             "colloquial"</label>
         <input name={"info"} id={"info-input"} value={infoInput}
                onChange={handleChange}/>
-        <button>Submit</button>
-    </form>)
+        <button name={"create"}
+                onClick={() => handleClick("create")}
+        >create
+        </button>
+        <button name={"create-and-activate"}
+                onClick={() => handleClick("create-and-activate")}
+        >create and activate
+        </button>
+    </div>)
 }
