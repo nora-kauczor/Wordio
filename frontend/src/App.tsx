@@ -174,7 +174,7 @@ function App() {
             <Header userName={userName} logout={logout}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
-            {useForm && <Form language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
+            {useForm && <Form userName={userName} language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
