@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-
 @RestController
 @RequestMapping("/api/vocab")
 @RequiredArgsConstructor
@@ -28,10 +27,16 @@ public class VocabController {
         return vocabService.createVocab(vocabDTO);
     }
 
+    @PostMapping("/activate")
+    public Vocab createAndActivateVocab(@RequestBody VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
+        return vocabService.createAndActivateVocab(vocabDTO);
+    }
+
     @PutMapping
     public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         return vocabService.editVocab(editedVocab);
     }
+
     @PutMapping("/change-dates/{_id}")
     public Vocab changeReviewDates(@PathVariable String _id) throws IdNotFoundException {
         return vocabService.changeReviewDates(_id);
