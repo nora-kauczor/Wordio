@@ -1,6 +1,5 @@
 #new-vocabs-popup {
     z-index: 3;
-    background-color: hotpink;
     padding: 0;
     margin: auto;
     border-radius: 10px;
@@ -12,15 +11,23 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*gap: 5px;*/
+    /*justify-content: space-evenly;*/
+    /*align-items: center;*/
+}
+
+#button-wrapper{ display: flex;
     flex-direction: column;
     gap: 5px;
     justify-content: space-evenly;
-    align-items: center;
-}
+    align-items: center;}
 
 .new-vocabs-button {
-    height: 10rem;
+    padding: 1.25rem 0;
+    background-color: inherit;
+    border: 1px solid white;
     width: 70%;
     font-size: 20px;
     &:hover {

@@ -17,15 +17,18 @@ export default function DayPopUp(props: Readonly<Props>) {
 
 
     return (<div id={"day-popup"} className={"pop-up"}>
-            <h3>{displayDate}</h3>
-            <VocabList vocabs={props.vocabsOfDay} calendarMode={true}
-                       deactivateVocab={props.deactivateVocab}
-                       closeDayPopUp={props.closeDayPopUp}
-            openForm ={props.openForm}/>
-            <button onClick={props.closeDayPopUp}
-            >close
-            </button>
-        </div>)
+        <button onClick={() => props.closeDayPopUp()}
+                className={"close-button"}>✕
+        </button>
+        <h3>{displayDate}</h3>
+        <VocabList vocabs={props.vocabsOfDay} calendarMode={true}
+                   deactivateVocab={props.deactivateVocab}
+                   closeDayPopUp={props.closeDayPopUp}
+                   openForm={props.openForm}/>
+        <button onClick={props.closeDayPopUp}
+        >close
+        </button>
+    </div>)
 
 
 }

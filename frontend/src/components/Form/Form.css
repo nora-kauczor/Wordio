@@ -1,10 +1,12 @@
 #form {
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
     gap: 30px;
     width: 70%;
     height: 40%;
 }
+
 
 #input-and-label-wrapper {
     display: flex;

@@ -7,7 +7,6 @@ type Props = {
     vocabs:Vocab[]
     setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-
 }
 
 export default function NewVocabsPopUp(props: Readonly<Props>) {
@@ -32,20 +31,25 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
 
     const navigate = useNavigate()
     return (<div id={"new-vocabs-popup"} className={"pop-up"}>
-        <button className={"new-vocabs-button"}
-                onClick={handleClick}
-                onKeyDown={handleClick}>Enter new
-            vocab
+        <button onClick={() => props.setShowPopUp(false)}
+                className={"close-button"}>✕
         </button>
-        <button className={"new-vocabs-button"}
-                onClick={() => navigate("/backlog")}
-                onKeyDown={() => navigate("/backlog")}>Pick
-            from backlog
-        </button>
-        <button className={"new-vocabs-button"}
-                onClick={goToDisplayPageWithRandomVocab}
-                onKeyDown={goToDisplayPageWithRandomVocab}>get random
-            vocab
-        </button>
+        <div id={"button-wrapper"}>
+            <button className={"new-vocabs-button"}
+                    onClick={handleClick}
+                    onKeyDown={handleClick}>Enter new
+                vocab
+            </button>
+            <button className={"new-vocabs-button"}
+                    onClick={() => navigate("/backlog")}
+                    onKeyDown={() => navigate("/backlog")}>Pick
+                from backlog
+            </button>
+            <button className={"new-vocabs-button"}
+                    onClick={goToDisplayPageWithRandomVocab}
+                    onKeyDown={goToDisplayPageWithRandomVocab}>get random
+                vocab
+            </button>
+        </div>
     </div>)
 }

@@ -166,7 +166,7 @@ function App() {
             {useForm && <div className={"overlay"}/>}
             {useForm && <Form userName={userName} language={language}
                               editVocab={editVocab} createVocab={createVocab}
-                              vocabToEdit={vocabToEdit} useForm={useForm}/>}
+                              vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}

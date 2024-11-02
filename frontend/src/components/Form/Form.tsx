@@ -67,18 +67,21 @@ export default function Form(props: Readonly<Props>) {
     }
 
     return (<form id={"form"} onSubmit={handleSubmit} className={"pop-up"}>
-        <button onClick={()=>props.setUseForm(false)}>✕</button>
+        <button onClick={() => props.setUseForm(false)}
+                className={"close-button"}>✕
+        </button>
         <div id={"input-and-label-wrapper"}>
-        <label htmlFor={"word-input"}>Your Vocab</label>
-        <input name={"word"} id={"word-input"} value={wordInput}
-               onChange={handleChange}/>
-        <label htmlFor={"translation-input"}>Translation into English</label>
-        <input name={"translation"} id={"translation-input"}
-               value={translationInput} onChange={handleChange}/>
-        <label htmlFor={"info-input"}>Additional info, e.g.
-            "colloquial"</label>
-        <input name={"info"} id={"info-input"} value={infoInput}
-               onChange={handleChange}/>
+            <label htmlFor={"word-input"}>Your Vocab</label>
+            <input name={"word"} id={"word-input"} value={wordInput}
+                   onChange={handleChange}/>
+            <label htmlFor={"translation-input"}>Translation into
+                English</label>
+            <input name={"translation"} id={"translation-input"}
+                   value={translationInput} onChange={handleChange}/>
+            <label htmlFor={"info-input"}>Additional info, e.g.
+                "colloquial"</label>
+            <input name={"info"} id={"info-input"} value={infoInput}
+                   onChange={handleChange}/>
         </div>
         <button>Submit</button>
     </form>)
