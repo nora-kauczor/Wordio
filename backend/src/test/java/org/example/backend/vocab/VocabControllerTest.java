@@ -1,6 +1,5 @@
 package org.example.backend.vocab;
 
-import org.example.backend.exception.LanguageNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,9 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WithMockUser
@@ -152,15 +148,15 @@ class VocabControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 { "word":"la prueba", "translation":"test",
-                                                                          "info":"", "language":"Spanish", "reviewDates":[]}
+                                                                          "info":"", "language":"Spanish", "createdBy":  "jane-doe"}
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         { "word":"la prueba", "translation":"test",
-                                                                  "info":"", "language":"Spanish"}
+                                                                  "info":"", "language":"Spanish", "createdBy":  "jane-doe"}
                         """))
                 .andExpect(jsonPath("$._id").isNotEmpty())
-                .andExpect(jsonPath("$.reviewDates").isNotEmpty());;
+                .andExpect(jsonPath("$.datesPerUser.jane-doe").isNotEmpty());
 
     }
 

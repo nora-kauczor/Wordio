@@ -60,9 +60,11 @@ public class VocabService {
 
     public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
         List<LocalDate> dates = generateDates(LocalDate.now());
+        datesPerUser.put(vocabDTO.createdBy(), dates);
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, dates, vocabDTO.createdBy());
+                vocabDTO.info(), language, datesPerUser, vocabDTO.createdBy());
         return vocabRepo.save(newVocab);
     }
 

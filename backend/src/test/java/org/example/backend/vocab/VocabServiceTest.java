@@ -120,11 +120,13 @@ class VocabServiceTest {
     void createAndActivateVocab_shouldReturnNewVocabObjectWithReviewDates_whenCalledWithVocabDTO() throws LanguageNotFoundException {
         VocabDTOCreate testDTO = new VocabDTOCreate("la prueba", "test",
                 "", "Spanish", "maxi-muster");
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("maxi-muster", List.of(LocalDate.of(2024,11,1)));
         Vocab expected = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024,11,1)), "maxi-muster");
+                "", Language.SPANISH, datesPerUser, "maxi-muster");
         when(mockVocabRepo.save(any(Vocab.class))).thenReturn(expected);
        Vocab actual = vocabService.createAndActivateVocab(testDTO);
-        assertFalse(actual.getReviewDates().isEmpty());
+        assertFalse(actual.getDatesPerUser().get("maxi-muster").isEmpty());
 
     }
 
