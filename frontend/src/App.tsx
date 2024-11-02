@@ -36,7 +36,7 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    function getUserName():void{
+    function getUserName(): void {
         axios.get("/api/vocab/auth")
             .then(response => setUserName(response.data.name))
             .then(() => navigate("/"))
@@ -65,21 +65,21 @@ function App() {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
-                .find(vocabFromTodays =>
-                    vocabFromTodays._id === vocabToReview._id))
+                .find(vocabFromTodays => vocabFromTodays._id ===
+                    vocabToReview._id))
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabFromUpdatedOnes => todaysVocabs
-                .find((vocabFromOldOnes: Vocab) =>
-                    vocabFromOldOnes._id != vocabFromUpdatedOnes._id))
-        const updatedVocabsToReview: Vocab[] =
-            [...vocabsToReviewWithoutDeletedOnes, ...newVocabs]
+                .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id !=
+                    vocabFromUpdatedOnes._id))
+        const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes,
+            ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
     function removeVocabFromVocabsToReview(_id: string | null): void {
-        setVocabsLeftToReview(vocabsLeftToReview.filter(
-            (vocab: Vocab) => vocab._id === _id))
+        setVocabsLeftToReview(
+            vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
     }
 
     function getTodaysVocabs(): Vocab[] {
@@ -119,18 +119,15 @@ function App() {
 
     function logout() {
         setUserName("")
-        const host = window.location.host ===
-        'localhost:5173' ?
-            'http://localhost:8080' :
-            window.location.origin
+        const host = window.location.host === 'localhost:5173' ?
+            'http://localhost:8080' : window.location.origin
         window.open(host + '/api/auth/logout', '_self')
     }
 
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
-            .then(
-                () => console.log(`Vocab ${_id} successfully deleted.`))
+            .then(() => console.log(`Vocab ${_id} successfully deleted.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -143,19 +140,27 @@ function App() {
             .catch(error => console.log(error))
     }
 
+    function createAndActivateVocab(newVocab: Vocab): void {
+        setUseForm(false)
+        axios.post("/api/vocab/activate", newVocab)
+            .then(response => navigate(`/display/:${response.data._id}`))
+            .then(() => console.log("New vocab was successfully created and activated."))
+            .then(() => getAllVocabsOfLanguage())
+            .catch(error => console.log(error))
+    }
+
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
         axios.put(`api/vocab/`, editedVocab)
-            .then(
-                () => console.log(`Vocab ${editedVocab._id} successfully edited.`))
+            .then(() => console.log(`Vocab ${editedVocab._id} successfully edited.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
 
-    function openForm(_id:string | undefined){
+    function openForm(_id: string | undefined) {
         setUseForm(true)
         if (!_id) {
             const vocab = vocabs.find(vocab => vocab._id === _id)
@@ -169,7 +174,10 @@ function App() {
                     language={language}
                     setLanguage={setLanguage}/>
             <div style={{height: "60px"}}/>
-            {useForm && <Form userName={userName} language={language} editVocab={editVocab} createVocab={createVocab} vocabToEdit={vocabToEdit}/>}
+            {useForm && <Form userName={userName} language={language} editVocab={editVocab}
+                              createVocab={createVocab}
+                              createAndActivateVocab={createAndActivateVocab}
+                              vocabToEdit={vocabToEdit}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
                 <Route path={"/login"}
@@ -185,14 +193,14 @@ function App() {
                                language={language}
                            setLanguage={setLanguage} />}/>
                     <Route path={"/calendar"} element={<CalendarPage
+                        setUseForm={setUseForm}
                         openForm={openForm}
                         vocabs={vocabs}
                         language={language}
                         deactivateVocab={deactivateVocab}/>}/>
                     <Route path={"/review"}
                            element={<ReviewPage
-                               removeVocabFromVocabsToReview={
-                               removeVocabFromVocabsToReview}
+                               removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                                vocabsLeftToReview={vocabsLeftToReview}
                                changeReviewDates={changeReviewDates}/>}/>
                     <Route path={"/backlog"}
@@ -203,6 +211,7 @@ function App() {
                                activateVocab={activateVocab}
                                language={language}
                                openForm={openForm}
+                               setUseForm={setUseForm}
                            />}/>
                     <Route path={"/display/:_id"}
                            element={<DisplayPage
@@ -211,8 +220,7 @@ function App() {
                 </Route>
             </Routes>
             <div style={{height: "60px"}}/>
-        </div>
-    )
+        </div>)
 }
 
 export default App

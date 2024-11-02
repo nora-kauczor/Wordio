@@ -26,13 +26,12 @@ public class VocabService {
         LocalDate firstDayOfOldReviewDates = vocab.getDatesPerUser().get(userName).getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
         vocab.getDatesPerUser().put(userName, newDates);
-        vocabRepo.save(vocab);
-        return vocabRepo.findById(_id).orElseThrow();
+        return vocabRepo.save(vocab);
     }
 
     public Vocab deactivateVocab(String _id, String userName) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        vocab.getDatesPerUser().put(userName, List.of()); // TODO: immutable? besser arraylist.. ??
+        vocab.getDatesPerUser().put(userName, List.of());
         return vocabRepo.save(vocab);
     }
 
@@ -59,6 +58,14 @@ public class VocabService {
         return vocabRepo.save(newVocab);
     }
 
+    public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
+        Language language = Language.getEnumByString(vocabDTO.language());
+        List<LocalDate> dates = generateDates(LocalDate.now());
+        Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
+                vocabDTO.info(), language, dates, vocabDTO.createdBy());
+        return vocabRepo.save(newVocab);
+    }
+
     public Vocab editVocab(VocabDTOEdit vocabDTO) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
         if (!vocabRepo.existsById(vocabDTO._id())) {
             throw new IdNotFoundException("ID not found.");
@@ -69,8 +76,7 @@ public class VocabService {
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), language, vocabDTO.datesPerUser(), vocabDTO.createdBy());
-        vocabRepo.save(editedVocab);
-        return vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
+        return vocabRepo.save(editedVocab);
     }
 
     public String deleteVocab(String _id) throws IdNotFoundException {

@@ -2,6 +2,7 @@ import './BacklogPage.css'
 import {Vocab} from "../../types/Vocab.ts";
 import VocabList
     from "../../components/VocabList/VocabList.tsx";
+import React, {useEffect} from "react";
 
 
 type Props = {
@@ -10,10 +11,13 @@ type Props = {
     activateVocab: (_id: string) => void
     language:string
     openForm:(_id:string) => void
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
-
+    useEffect(() => {
+        props.setUseForm(false)
+    }, []);
     return (<div id={"backlog-page"}>
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}
