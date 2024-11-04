@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -27,19 +28,25 @@ class CalendarServiceTest {
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
+        Map<String, List<LocalDate>> datesPerUser1 = new HashMap<>();
+        datesPerUser1.put("jane-doe", List.of(date011024, date021024, date031024));
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(date011024, date021024, date031024), "");
+                "", Language.SPANISH, datesPerUser1, "");
+        Map<String, List<LocalDate>> datesPerUser2 = new HashMap<>();
+        datesPerUser2.put("jane-doe", List.of(date161024, date181024));
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(date161024, date181024), "");
+                "", Language.SPANISH, datesPerUser2, "");
+        Map<String, List<LocalDate>> datesPerUser3 = new HashMap<>();
+        datesPerUser3.put("jane-doe", List.of(date181024));
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, List.of(date181024), "");
+                "", Language.SPANISH, datesPerUser3, "");
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, List.of(date181024), "");
+                "", Language.ITALIAN, datesPerUser3, "");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
         String expectedYearMonthName = "October 2024";
         VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[5][7];
         Month expected = new Month(expectedYearMonthName, expectedVocabIdsOfMonth);
-        Month actual = calendarService.getMonth(YearMonth.of(2024, 10), "Spanish");
+        Month actual = calendarService.getMonth(YearMonth.of(2024, 10), "Spanish", "jane-doe");
         assertEquals(expected.yearMonthName(), actual.yearMonthName());
     }
 
@@ -50,14 +57,20 @@ class CalendarServiceTest {
         LocalDate date031024 = LocalDate.of(2024, 10, 3);
         LocalDate date161024 = LocalDate.of(2024, 10, 16);
         LocalDate date181024 = LocalDate.of(2024, 10, 18);
+        Map<String, List<LocalDate>> datesPerUser1 = new HashMap<>();
+        datesPerUser1.put("jane-doe", List.of(date011024, date021024, date031024));
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(date011024, date021024, date031024), "");
+                "", Language.SPANISH, datesPerUser1, "");
+        Map<String, List<LocalDate>> datesPerUser2 = new HashMap<>();
+        datesPerUser2.put("jane-doe", List.of(date161024, date181024));
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(date161024, date181024), "");
+                "", Language.SPANISH, datesPerUser2, "");
+        Map<String, List<LocalDate>> datesPerUser3 = new HashMap<>();
+        datesPerUser3.put("jane-doe", List.of(date181024));
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, List.of(date181024), "");
+                "", Language.SPANISH, datesPerUser3, "");
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, List.of(date181024), "");
+                "", Language.ITALIAN, datesPerUser3, "");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
         String expectedYearMonthName = "October 2024";
         VocabIdsOfDate[][] expectedVocabIdsOfMonth = new VocabIdsOfDate[][]{
@@ -109,35 +122,36 @@ class CalendarServiceTest {
         };
 
         Month expected = new Month(expectedYearMonthName, expectedVocabIdsOfMonth);
-        Month actual = calendarService.getMonth(YearMonth.of(2024, 10), "Spanish");
+        Month actual = calendarService.getMonth(YearMonth.of(2024, 10), "Spanish", "jane-doe");
         assertArrayEquals(expected.vocabIdsOfMonth()[0], actual.vocabIdsOfMonth()[0]);
     }
 
 
     @Test
     void getMonth_ShouldThrowLanguageNotFoundException_whenCalledWithNonExistentLanguage()  {
-        assertThrows(LanguageNotFoundException.class, () -> calendarService.getMonth(YearMonth.of(2024, 12), "Esperanto"));
+        assertThrows(LanguageNotFoundException.class, () ->
+                calendarService.getMonth(YearMonth.of(2024, 12), "Esperanto", "jane-doe"));
     }
 
 
     @Test
     void getVocabIdsOfDate_ShouldReturnIdsOFAllVocabsOfALanguageThatAreToBeReviewedAtCertainDate_whenCalledWithDateAndLanguage() {
-        List<LocalDate> reviewDates = new ArrayList<>(List.of());
         LocalDate date = LocalDate.of(2024, 10, 18);
-        reviewDates.add(date);
-        List<LocalDate> otherDates = new ArrayList<>(List.of());
-        otherDates.add(LocalDate.of(2024, 10, 16));
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of(date));
+        Map<String, List<LocalDate>> otherDatesPerUser = new HashMap<>();
+        otherDatesPerUser.put("jane-doe", List.of(LocalDate.of(2024, 10, 16)));
         Vocab testVocab1 = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, reviewDates, "");
+                "", Language.SPANISH, datesPerUser, "");
         Vocab testVocab2 = new Vocab("777", "la prueba", "test",
-                "", Language.SPANISH, reviewDates, "");
+                "", Language.SPANISH, datesPerUser, "");
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.SPANISH, otherDates, "");
+                "", Language.SPANISH, otherDatesPerUser, "");
         Vocab vocabDifferentLanguage = new Vocab("333", "la prueba", "test",
-                "", Language.ITALIAN, reviewDates, "");
+                "", Language.ITALIAN, datesPerUser, "");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab1, testVocab2, testVocab3, vocabDifferentLanguage));
         VocabIdsOfDate expected = new VocabIdsOfDate(date, List.of("000", "777"));
-        VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date, Language.SPANISH);
+        VocabIdsOfDate actual = calendarService.getVocabIdsOfDate(date, Language.SPANISH, "jane-doe");
         assertEquals(expected, actual);
     }
 

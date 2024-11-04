@@ -7,7 +7,9 @@ import org.example.backend.exception.VocabIsNotEditableException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import static org.example.backend.vocab.Language.getEnumByString;
@@ -19,25 +21,24 @@ public class VocabService {
     private final VocabRepo vocabRepo;
 
 
-    public Vocab changeReviewDates(String _id) throws IdNotFoundException {
+    public Vocab changeReviewDates(String _id, String userName) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        LocalDate firstDayOfOldReviewDates = vocab.getReviewDates().getFirst();
+        LocalDate firstDayOfOldReviewDates = vocab.getDatesPerUser().get(userName).getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
-        vocab.setReviewDates(newDates);
-        vocabRepo.save(vocab);
-        return vocabRepo.findById(_id).orElseThrow();
-    }
-
-    public Vocab deactivateVocab(String _id) throws IdNotFoundException {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        vocab.setReviewDates(List.of());
+        vocab.getDatesPerUser().put(userName, newDates);
         return vocabRepo.save(vocab);
     }
 
-    public Vocab activateVocab(String _id) throws IdNotFoundException {
+    public Vocab deactivateVocab(String _id, String userName) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
+        vocab.getDatesPerUser().put(userName, List.of());
+        return vocabRepo.save(vocab);
+    }
+
+    public Vocab activateVocab(String _id, String userName) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         List<LocalDate> dates = generateDates(LocalDate.now());
-        vocab.setReviewDates(dates);
+        vocab.getDatesPerUser().put(userName, dates);
         return vocabRepo.save(vocab);
     }
 
@@ -48,11 +49,22 @@ public class VocabService {
                 .toList();
     }
 
-
     public Vocab createVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put(vocabDTO.createdBy(), List.of());
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, List.of(), vocabDTO.createdBy());
+                vocabDTO.info(), language, datesPerUser, vocabDTO.createdBy());
+        return vocabRepo.save(newVocab);
+    }
+
+    public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
+        Language language = Language.getEnumByString(vocabDTO.language());
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        List<LocalDate> dates = generateDates(LocalDate.now());
+        datesPerUser.put(vocabDTO.createdBy(), dates);
+        Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
+                vocabDTO.info(), language, datesPerUser, vocabDTO.createdBy());
         return vocabRepo.save(newVocab);
     }
 
@@ -65,9 +77,8 @@ public class VocabService {
         }
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, vocabDTO.reviewDates(), vocabDTO.createdBy());
-        vocabRepo.save(editedVocab);
-        return vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
+                vocabDTO.info(), language, vocabDTO.datesPerUser(), vocabDTO.createdBy());
+        return vocabRepo.save(editedVocab);
     }
 
     public String deleteVocab(String _id) throws IdNotFoundException {

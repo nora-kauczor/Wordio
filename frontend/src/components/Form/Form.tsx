@@ -6,6 +6,7 @@ type Props = {
     language: string
     vocabToEdit: Vocab | undefined
     createVocab: (vocab: Vocab) => void
+    createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
     userName: string
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
@@ -25,8 +26,7 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(props.vocabToEdit.info)
     }, []);
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault()
+    function handleClick(clickedButton: string) {
         if (props.vocabToEdit) {
             const editedVocab: Vocab = {
                 _id: props.vocabToEdit._id,
@@ -34,7 +34,7 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                reviewDates: props.vocabToEdit.reviewDates,
+                // reviewDates: props.vocabToEdit.datesPerUser.userName.reviewDates,
                 createdBy: props.userName
             }
             props.editVocab(editedVocab)
@@ -47,7 +47,11 @@ export default function Form(props: Readonly<Props>) {
                 language: props.language,
                 createdBy: props.userName
             }
-            props.createVocab(newVocab)
+            if (clickedButton === "create") {
+                props.createVocab(newVocab)
+            } else {
+                props.createAndActivateVocab(newVocab)
+            }
         }
     }
 
@@ -66,9 +70,10 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(value)
     }
 
-    return (<form id={"form"} onSubmit={handleSubmit} className={"pop-up"}>
-        <button onClick={() => props.setUseForm(false)}
-                className={"close-button"}>✕
+    return (<div id={"form"} className={"pop-up"}>
+        <button className={"close-button"}
+                onClick={() => props.setUseForm(false)}
+                >✕
         </button>
         <div id={"input-and-label-wrapper"}>
             <label htmlFor={"word-input"}>Your Vocab</label>
@@ -83,6 +88,14 @@ export default function Form(props: Readonly<Props>) {
             <input name={"info"} id={"info-input"} value={infoInput}
                    onChange={handleChange}/>
         </div>
-        <button>Submit</button>
-    </form>)
-}
+            <button name={"create"}
+                    onClick={() => handleClick("create")}
+            >create
+            </button>
+            <button name={"create-and-activate"}
+                    onClick={() => handleClick("create-and-activate")}
+            >create and activate
+            </button>
+        </div>
+        )
+        }

@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -17,7 +19,7 @@ public class Vocab {
     private String translation;
     private String info;
     private Language language;
-    private List<LocalDate> reviewDates;
+    private Map<String, List<LocalDate>> datesPerUser;
     private String createdBy;
 
 
@@ -32,7 +34,5 @@ public class Vocab {
         }
         return reviewDates;
     }
-
-
 
 }

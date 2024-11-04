@@ -1,5 +1,5 @@
 import './CalendarPage.css'
-import  {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import CalendarWeek
     from "../../components/CalendarWeek/CalendarWeek.tsx";
@@ -20,6 +20,7 @@ type Props = {
     deactivateVocab: (_id: string) => void
     language: string
     openForm:(_id:string) => void
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -31,6 +32,7 @@ export default function CalendarPage(props: Readonly<Props>) {
 
 
     useEffect(() => {
+        props.setUseForm(false)
         if (!props.language) {return}
         getMonth()
     }, [props.language]);

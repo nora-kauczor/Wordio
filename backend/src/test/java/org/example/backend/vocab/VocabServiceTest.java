@@ -17,49 +17,60 @@ class VocabServiceTest {
 
     @Test
     void changeReviewDates_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
-        assertThrows(IdNotFoundException.class, () -> vocabService.changeReviewDates("000"));
+        assertThrows(IdNotFoundException.class, () -> vocabService.changeReviewDates("000", "jane-doe"));
     }
 
     @Test
     void changeReviewDates_shouldReturnVocabWithChangedDates_whenCalledWithId() throws IdNotFoundException {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of(LocalDate.of(2024,11, 1)));
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024,11, 1)), "Wordio");
+                "", Language.SPANISH, datesPerUser, "Wordio");
+        Map<String, List<LocalDate>> otherDatesPerUser = new HashMap<>();
+        otherDatesPerUser.put("jane-doe", List.of(LocalDate.of(2024,11, 2)));
+        Vocab changedVocab = new Vocab("000", "la prueba", "test",
+                "", Language.SPANISH, otherDatesPerUser, "Wordio");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
+        when(mockVocabRepo.save(any(Vocab.class))).thenReturn(changedVocab);
         LocalDate expected = LocalDate.of(2024,11, 2);
-        LocalDate actual = vocabService.changeReviewDates("000").getReviewDates().getFirst();
+        LocalDate actual = vocabService.changeReviewDates("000", "jane-doe").getDatesPerUser().get("jane-doe").getFirst();
         assertEquals(expected, actual);
-        verify(mockVocabRepo, times(2)).findById("000");
+        verify(mockVocabRepo).findById("000");
     }
 
 
     @Test
     void deactivateVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
-        assertThrows(IdNotFoundException.class, () -> vocabService.deactivateVocab("000"));
+        assertThrows(IdNotFoundException.class, () -> vocabService.deactivateVocab("000", "jane-doe"));
     }
 
     @Test
     void deactivateVocab_shouldReturnVocabWithEmptiedReviewDates_whenCalledWithExistentId() throws IdNotFoundException {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of(LocalDate.of(2024,11, 15)));
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(LocalDate.of(2024,11,15)), "Wordio");
+                "", Language.SPANISH, datesPerUser, "Wordio");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
-        vocabService.deactivateVocab("000");
-        assertTrue(testVocab.getReviewDates().isEmpty());
+        vocabService.deactivateVocab("000", "jane-doe");
+        assertTrue(testVocab.getDatesPerUser().get("jane-doe").isEmpty());
         verify(mockVocabRepo).findById("000");
     }
 
 
     @Test
     void activateVocab_shouldThrowIdNotFoundException_whenCalledWithNonexistentId() {
-        assertThrows(IdNotFoundException.class, () -> vocabService.activateVocab("000"));
+        assertThrows(IdNotFoundException.class, () -> vocabService.activateVocab("000", "jane-doe"));
     }
 
     @Test
     void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws IdNotFoundException {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, Collections.emptyList(), "Wordio");
+                "", Language.SPANISH, datesPerUser, "Wordio");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(testVocab));
-        vocabService.activateVocab("000");
-        assertFalse(testVocab.getReviewDates().isEmpty());
+        vocabService.activateVocab("000", "jane-doe");
+        assertFalse(testVocab.getDatesPerUser().get("jane-doe").isEmpty());
         verify(mockVocabRepo).findById("000");
     }
 
@@ -71,12 +82,14 @@ class VocabServiceTest {
 
     @Test
     void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws LanguageNotFoundException {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
         Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "Wordio");
+                "", Language.SPANISH, datesPerUser, "Wordio");
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "Wordio");
+                "", Language.SPANISH, datesPerUser, "Wordio");
         Vocab testVocab3 = new Vocab("222", "la prueba", "test",
-                "", Language.ITALIAN, List.of(), "Wordio");
+                "", Language.ITALIAN, datesPerUser, "Wordio");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab,testVocab2,testVocab3));
         List<Vocab> expected = List.of(testVocab, testVocab2);
         List<Vocab> actual = vocabService.getAllVocabsOfLanguage("Spanish");
@@ -85,10 +98,12 @@ class VocabServiceTest {
 
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws LanguageNotFoundException {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
         VocabDTOCreate testDTO = new VocabDTOCreate("la prueba", "test",
                 "", "Spanish", "maxi-muster");
         Vocab testVocab = new Vocab("Id generated by MongoDB", "la prueba", "test",
-                "", Language.SPANISH, List.of(), "maxi-muster");
+                "", Language.SPANISH, datesPerUser, "maxi-muster");
         when(mockVocabRepo.save(any(Vocab.class))).thenReturn(testVocab);
         assertEquals(testVocab, vocabService.createVocab(testDTO));
         verify(mockVocabRepo).save(any(Vocab.class));
@@ -102,13 +117,36 @@ class VocabServiceTest {
     }
 
     @Test
-    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
-        VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", List.of(), "maxi-muster");
-        when(mockVocabRepo.existsById("000")).thenReturn(true);
+    void createAndActivateVocab_shouldReturnNewVocabObjectWithReviewDates_whenCalledWithVocabDTO() throws LanguageNotFoundException {
+        VocabDTOCreate testDTO = new VocabDTOCreate("la prueba", "test",
+                "", "Spanish", "maxi-muster");
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("maxi-muster", List.of(LocalDate.of(2024,11,1)));
         Vocab expected = new Vocab("000", "la prueba", "test",
-                "added infotext", Language.SPANISH, List.of(), "maxi-muster");
-        when(mockVocabRepo.findById("000")).thenReturn(Optional.of(expected));
+                "", Language.SPANISH, datesPerUser, "maxi-muster");
+        when(mockVocabRepo.save(any(Vocab.class))).thenReturn(expected);
+       Vocab actual = vocabService.createAndActivateVocab(testDTO);
+        assertFalse(actual.getDatesPerUser().get("maxi-muster").isEmpty());
+
+    }
+
+    @Test
+    void createAndActivateVocab_throwsLanguageNotFoundException_whenCalledWithVocabWithNonExistentLanguage(){
+        VocabDTOCreate testDTO = new VocabDTOCreate("la prueba", "test",
+                "", "Esperanto", "maxi-muster");
+        assertThrows(LanguageNotFoundException.class, () -> vocabService.createAndActivateVocab(testDTO));
+    }
+
+    @Test
+    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
+        VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
+                "added infotext", "Spanish", datesPerUser, "maxi-muster");
+        Vocab expected = new Vocab("000", "la prueba", "test",
+                "added infotext", Language.SPANISH, datesPerUser, "maxi-muster");
+        when(mockVocabRepo.existsById("000")).thenReturn(true);
+        when(mockVocabRepo.save(any(Vocab.class))).thenReturn(expected);
         Vocab actual = vocabService.editVocab(vocabDTO);
         assertEquals(expected, actual);
         verify(mockVocabRepo).save(expected);
@@ -116,24 +154,30 @@ class VocabServiceTest {
 
     @Test
     void editVocab_shouldThrowIdNotFoundException_whenCalledWithVocabWithNonexistentId() {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", List.of(), "maxi-muster");
+                "added infotext", "Spanish", datesPerUser, "maxi-muster");
         assertThrows(IdNotFoundException.class, () -> vocabService.editVocab(vocabDTO));
         verify(mockVocabRepo).existsById("000");
     }
 
     @Test
     void editVocab_shouldThrowVocabIsNotEditableException_whenCalledWithNonEditableVocab() {
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", List.of(), "Wordio");
+                "added infotext", "Spanish", datesPerUser, "Wordio");
         when(mockVocabRepo.existsById(vocabDTO._id())).thenReturn(true);
         assertThrows(VocabIsNotEditableException.class, () -> vocabService.editVocab(vocabDTO));
     }
 
     @Test
     void editVocab_throwsLanguageNotFoundException_whenCalledWithVocabWithNonExistentLanguage(){
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("jane-doe", List.of());
         VocabDTOEdit testDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "", "Esperanto", List.of(), "maxi-muster");
+                "", "Esperanto", datesPerUser, "maxi-muster");
         when(mockVocabRepo.existsById(testDTO._id())).thenReturn(true);
         assertThrows(LanguageNotFoundException.class, () -> vocabService.editVocab(testDTO));
     }

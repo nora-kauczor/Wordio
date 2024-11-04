@@ -89,28 +89,29 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.reviewDates?.includes(today))
+            .filter(vocab => vocab.datesPerUser?.userName.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
     function activateVocab(_id: string): void {
-        axios.put(`api/vocab/activate/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully activated.`))
+        axios.put(`api/vocab/activate/${_id}?user=${userName}`)
+            .then(() =>
+                console.log(`Vocab ${_id} successfully activated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
     function deactivateVocab(_id: string): void {
-        axios.put(`api/vocab/deactivate/${_id}`)
+        axios.put(`api/vocab/deactivate/${_id}?user=${userName}`)
             .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
     function changeReviewDates(_id: string | null): void {
-        axios.put(`api/vocab/change-dates/${_id}`)
-            .then(() => console.log(
-                `Vocab ${_id}'s review dates successfully updated.`))
+        axios.put(`api/vocab/change-dates/${_id}?user=${userName}`)
+            .then(() =>
+                console.log(`Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -138,12 +139,20 @@ function App() {
             .catch(error => console.log(error))
     }
 
+    function createAndActivateVocab(newVocab: Vocab): void {
+        setUseForm(false)
+        axios.post("/api/vocab/activate", newVocab)
+            .then(response => navigate(`/display/:${response.data._id}`))
+            .then(() => console.log("New vocab was successfully created and activated."))
+            .then(() => getAllVocabsOfLanguage())
+            .catch(error => console.log(error))
+    }
+
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
         axios.put(`api/vocab/`, editedVocab)
-            .then(() => console.log(
-                `Vocab ${editedVocab._id} successfully edited.`))
+            .then(() => console.log(`Vocab ${editedVocab._id} successfully edited.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -166,6 +175,7 @@ function App() {
             {useForm && <div className={"overlay"}/>}
             {useForm && <Form userName={userName} language={language}
                               editVocab={editVocab} createVocab={createVocab}
+                              createAndActivateVocab={createAndActivateVocab}
                               vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
             <NavBar setUseForm={setUseForm}/>
             <Routes>
@@ -182,6 +192,7 @@ function App() {
                                language={language}
                                setLanguage={setLanguage}/>}/>
                     <Route path={"/calendar"} element={<CalendarPage
+                        setUseForm={setUseForm}
                         openForm={openForm}
                         vocabs={vocabs}
                         language={language}
@@ -199,6 +210,7 @@ function App() {
                                activateVocab={activateVocab}
                                language={language}
                                openForm={openForm}
+                               setUseForm={setUseForm}
                            />}/>
                     <Route path={"/display/:_id"}
                            element={<DisplayPage
