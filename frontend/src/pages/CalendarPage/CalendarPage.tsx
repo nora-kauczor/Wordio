@@ -41,7 +41,6 @@ export default function CalendarPage(props: Readonly<Props>) {
         getMonth()
     }, [props.language]);
 
-    console.log(month)
 
     if (!month.yearMonthName) {
         return <p className={"loading-message"}>Loading...</p>
@@ -82,8 +81,7 @@ function getMonth() {
             newYear = currentMonthNumber < 12 ?
                 currentYearNumber : (currentYearNumber + 1)
         }
-        axios.get(`/api/calendar?year=${newYear.toString()}&
-        month=${newMonth.toString()}&language=${props.language}`)
+        axios.get(`/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}&user=${props.userName}`)
             .then(response => setMonth(response.data))
             .then(response => console.log(response))
             .catch(error => console.error(error))
@@ -137,7 +135,7 @@ function getMonth() {
                     closeDayPopUp={closeDayPopUp}
                     openForm={props.openForm}
                     deactivateVocab={props.deactivateVocab}/>}
-        <button id={"back-button"}>← Back</button>
+        <button className={"back-button"}>← Back</button>
         </div>
     )
 }
