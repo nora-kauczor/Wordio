@@ -11,7 +11,15 @@
   "compilerOptions": {
     "types": [
       "vitest/globals"
-    ]
+    ],
+    "jsx": "react-jsx",
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
+    "target": "esnext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "tests"]
 }
