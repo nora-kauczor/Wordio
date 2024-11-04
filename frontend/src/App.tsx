@@ -27,6 +27,7 @@ function App() {
         "vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
         "todaysVocabs", {defaultValue: []})
+    const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const navigate = useNavigate()
 
     function getAllVocabsOfLanguage() {
@@ -36,9 +37,10 @@ function App() {
             .catch(error => console.error(error))
     }
 
+
     function getUserName(): void {
         axios.get("/api/vocab/auth")
-            .then(response => setUserName(response.data.name))
+            .then(response => response && setUserName(response.data.name))
             .then(() => navigate("/"))
             .catch(error => console.error(error))
     }
@@ -157,7 +159,7 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
+
 
     function openForm(_id: string | undefined) {
         setUseForm(true)
