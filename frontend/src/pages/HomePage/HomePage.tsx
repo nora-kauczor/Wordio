@@ -1,7 +1,7 @@
 import './HomePage.css'
 import NewVocabsPopUp from "../../components/NewVocabsPopUp/NewVocabsPopUp.tsx";
 import {useNavigate} from "react-router-dom";
-import React, {useState} from "react";
+import React from "react";
 import {Vocab} from "../../types/Vocab.ts";
 import PickLanguagePopUp
     from "../../components/PickLanguagePopUp/PickLanguagePopUp.tsx";
@@ -18,7 +18,6 @@ type Props = {
 }
 
 export default function HomePage(props: Readonly<Props>) {
-
     const navigate = useNavigate()
 
     return (<div id={"homepage"}>
@@ -54,6 +53,5 @@ export default function HomePage(props: Readonly<Props>) {
         {!props.language && <div className={"overlay"}/>}
         {!props.language &&
             <PickLanguagePopUp setLanguage={props.setLanguage}/>}
-
     </div>)
 }

@@ -98,8 +98,7 @@ function App() {
 
     function activateVocab(_id: string): void {
         axios.put(`api/vocab/activate/${_id}?user=${userName}`)
-            .then(() =>
-                console.log(`Vocab ${_id} successfully activated.`))
+            .then(() => console.log(`Vocab ${_id} successfully activated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -113,8 +112,8 @@ function App() {
 
     function changeReviewDates(_id: string | null): void {
         axios.put(`api/vocab/change-dates/${_id}?user=${userName}`)
-            .then(() =>
-                console.log(`Vocab ${_id}'s review dates successfully updated.`))
+            .then(() => console.log(
+                `Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -146,7 +145,8 @@ function App() {
         setUseForm(false)
         axios.post("/api/vocab/activate", newVocab)
             .then(response => navigate(`/display/:${response.data._id}`))
-            .then(() => console.log("New vocab was successfully created and activated."))
+            .then(() => console.log(
+                "New vocab was successfully created and activated."))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.log(error))
     }
@@ -155,17 +155,17 @@ function App() {
         setVocabToEdit(undefined)
         setUseForm(false)
         axios.put(`api/vocab/`, editedVocab)
-            .then(() => console.log(`Vocab ${editedVocab._id} successfully edited.`))
+            .then(() => console.log(
+                `Vocab ${editedVocab._id} successfully edited.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
 
-
     function openForm(_id: string | undefined) {
-       if (displayNewVocabsPopUp) {
-           setDisplayNewVocabsPopUp(false)
-       }
+        if (displayNewVocabsPopUp) {
+            setDisplayNewVocabsPopUp(false)
+        }
         setUseForm(true)
         if (!_id) {
             const vocab = vocabs.find(vocab => vocab._id === _id)
@@ -174,61 +174,62 @@ function App() {
     }
 
     return (<div id={"app"}>
-            <Header userName={userName} logout={logout}
+        <Header userName={userName} logout={logout}
+                language={language}
+                setLanguage={setLanguage}/>
+        <div style={{height: "60px"}}/>
+        {useForm && <div className={"overlay"}/>}
+        {useForm && <Form userName={userName} language={language}
+                          editVocab={editVocab} createVocab={createVocab}
+                          createAndActivateVocab={createAndActivateVocab}
+                          vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
+        <NavBar setUseForm={setUseForm}/>
+        <Routes>
+            <Route path={"/login"}
+                   element={<LoginPage
+                   />}/>
+            <Route element={<ProtectedRoutes
+                userName={userName}/>}>
+                <Route path={"/"}
+                       element={<HomePage
+                           userName={userName}
+                           vocabs={vocabs}
+                           finishedReviewing={vocabsLeftToReview.length < 1}
+                           setUseForm={setUseForm}
+                           language={language}
+                           setLanguage={setLanguage}
+                           displayNewVocabsPopUp={displayNewVocabsPopUp}
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
+                <Route path={"/calendar"} element={<CalendarPage
+                    setUseForm={setUseForm}
+                    openForm={openForm}
+                    vocabs={vocabs}
                     language={language}
-                    setLanguage={setLanguage}/>
-            <div style={{height: "60px"}}/>
-            {useForm && <div className={"overlay"}/>}
-            {useForm && <Form userName={userName} language={language}
-                              editVocab={editVocab} createVocab={createVocab}
-                              createAndActivateVocab={createAndActivateVocab}
-                              vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
-            <NavBar setUseForm={setUseForm}/>
-            <Routes>
-                <Route path={"/login"}
-                       element={<LoginPage
+                    deactivateVocab={deactivateVocab}/>}/>
+                <Route path={"/review"}
+                       element={<ReviewPage
+                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
+                           vocabsLeftToReview={vocabsLeftToReview}
+                           changeReviewDates={changeReviewDates}/>}/>
+                <Route path={"/backlog"}
+                       element={<BacklogPage
+                           vocabs={vocabs.filter(vocab => vocab.datesPerUser &&
+                               Object.keys(vocab.datesPerUser).length !== 0 ||
+                               !vocab.datesPerUser?.userName)}
+                           deleteVocab={deleteVocab}
+                           activateVocab={activateVocab}
+                           language={language}
+                           openForm={openForm}
+                           setUseForm={setUseForm}
                        />}/>
-                <Route element={<ProtectedRoutes
-                    userName={userName}/>}>
-                    <Route path={"/"}
-                           element={<HomePage
-                               userName={userName}
-                               vocabs={vocabs}
-                               finishedReviewing={vocabsLeftToReview.length < 1}
-                               setUseForm={setUseForm}
-                               language={language}
-                               setLanguage={setLanguage}
-                               displayNewVocabsPopUp={displayNewVocabsPopUp}
-                               setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
-                    <Route path={"/calendar"} element={<CalendarPage
-                        setUseForm={setUseForm}
-                        openForm={openForm}
-                        vocabs={vocabs}
-                        language={language}
-                        deactivateVocab={deactivateVocab}/>}/>
-                    <Route path={"/review"}
-                           element={<ReviewPage
-                               removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
-                               vocabsLeftToReview={vocabsLeftToReview}
-                               changeReviewDates={changeReviewDates}/>}/>
-                    <Route path={"/backlog"}
-                           element={<BacklogPage
-                               vocabs={vocabs? vocabs.filter(
-                                   vocab => vocab.datesPerUser?.userName?.length === 0): []}
-                               deleteVocab={deleteVocab}
-                               activateVocab={activateVocab}
-                               language={language}
-                               openForm={openForm}
-                               setUseForm={setUseForm}
-                           />}/>
-                    <Route path={"/display/:_id"}
-                           element={<DisplayPage
-                               vocabs={vocabs}
-                           />}/>
-                </Route>
-            </Routes>
-            <div style={{height: "60px"}}/>
-        </div>)
+                <Route path={"/display/:_id"}
+                       element={<DisplayPage
+                           vocabs={vocabs}
+                       />}/>
+            </Route>
+        </Routes>
+        <div style={{height: "60px"}}/>
+    </div>)
 }
 
 export default App
