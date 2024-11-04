@@ -66,3 +66,11 @@ button {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
 }
+
+.loading-message {
+    font-size: 1.25rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
