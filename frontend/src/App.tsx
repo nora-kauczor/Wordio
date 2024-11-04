@@ -205,7 +205,7 @@ function App() {
                     <Route path={"/backlog"}
                            element={<BacklogPage
                                vocabs={vocabs.filter(
-                                   vocab => vocab.reviewDates?.length === 0)}
+                                   vocab => vocab.datesPerUser?.userName.length === 0)}
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                                language={language}

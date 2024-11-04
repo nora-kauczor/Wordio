@@ -34,7 +34,7 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                // reviewDates: props.vocabToEdit.datesPerUser.userName.reviewDates,
+                datesPerUser: props.vocabToEdit.datesPerUser,
                 createdBy: props.userName
             }
             props.editVocab(editedVocab)
