@@ -35,11 +35,4 @@ public class Vocab {
         return reviewDates;
     }
 
-/*
-datesPerUser: {
-  "user1": ["2024-11-01", "2024-11-02"],
-  "user2": ["2024-12-25"]
-}
- */
-
 }
