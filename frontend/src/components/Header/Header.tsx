@@ -23,6 +23,7 @@ export default function Header(props: Readonly<Props>) {
         </select>}
 
         {props.userName && <button id={"logout-button"}
-                                   onClick={props.logout}>logout</button>}
+                                   onClick={props.logout}>
+            logout</button>}
     </div>)
 }
