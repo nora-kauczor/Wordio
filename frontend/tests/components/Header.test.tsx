@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Header from '../../src/components/Header/Header'// Adjust the import path to your project structure
 // import { vi } from 'vitest';
 // import { it, describe, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+
 
 
 describe('Header Component', () => {
@@ -21,13 +21,13 @@ describe('Header Component', () => {
         render(<Header {...defaultProps} />);
         expect(screen.getByText('Wordio')).toBeInTheDocument();
     });
-    //
-    // it('displays the language select dropdown when userName and language are provided', () => {
-    //     render(<Header {...defaultProps} />);
-    //     const select = screen.getByRole('combobox');
-    //     expect(select).toBeInTheDocument();
-    //     expect(select).toHaveValue('Spanish');
-    // });
+
+    it('displays the language select dropdown when userName and language are provided', () => {
+        render(<Header {...defaultProps} />);
+        const select = screen.getByRole('combobox');
+        expect(select).toBeInTheDocument();
+        expect(select).toHaveValue('Spanish');
+    });
 
     // it('calls setLanguage when a new language is selected', () => {
     //     render(<Header {...defaultProps} />);
