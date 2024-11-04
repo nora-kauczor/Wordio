@@ -12,7 +12,9 @@ type Props = {
     language?: string
     vocabs: Vocab[]
     setLanguage: React.Dispatch<React.SetStateAction<string>>
+    userName: string
 }
+
 export default function HomePage(props: Readonly<Props>) {
     const [showPopUp, setShowPopUp] = useState(false)
     const navigate = useNavigate()
@@ -43,10 +45,10 @@ export default function HomePage(props: Readonly<Props>) {
             </button>}
         </article>
         {showPopUp && props.vocabs && <div className={"overlay"}/>}
-        {showPopUp && props.vocabs && <NewVocabsPopUp
-            vocabs={props.vocabs}
-            setUseForm={props.setUseForm}
-            setShowPopUp={setShowPopUp}/>}
+        {showPopUp && props && <NewVocabsPopUp userName={props.userName}
+                                               vocabs={props.vocabs}
+                                               setUseForm={props.setUseForm}
+                                               setShowPopUp={setShowPopUp}/>}
         {!props.language && <div className={"overlay"}/>}
         {!props.language &&
             <PickLanguagePopUp setLanguage={props.setLanguage}/>}

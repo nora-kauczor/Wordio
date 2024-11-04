@@ -40,7 +40,7 @@ function App() {
 
     function getUserName(): void {
         axios.get("/api/vocab/auth")
-            .then(response => response && setUserName(response.data.name))
+            .then(response => setUserName(response.data.name))
             .then(() => navigate("/"))
             .catch(error => console.error(error))
     }
@@ -162,6 +162,7 @@ function App() {
 
 
     function openForm(_id: string | undefined) {
+        // TODO close newVocabsPopUp if open
         setUseForm(true)
         if (!_id) {
             const vocab = vocabs.find(vocab => vocab._id === _id)
@@ -188,6 +189,7 @@ function App() {
                     userName={userName}/>}>
                     <Route path={"/"}
                            element={<HomePage
+                               userName={userName}
                                vocabs={vocabs}
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
@@ -206,8 +208,8 @@ function App() {
                                changeReviewDates={changeReviewDates}/>}/>
                     <Route path={"/backlog"}
                            element={<BacklogPage
-                               vocabs={vocabs.filter(
-                                   vocab => vocab.datesPerUser?.userName.length === 0)}
+                               vocabs={vocabs? vocabs.filter(
+                                   vocab => vocab.datesPerUser?.userName?.length === 0): []}
                                deleteVocab={deleteVocab}
                                activateVocab={activateVocab}
                                language={language}

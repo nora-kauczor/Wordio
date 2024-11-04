@@ -7,9 +7,11 @@ type Props = {
     vocabs:Vocab[]
     setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
+    userName: string | undefined
 }
 
 export default function NewVocabsPopUp(props: Readonly<Props>) {
+    const navigate = useNavigate()
 
     function handleClick() {
         props.setShowPopUp(false)
@@ -17,7 +19,12 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     }
 
     function getRandomVocab():Vocab {
-        const inactiveVocabs:Vocab[] = props.vocabs.filter(vocab => vocab.reviewDates && vocab.reviewDates?.length < 1)
+        const inactiveVocabs:Vocab[] = props.vocabs
+            .filter(vocab =>
+                vocab.datesPerUser &&
+                Object.keys(vocab.datesPerUser).length !== 0
+                || !vocab.datesPerUser?.userName
+            )
         const numberOfVocabs: number = inactiveVocabs.length
         const randomIndex = Math.floor(Math.random() * numberOfVocabs)-1
         return props.vocabs[randomIndex];
@@ -29,11 +36,14 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
         navigate(`/display/:${_id}`)
     }
 
-    const navigate = useNavigate()
-    return (<div id={"new-vocabs-popup"} className={"pop-up"}>
+
+    return (<div id={"new-vocabs-popup"}
+                 className={"pop-up"}>
         <button onClick={() => props.setShowPopUp(false)}
                 className={"close-button"}>✕
         </button>
+        <h2 className={"popup-header"}>Learn new vocabulary</h2>
+
         <div id={"button-wrapper"}>
             <button className={"new-vocabs-button"}
                     onClick={handleClick}
@@ -47,7 +57,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
             </button>
             <button className={"new-vocabs-button"}
                     onClick={goToDisplayPageWithRandomVocab}
-                    onKeyDown={goToDisplayPageWithRandomVocab}>get random
+                    onKeyDown={goToDisplayPageWithRandomVocab}>Get random
                 vocab
             </button>
         </div>

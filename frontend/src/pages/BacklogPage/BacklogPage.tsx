@@ -18,6 +18,8 @@ export default function BacklogPage(props: Readonly<Props>) {
     useEffect(() => {
         props.setUseForm(false)
     }, []);
+
+    if(props.vocabs.length < 1 || !Array.isArray(props.vocabs)) return <p className={"loading-message"}>Loading...</p>
     return (<div id={"backlog-page"}>
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}

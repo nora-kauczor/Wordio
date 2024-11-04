@@ -38,7 +38,7 @@ export default function CalendarPage(props: Readonly<Props>) {
     }, [props.language]);
 
     if (!month) {
-        return <p>Loading calendar...</p>
+        return <p className={"loading-message"}>Loading calendar...</p>
     }
 
 
