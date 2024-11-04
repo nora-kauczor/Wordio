@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/vitest";
-import { it, describe, expect } from "vitest";
+// import { it, describe, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Greet from "../../src/components/Greet";
 import React from 'react'; // necessary, do not remove line
@@ -15,6 +15,3 @@ describe("Greet", () => {
   });
 });
 
-/*
-- falsche version von jest bzw 
-*/
