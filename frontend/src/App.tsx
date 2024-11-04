@@ -201,6 +201,7 @@ function App() {
                            displayNewVocabsPopUp={displayNewVocabsPopUp}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
                 <Route path={"/calendar"} element={<CalendarPage
+                    userName={userName}
                     setUseForm={setUseForm}
                     openForm={openForm}
                     vocabs={vocabs}

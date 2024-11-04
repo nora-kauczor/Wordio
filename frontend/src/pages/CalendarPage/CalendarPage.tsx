@@ -21,10 +21,14 @@ type Props = {
     language: string
     openForm:(_id:string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
+    userName: string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
-    const [month, setMonth] = useState<Month>()
+    const [month, setMonth] = useState<Month>({
+        vocabIdsOfMonth: [],
+        yearMonthName: ""
+    })
     const [vocabsOfDayPopUp, setVocabsOfDayPopUp] =
         useState<Vocab[]>([])
     const [dayOfDayPopUp, setDayOfDayPopUp] =
@@ -37,8 +41,10 @@ export default function CalendarPage(props: Readonly<Props>) {
         getMonth()
     }, [props.language]);
 
-    if (!month) {
-        return <p className={"loading-message"}>Loading calendar...</p>
+    console.log(month)
+
+    if (!month.yearMonthName) {
+        return <p className={"loading-message"}>Loading...</p>
     }
 
 
@@ -46,7 +52,7 @@ function getMonth() {
         const today = new Date();
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
-        axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}`)
+        axios.get(`/api/calendar?year=${year}&month=${month}&language=${props.language}&user=${props.userName}`)
             .then(response => setMonth(response.data))
             .catch(error => console.error(error))
     }

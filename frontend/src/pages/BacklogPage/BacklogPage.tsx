@@ -14,7 +14,7 @@ type Props = {
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
-    console.log(props)
+
     useEffect(() => {
         props.setUseForm(false)
     }, []);
