@@ -5,7 +5,7 @@ import React from "react";
 
 type Props = {
     vocabs:Vocab[]
-    setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>
+    setDisplayNewVocabsPopUp: React.Dispatch<React.SetStateAction<boolean>>
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     userName: string | undefined
 }
@@ -14,7 +14,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     const navigate = useNavigate()
 
     function handleClick() {
-        props.setShowPopUp(false)
+        props.setDisplayNewVocabsPopUp(false)
         props.setUseForm(true)
     }
 
@@ -39,7 +39,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
 
     return (<div id={"new-vocabs-popup"}
                  className={"pop-up"}>
-        <button onClick={() => props.setShowPopUp(false)}
+        <button onClick={() => props.setDisplayNewVocabsPopUp(false)}
                 className={"close-button"}>✕
         </button>
         <h2 className={"popup-header"}>Learn new vocabulary</h2>

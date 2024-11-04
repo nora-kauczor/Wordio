@@ -28,6 +28,7 @@ function App() {
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
         "todaysVocabs", {defaultValue: []})
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
+    const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
     function getAllVocabsOfLanguage() {
@@ -162,7 +163,9 @@ function App() {
 
 
     function openForm(_id: string | undefined) {
-        // TODO close newVocabsPopUp if open
+       if (displayNewVocabsPopUp) {
+           setDisplayNewVocabsPopUp(false)
+       }
         setUseForm(true)
         if (!_id) {
             const vocab = vocabs.find(vocab => vocab._id === _id)
@@ -194,7 +197,9 @@ function App() {
                                finishedReviewing={vocabsLeftToReview.length < 1}
                                setUseForm={setUseForm}
                                language={language}
-                               setLanguage={setLanguage}/>}/>
+                               setLanguage={setLanguage}
+                               displayNewVocabsPopUp={displayNewVocabsPopUp}
+                               setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
                     <Route path={"/calendar"} element={<CalendarPage
                         setUseForm={setUseForm}
                         openForm={openForm}
