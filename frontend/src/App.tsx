@@ -89,28 +89,30 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.reviewDates?.includes(today))
+            .filter(vocab => vocab.datesPerUser?.userName.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
     function activateVocab(_id: string): void {
-        axios.put(`api/vocab/activate/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully activated.`))
+        axios.put(`api/vocab/activate/${_id}?user=${userName}`)
+            .then(() =>
+                console.log(`Vocab ${_id} successfully activated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
     function deactivateVocab(_id: string): void {
-        axios.put(`api/vocab/deactivate/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully deactivated.`))
+        axios.put(`api/vocab/deactivate/${_id}?user=${userName}`)
+            .then(() =>
+                console.log(`Vocab ${_id} successfully deactivated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
 
     function changeReviewDates(_id: string | null): void {
-        axios.put(`api/vocab/change-dates/${_id}`)
-            .then(() => console.log(
-                `Vocab ${_id}'s review dates successfully updated.`))
+        axios.put(`api/vocab/change-dates/${_id}?user=${userName}`)
+            .then(() =>
+                console.log(`Vocab ${_id}'s review dates successfully updated.`))
             .then(() => getAllVocabsOfLanguage())
             .catch(error => console.error(error))
     }
@@ -166,7 +168,8 @@ function App() {
         }
     }
 
-    return (<div id={"app"}>
+        return (
+            <div id={"app"}>
             <Header userName={userName} logout={logout}
                     language={language}
                     setLanguage={setLanguage}/>

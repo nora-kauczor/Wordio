@@ -38,18 +38,18 @@ public class VocabController {
     }
 
     @PutMapping("/change-dates/{_id}")
-    public Vocab changeReviewDates(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.changeReviewDates(_id);
+    public Vocab changeReviewDates(@PathVariable String _id, @RequestParam String user) throws IdNotFoundException {
+        return vocabService.changeReviewDates(_id, user);
     }
 
     @PutMapping("/deactivate/{_id}")
-    public Vocab deactivateVocab(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.deactivateVocab(_id);
+    public Vocab deactivateVocab(@PathVariable String _id, @RequestParam String user ) throws IdNotFoundException {
+        return vocabService.deactivateVocab(_id, user);
     }
 
     @PutMapping("/activate/{_id}")
-    public Vocab activateVocab(@PathVariable String _id) throws IdNotFoundException {
-        return vocabService.activateVocab(_id);
+    public Vocab activateVocab(@PathVariable String _id, @RequestParam String user) throws IdNotFoundException {
+        return vocabService.activateVocab(_id, user);
     }
 
     @DeleteMapping("/{_id}")
