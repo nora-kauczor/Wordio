@@ -100,21 +100,24 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
 
-    return (<div id={"calendar-page"}>
+    return (<div id={"calendar-page"} role={"main"}>
         <div id={"button-and-header-container"}>
             {month &&<button
                 className={"calendar-button"}
                 onClick={() => changeMonth("previous")}
-                onKeyDown={() => changeMonth("previous")}>◀︎
+                onKeyDown={() => changeMonth("previous")}
+                aria-label={"Previous month"}>◀︎
             </button>}
             {month && <h2>{month.yearMonthName}</h2>}
             {month &&<button className={"calendar-button"}
                     onClick={() => changeMonth("next")}
-                    onKeyDown={() => changeMonth("next")}>▶︎
+                    onKeyDown={() => changeMonth("next")}
+                             aria-label={"Next month"}>▶︎
             </button>}
         </div>
         <article id={"weeks-wrapper"}>
-            {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek => <CalendarWeek
+            {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek =>
+                <CalendarWeek
                 key={uid()}
                 vocabIdsOfWeek={vocabIdsOfWeek}
                 openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
@@ -127,7 +130,8 @@ export default function CalendarPage(props: Readonly<Props>) {
             deactivateVocab={props.deactivateVocab}
             userName={props.userName}/>}
         <button className={"back-button"} id={"calendar-back-button"} onClick={() => navigate("/")}
-                onKeyDown={() => navigate("/")}>
+                onKeyDown={() => navigate("/")}
+                aria-label={"Go back to the main page"}>
             ← Back
         </button>
     </div>)
