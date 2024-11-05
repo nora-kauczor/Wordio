@@ -16,6 +16,7 @@ import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
 import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
+import { toast } from "react-toastify";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -94,27 +95,38 @@ function App() {
     }
 
     function activateVocab(_id: string): void {
-        axios.put(`api/vocab/activate/${_id}?user=${userName}`)
-            .then(() =>
-                console.log(`Vocab ${_id} successfully activated.`))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.error(error))
+        axios.put(`api/vocab/activate/${_id}`)
+            .then(() => {
+                console.log(`Vocab ${_id} successfully activated.`)
+                toast.success("Vocab successfully activated.")
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't activate vocab")})
     }
 
     function deactivateVocab(_id: string): void {
-        axios.put(`api/vocab/deactivate/${_id}?user=${userName}`)
-            .then(() =>
-                console.log(`Vocab ${_id} successfully deactivated.`))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.error(error))
+        axios.put(`api/vocab/deactivate/${_id}`)
+            .then(() => {
+                console.log(`Vocab ${_id} successfully deactivated.`)
+                toast.success("Vocab successfully deactivated.")
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't deactivate vocab")})
     }
 
     function changeReviewDates(_id: string | null): void {
-        axios.put(`api/vocab/change-dates/${_id}?user=${userName}`)
-            .then(() =>
-                console.log(`Vocab ${_id}'s review dates successfully updated.`))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.error(error))
+        axios.put(`api/vocab/change-dates/${_id}`)
+            .then(() => {
+                console.log(`Vocab ${_id}'s review dates successfully deactivated.`)
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Something went wrong.")})
     }
 
     function logout() {
@@ -127,35 +139,55 @@ function App() {
 
     function deleteVocab(_id: string): void {
         axios.delete(`api/vocab/${_id}`)
-            .then(() => console.log(`Vocab ${_id} successfully deleted.`))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.error(error))
+            .then(() => {
+                console.log(`Vocab ${_id} successfully deleted.`)
+                toast.success("Vocab successfully deleted")
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't delete vocab")})
     }
 
     function createVocab(newVocab: Vocab): void {
         setUseForm(false)
         axios.post("/api/vocab", newVocab)
-            .then(() => console.log("New vocab was successfully created."))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.log(error))
+            .then(() => {
+                console.log(`New vocab successfully created`)
+                toast.success("New vocab successfully created")
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't create new vocab")})
     }
 
     function createAndActivateVocab(newVocab: Vocab): void {
         setUseForm(false)
         axios.post("/api/vocab/activate", newVocab)
-            .then(response => navigate(`/display/:${response.data._id}`))
-            .then(() => console.log("New vocab was successfully created and activated."))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.log(error))
+            .then(response => {
+                navigate(`/display/:${response.data._id}`)
+                console.log("New vocab was successfully created and activated.")
+                toast.success("New vocab successfully created and activated")
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't create and activate new vocab")})
     }
 
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
         axios.put(`api/vocab/`, editedVocab)
-            .then(() => console.log(`Vocab ${editedVocab._id} successfully edited.`))
-            .then(() => getAllVocabsOfLanguage())
-            .catch(error => console.error(error))
+            .then(() => {
+                console.log(`Vocab ${editedVocab._id} successfully edited.`)
+                toast.success("Vocab successfully edited")
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't edit vocab")})
     }
 
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
