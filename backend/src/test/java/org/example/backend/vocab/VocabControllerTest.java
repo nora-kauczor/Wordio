@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -65,8 +63,9 @@ class VocabControllerTest {
 
     @Test
     void changeReviewDates_shouldReturnVocabWithNewReviewDates_whenCalledWithExistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/change-dates/000").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/change-dates/000")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -78,16 +77,18 @@ class VocabControllerTest {
 
     @Test
     void deactivateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/nonexistent-id").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/nonexistent-id")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void deactivateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/000").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/000")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -100,8 +101,9 @@ class VocabControllerTest {
 
     @Test
     void activateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/nonexistent-id").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/nonexistent-id")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isNotFound());
     }
@@ -109,8 +111,9 @@ class VocabControllerTest {
 
     @Test
     void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/000").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/000")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -123,8 +126,9 @@ class VocabControllerTest {
 
     @Test
     void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Esperanto").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Esperanto")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isNotFound());
     }
@@ -132,12 +136,15 @@ class VocabControllerTest {
 
     @Test
     void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Spanish").with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Spanish")
+                        .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{"_id":"000", "word":"la prueba", "translation":"test",
+                                          "info":"", "language":"Spanish"},
+                  {"_id":"111", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}]
                         """))
                 .andExpect(jsonPath("$[0].datesPerUser.jane-doe[0]").value("2024-11-01"));
@@ -146,8 +153,9 @@ class VocabControllerTest {
 
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/api/vocab").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -166,8 +174,9 @@ class VocabControllerTest {
 
     @Test
     void createVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/api/vocab").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -180,8 +189,9 @@ class VocabControllerTest {
 
     @Test
     void createAndActivateVocab_shouldReturnNewVocabObjectWithReviewDates_whenCalledWithVocabDTO() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/api/vocab/activate").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.post("/api/vocab/activate")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -200,9 +210,10 @@ class VocabControllerTest {
 
 
     @Test
-    void createAndActivateVocab_throwsLanguageNotFoundException_whenCalledWithVocabWithNonExistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/api/vocab/activate").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+    void createAndActivateVocab_shouldReturn404_whenCalledWithVocabWithNonExistentLanguage() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/api/vocab/activate")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -215,18 +226,19 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "_id":"000","word":"la prueba", "translation":"test",
-                                                                          "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "maxi-muster"}
+                                { "_id":"111","word":"la prueba", "translation":"test",
+                                                                          "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "jane-doe"}
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        { "_id":"000", "word":"la prueba", "translation":"test",
-                                                                  "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "maxi-muster"}
+                        { "_id":"111", "word":"la prueba", "translation":"test",
+                                                                  "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "jane-doe"}
                         """));
 
     }
@@ -234,8 +246,9 @@ class VocabControllerTest {
 
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -250,8 +263,9 @@ class VocabControllerTest {
     void editVocab_shouldReturn405_whenCalledWithNonEditableVocab() throws Exception {
         Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, new HashMap<>(), "Wordio");
         vocabRepo.save(nonEditableVocab);
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
+        mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -261,26 +275,11 @@ class VocabControllerTest {
                 .andExpect(status().isMethodNotAllowed());
     }
 
-
-    @Test
-    void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/api/vocab").with(oauth2Login().attributes(attributes -> {
-                            attributes.put("name", "jane-doe");
-                        }))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                { "_id":"000","word":"la prueba", "translation":"test",
-                                                                          "info":"", "language":"Esperanto", "datesPerUser":{}, "createdBy":  "maxi-muster"}
-                                """))
-                .andExpect(status().isNotFound());
-    }
-
-
     @Test
     void deleteVocab_shouldReturnString_whenCalledWithIdOfEditableVocab() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/111")
                         .with(oauth2Login().attributes(attributes -> {
-                    attributes.put("name", "jane-doe");
+                    attributes.put("sub", "jane-doe");
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Vocab successfully deleted."));
@@ -289,7 +288,10 @@ class VocabControllerTest {
 
     @Test
     void deleteVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/nonexistent-id"))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/nonexistent-id")
+                .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "jane-doe");
+                })))
                 .andExpect(status().isNotFound());
     }
 

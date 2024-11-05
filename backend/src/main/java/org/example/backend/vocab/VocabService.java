@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.exception.IdNotFoundException;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.exception.VocabIsNotEditableException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
