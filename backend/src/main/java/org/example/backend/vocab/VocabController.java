@@ -20,43 +20,43 @@ public class VocabController {
     private final VocabService vocabService;
 
     @GetMapping
-    public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        return vocabService.getAllVocabsOfLanguage(language, user);
+    public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
+        return vocabService.getAllVocabsOfLanguage(language, user.getName());
     }
 
     @PostMapping
-    public Vocab createVocab(@RequestBody VocabDTOCreate vocabDTO @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        return vocabService.createVocab(vocabDTO, user);
+    public Vocab createVocab(@RequestBody VocabDTOCreate vocabDTO, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
+        return vocabService.createVocab(vocabDTO, user.getName());
     }
 
     @PostMapping("/activate")
-    public Vocab createAndActivateVocab(@RequestBody VocabDTOCreate vocabDTO @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        return vocabService.createAndActivateVocab(vocabDTO, user);
+    public Vocab createAndActivateVocab(@RequestBody VocabDTOCreate vocabDTO, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
+        return vocabService.createAndActivateVocab(vocabDTO, user.getName());
     }
 
     @PutMapping
-    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
-        return vocabService.editVocab(editedVocab, user);
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
+        return vocabService.editVocab(editedVocab, user.getName());
     }
 
     @PutMapping("/change-dates/{_id}")
     public Vocab changeReviewDates(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
-        return vocabService.changeReviewDates(_id, user);
+        return vocabService.changeReviewDates(_id, user.getName());
     }
 
     @PutMapping("/deactivate/{_id}")
     public Vocab deactivateVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user ) throws IdNotFoundException {
-        return vocabService.deactivateVocab(_id, user);
+        return vocabService.deactivateVocab(_id, user.getName());
     }
 
     @PutMapping("/activate/{_id}")
     public Vocab activateVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
-        return vocabService.activateVocab(_id, user);
+        return vocabService.activateVocab(_id, user.getName());
     }
 
     @DeleteMapping("/{_id}")
-    public String deleteVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
-        return vocabService.deleteVocab(_id, user);
+    public String deleteVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException {
+        return vocabService.deleteVocab(_id, user.getName());
     }
 
 }
