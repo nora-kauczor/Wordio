@@ -11,24 +11,25 @@ type Props = {
     language: string
     openForm: (_id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName:string
+    userName: string
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
 
     useEffect(() => {
         props.setUseForm(false)
-    }, []);
+    }, [props]);
 
     if (props.vocabs.length < 1 || !Array.isArray(props.vocabs)) return <p
         className={"loading-message"}>Loading...</p>
-    return (<div id={"backlog-page"}>
+
+    return (<div id={"backlog-page"} role={"main"}>
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}
                    activateVocab={props.activateVocab}
                    deleteVocab={props.deleteVocab}
                    openForm={props.openForm}
-        userName={props.userName}/>
+                   userName={props.userName}/>
     </div>)
 
 }

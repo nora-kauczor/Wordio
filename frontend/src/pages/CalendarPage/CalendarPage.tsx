@@ -102,16 +102,16 @@ export default function CalendarPage(props: Readonly<Props>) {
 
     return (<div id={"calendar-page"}>
         <div id={"button-and-header-container"}>
-            <button
+            {month &&<button
                 className={"calendar-button"}
                 onClick={() => changeMonth("previous")}
                 onKeyDown={() => changeMonth("previous")}>◀︎
-            </button>
+            </button>}
             {month && <h2>{month.yearMonthName}</h2>}
-            <button className={"calendar-button"}
+            {month &&<button className={"calendar-button"}
                     onClick={() => changeMonth("next")}
                     onKeyDown={() => changeMonth("next")}>▶︎
-            </button>
+            </button>}
         </div>
         <article id={"weeks-wrapper"}>
             {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek => <CalendarWeek
