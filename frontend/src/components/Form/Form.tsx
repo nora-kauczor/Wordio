@@ -8,7 +8,6 @@ type Props = {
     createVocab: (vocab: Vocab) => void
     createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
-    userName: string
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 

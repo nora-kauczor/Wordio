@@ -1,6 +1,7 @@
 import {Vocab} from "../../types/Vocab.ts";
 import './VocabList.css'
 import {useNavigate} from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
     vocabs: Vocab[]
@@ -20,6 +21,7 @@ export default function VocabList(props: Readonly<Props>) {
             return
         }
         props.activateVocab(_id)
+        // TODO trigger rerender
         navigate(`/display/:${_id}`)
     }
 
@@ -28,6 +30,7 @@ export default function VocabList(props: Readonly<Props>) {
             return
         }
         props.deactivateVocab(_id)
+        // TODO trigger rerender
     }
 
     function handleClickEdit(_id: string | null) {

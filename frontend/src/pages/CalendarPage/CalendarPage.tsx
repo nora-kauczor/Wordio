@@ -20,7 +20,6 @@ type Props = {
     language: string
     openForm: (_id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName: string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {

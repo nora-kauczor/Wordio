@@ -16,7 +16,7 @@ import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
 import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
-import { toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -92,7 +92,7 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.datesPerUser?.userName.includes(today))
+            .filter(vocab => vocab.datesPerUser?.userName && vocab.datesPerUser?.userName.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
@@ -205,12 +205,13 @@ function App() {
     }
 
     return (<div id={"app"}>
+        <ToastContainer autoClose={2000}  hideProgressBar={true} />
         <Header userName={userName} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
         <div style={{height: "50px"}}/>
         {useForm && <div className={"overlay"}/>}
-        {useForm && <Form userName={userName} language={language}
+        {useForm && <Form language={language}
                           editVocab={editVocab} createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
                           vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
@@ -232,7 +233,6 @@ function App() {
                            displayNewVocabsPopUp={displayNewVocabsPopUp}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
                 <Route path={"/calendar"} element={<CalendarPage
-                    userName={userName}
                     setUseForm={setUseForm}
                     openForm={openForm}
                     vocabs={vocabs}
