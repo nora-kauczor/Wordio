@@ -9,6 +9,7 @@ type Props = {
     createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
     userName: string
+    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function Form(props: Readonly<Props>) {
@@ -33,7 +34,7 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                reviewDates: props.vocabToEdit.reviewDates,
+                datesPerUser: props.vocabToEdit.datesPerUser,
                 createdBy: props.userName
             }
             props.editVocab(editedVocab)
@@ -46,7 +47,7 @@ export default function Form(props: Readonly<Props>) {
                 language: props.language,
                 createdBy: props.userName
             }
-            if (clickedButton === "create") {
+            if (clickedButton === "submit") {
                 props.createVocab(newVocab)
             } else {
                 props.createAndActivateVocab(newVocab)
@@ -69,25 +70,31 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(value)
     }
 
-    return (
-        <div id={"form"}>
-        <label htmlFor={"word-input"}>Word</label>
-        <input name={"word"} id={"word-input"} value={wordInput}
-               onChange={handleChange}/>
-        <label htmlFor={"translation-input"}>Translation</label>
-        <input name={"translation"} id={"translation-input"}
-               value={translationInput} onChange={handleChange}/>
-        <label htmlFor={"info-input"}>Additional info, e.g.
-            "colloquial"</label>
-        <input name={"info"} id={"info-input"} value={infoInput}
-               onChange={handleChange}/>
-        <button name={"create"}
-                onClick={() => handleClick("create")}
-        >create
+    return (<div id={"form"} className={"pop-up"}>
+        <button className={"close-button"}
+                onClick={() => props.setUseForm(false)}
+        >✕
         </button>
-        <button name={"create-and-activate"}
-                onClick={() => handleClick("create-and-activate")}
-        >create and activate
+        <h2 className={"popup-header"}>{props.vocabToEdit ? 'Edit your vocab' :
+            'Create your vocab'}</h2>
+        <div id={"input-and-label-wrapper"}>
+            <label htmlFor={"word-input"}>Your Vocab</label>
+            <input name={"word"} id={"word-input"} value={wordInput}
+                   onChange={handleChange}/>
+            <label htmlFor={"translation-input"}>Translation into
+                English</label>
+            <input name={"translation"} id={"translation-input"}
+                   value={translationInput} onChange={handleChange}/>
+            <label htmlFor={"info-input"}>Additional info, e.g.
+                "colloquial"</label>
+            <input name={"info"} id={"info-input"} value={infoInput}
+                   onChange={handleChange}/>
+        </div>
+        <button className={"form-button"} onClick={() => handleClick("submit")}>submit
         </button>
+        {!props.vocabToEdit && <button className={"form-button"}
+            onClick={() => handleClick("submit-and-activate")}
+        >submit and activate
+        </button>}
     </div>)
 }

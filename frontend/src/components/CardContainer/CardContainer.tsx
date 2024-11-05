@@ -7,14 +7,13 @@ type Props = {
 
 
 export default function CardContainer(props: Readonly<Props>) {
-    if (!props.displayedVocab) return <p> Loading...</p>
 
     return (
         <div id={"card-container"}>
-            <article id={"word-card"}
-                     className={"card"}>{props.displayedVocab.word}</article>
-            <article id={"translation-card"}
-                     className={"card"}>{props.displayedVocab.translation}</article>
+            {props.displayedVocab && <article id={"word-card"}
+                      className={"card"}>{props.displayedVocab.word}</article>}
+            {props.displayedVocab &&<article id={"translation-card"}
+                     className={"card"}>{props.displayedVocab.translation}</article>}
         </div>
     )
 }

@@ -16,16 +16,19 @@ export default function DayPopUp(props: Readonly<Props>) {
         props.day.substring(5, 7) + "." + props.day.substring(0, 4)
 
 
-    return (<div id={"day-popup"}>
-            <h3>{displayDate}</h3>
-            <VocabList vocabs={props.vocabsOfDay} calendarMode={true}
-                       deactivateVocab={props.deactivateVocab}
-                       closeDayPopUp={props.closeDayPopUp}
-            openForm ={props.openForm}/>
-            <button onClick={props.closeDayPopUp}
-            >close
-            </button>
-        </div>)
+    return (<div id={"day-popup"} className={"pop-up"}>
+        <button onClick={() => props.closeDayPopUp()}
+                className={"close-button"}>✕
+        </button>
+        <h3>{displayDate}</h3>
+        <VocabList vocabs={props.vocabsOfDay} calendarMode={true}
+                   deactivateVocab={props.deactivateVocab}
+                   closeDayPopUp={props.closeDayPopUp}
+                   openForm={props.openForm}/>
+        <button onClick={props.closeDayPopUp}
+        >close
+        </button>
+    </div>)
 
 
 }

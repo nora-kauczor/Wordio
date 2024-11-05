@@ -28,6 +28,8 @@ function App() {
         "vocabsLeftToReview", {defaultValue: []})
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
         "todaysVocabs", {defaultValue: []})
+    const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
+    const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
     function getAllVocabsOfLanguage() {
@@ -36,6 +38,7 @@ function App() {
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
     }
+
 
     function getUserName(): void {
         axios.get("/api/vocab/auth")
@@ -190,9 +193,11 @@ function App() {
                 toast.error("Couldn't edit vocab")})
     }
 
-    const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
 
     function openForm(_id: string | undefined) {
+        if (displayNewVocabsPopUp) {
+            setDisplayNewVocabsPopUp(false)
+        }
         setUseForm(true)
         if (!_id) {
             const vocab = vocabs.find(vocab => vocab._id === _id)
@@ -200,59 +205,64 @@ function App() {
         }
     }
 
-        return (
-            <div id={"app"}>
-            <Header userName={userName} logout={logout}
+    return (<div id={"app"}>
+        <Header userName={userName} logout={logout}
+                language={language}
+                setLanguage={setLanguage}/>
+        <div style={{height: "50px"}}/>
+        {useForm && <div className={"overlay"}/>}
+        {useForm && <Form userName={userName} language={language}
+                          editVocab={editVocab} createVocab={createVocab}
+                          createAndActivateVocab={createAndActivateVocab}
+                          vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
+        <NavBar setUseForm={setUseForm}/>
+        <Routes>
+            <Route path={"/login"}
+                   element={<LoginPage
+                   />}/>
+            <Route element={<ProtectedRoutes
+                userName={userName}/>}>
+                <Route path={"/"}
+                       element={<HomePage
+                           userName={userName}
+                           vocabs={vocabs}
+                           finishedReviewing={vocabsLeftToReview.length < 1}
+                           setUseForm={setUseForm}
+                           language={language}
+                           setLanguage={setLanguage}
+                           displayNewVocabsPopUp={displayNewVocabsPopUp}
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
+                <Route path={"/calendar"} element={<CalendarPage
+                    userName={userName}
+                    setUseForm={setUseForm}
+                    openForm={openForm}
+                    vocabs={vocabs}
                     language={language}
-                    setLanguage={setLanguage}/>
-            <div style={{height: "60px"}}/>
-            {useForm && <Form userName={userName} language={language} editVocab={editVocab}
-                              createVocab={createVocab}
-                              createAndActivateVocab={createAndActivateVocab}
-                              vocabToEdit={vocabToEdit}/>}
-            <NavBar setUseForm={setUseForm}/>
-            <Routes>
-                <Route path={"/login"}
-                       element={<LoginPage
+                    deactivateVocab={deactivateVocab}/>}/>
+                <Route path={"/review"}
+                       element={<ReviewPage
+                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
+                           vocabsLeftToReview={vocabsLeftToReview}
+                           changeReviewDates={changeReviewDates}/>}/>
+                <Route path={"/backlog"}
+                       element={<BacklogPage
+                           vocabs={vocabs.filter(vocab => vocab.datesPerUser &&
+                               Object.keys(vocab.datesPerUser).length !== 0 ||
+                               !vocab.datesPerUser?.userName)}
+                           deleteVocab={deleteVocab}
+                           activateVocab={activateVocab}
+                           language={language}
+                           openForm={openForm}
+                           setUseForm={setUseForm}
                        />}/>
-                <Route element={<ProtectedRoutes
-                    userName={userName}/>}>
-                    <Route path={"/"}
-                           element={<HomePage
-                               vocabs={vocabs}
-                               finishedReviewing={vocabsLeftToReview.length < 1}
-                               setUseForm={setUseForm}
-                               language={language}
-                           setLanguage={setLanguage} />}/>
-                    <Route path={"/calendar"} element={<CalendarPage
-                        setUseForm={setUseForm}
-                        openForm={openForm}
-                        vocabs={vocabs}
-                        language={language}
-                        deactivateVocab={deactivateVocab}/>}/>
-                    <Route path={"/review"}
-                           element={<ReviewPage
-                               removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
-                               vocabsLeftToReview={vocabsLeftToReview}
-                               changeReviewDates={changeReviewDates}/>}/>
-                    <Route path={"/backlog"}
-                           element={<BacklogPage
-                               vocabs={vocabs.filter(
-                                   vocab => vocab.reviewDates?.length === 0)}
-                               deleteVocab={deleteVocab}
-                               activateVocab={activateVocab}
-                               language={language}
-                               openForm={openForm}
-                               setUseForm={setUseForm}
-                           />}/>
-                    <Route path={"/display/:_id"}
-                           element={<DisplayPage
-                               vocabs={vocabs}
-                           />}/>
-                </Route>
-            </Routes>
-            <div style={{height: "60px"}}/>
-        </div>)
+                <Route path={"/display/:_id"}
+                       element={<DisplayPage
+                           vocabs={vocabs}
+                       />}/>
+            </Route>
+        </Routes>
+        <div style={{height: "60px"}}/>
+    </div>)
 }
 
 export default App

@@ -1,17 +1,8 @@
 #new-vocabs-popup {
-    z-index: 3;
-    background-color: hotpink;
-    padding: 0;
-    margin: auto;
-    border-radius: 10px;
-    cursor: pointer;
-    position: fixed;
     width: 70%;
-    max-width: 500px;
-    height: 70%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    max-width: 400px;
+    height: 60%;
+    max-height: 600px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -19,10 +10,25 @@
     align-items: center;
 }
 
+
+
+#button-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1rem;
+}
+
 .new-vocabs-button {
-    height: 10rem;
+    padding: 1.5rem 0.5rem;
+    background-color: inherit;
+    border: 1px solid white;
     width: 70%;
     font-size: 20px;
+
     &:hover {
         transform: scale(1.05);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
