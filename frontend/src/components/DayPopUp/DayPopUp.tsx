@@ -16,11 +16,11 @@ export default function DayPopUp(props: Readonly<Props>) {
         props.day.substring(5, 7) + "." + props.day.substring(0, 4)
 
 
-    return (<div id={"day-popup"} className={"pop-up"} role="dialog"
-                 aria-labelledby="popup-title" aria-modal="true">
+    return (<div id={"day-popup"} className={"pop-up"} role={"dialog"}
+                 aria-labelledby={"popup-title"} aria-modal={"true"}>
         <button onClick={props.closeDayPopUp}
                 className={"close-button"}
-                aria-label="Close popup">✕
+                aria-label={"Close popup"}>✕
         </button>
         <h3>{displayDate}</h3>
         <VocabList vocabs={props.vocabsOfDay}

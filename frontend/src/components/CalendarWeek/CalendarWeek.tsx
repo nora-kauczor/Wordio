@@ -13,7 +13,7 @@ type Props = {
 export default function CalendarWeek(props: Readonly<Props>) {
 
     return(
-        <ul id={"calendar-week"} role="list">
+        <ul id={"calendar-week"} role={"list"}>
             {props.vocabIdsOfWeek.length > 0 && props.vocabIdsOfWeek.map(vocabIdsOfDate =>
                 vocabIdsOfDate ?
                 <CalendarDay key={vocabIdsOfDate.date}
