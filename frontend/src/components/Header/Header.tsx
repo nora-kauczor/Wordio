@@ -14,16 +14,24 @@ export default function Header(props: Readonly<Props>) {
     }
 
     return (<div id={"header"}>
-        <p id={"app-name"}>Wordio</p>
-        {props.userName && props.language &&
+        <p id={"app-name"} aria-live={"polite"}>Wordio</p>
+        {props.userName && props.language && (
+            <div>
+                <label htmlFor={"select-language"} className={"visually-hidden"}>
+                    Select your language
+                </label>
             <select id={"select-language"} value={props.language} onChange={handleChange}>
             <option value={"Spanish"}>🇪🇸 Spanish</option>
             <option value={"French"}>🇫🇷 French</option>
             <option value={"Italian"}>🇮🇹 Italian</option>
-        </select>}
+        </select>
+            </div>
+            )}
 
         {props.userName && <button id={"logout-button"}
-                                   onClick={props.logout}>
+                                   onClick={props.logout}
+                                   aria-label={"Log out"}
+                                   title={"Log out"}>
             logout</button>}
     </div>)
 }
