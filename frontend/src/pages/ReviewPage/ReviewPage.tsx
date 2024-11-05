@@ -5,6 +5,7 @@ import CardContainer
 import {Vocab} from "../../types/Vocab.ts";
 import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
+import useLocalStorageState from "use-local-storage-state";
 
 type Props = {
     vocabsLeftToReview: Vocab[]
@@ -13,10 +14,10 @@ type Props = {
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
-    // TODO localstorage
-    const [currentIndex, setCurrentIndex] = useState<number>(0)
-    // TODO localstorage
-    const [currentVocab, setCurrentVocab] = useState<Vocab>(props.vocabsLeftToReview[0])
+    const [currentIndex, setCurrentIndex] = useLocalStorageState("currentIndex",
+        {defaultValue: 0});
+    const [currentVocab, setCurrentVocab] = useLocalStorageState("currentVocab",
+        {defaultValue: props.vocabsLeftToReview[0]});
     const [userInput, setUserInput] = useState<string>("")
     const [showFireworks, setShowFireworks] = useState(false);
 const navigate = useNavigate()
@@ -26,12 +27,10 @@ const navigate = useNavigate()
     }, [currentIndex]);
 
     function checkAnswer() {
-        if (currentVocab.word !== userInput) {
+        // inputWithoutExtraSpaces
+        if (currentVocab.word.toLowerCase() !== userInput.toLowerCase()) {
             props.changeReviewDates(currentVocab._id)
             navigate(`/display:${currentVocab._id}`)
-            // TODO auf displayseite möglichkeit zurückzukommen? go to back to review page and look at the next vocab
-            // TODO besser wüare wenn das einfach auch hier angezeigt wird, anstelle des inputfeldes
-            // TODO card container etc. checken
         }
         else {
                 setShowFireworks(true);
@@ -46,15 +45,15 @@ const navigate = useNavigate()
         setCurrentIndex(currentIndex + 1)
     }
 
-    return (
-        <div id={"review-page"}>
-            {showFireworks && <Confetti />}
-            {currentVocab &&
-                <CardContainer displayedVocab={currentVocab}/>}
-            <label htmlFor={"review-input"}></label>
+    return (<div id={"review-page"} role={"main"}>
+            {showFireworks && <Confetti/>}
+            {currentVocab && <CardContainer displayedVocab={currentVocab}/>}
+            <label htmlFor={"review-input"} className={"visually-hidden"}>Your
+                answer</label>
             <input id={"review-input"}
-                   onChange={element => setUserInput(element.target.value)}/>
-            <button onClick={checkAnswer}>submit</button>
-        </div>
-    )
+                   onChange={element => setUserInput(element.target.value)}
+                   aria-label={"Enter your answer"}
+                   placeholder={"Type your answer here"}/>
+            <button onClick={checkAnswer}aria-label={"Submit your answer"}>submit</button>
+        </div>)
 }
