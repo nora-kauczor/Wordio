@@ -50,7 +50,6 @@ public class VocabService {
                 .toList();
     }
 
-
     public Vocab createVocab(VocabDTOCreate vocabDTO, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),

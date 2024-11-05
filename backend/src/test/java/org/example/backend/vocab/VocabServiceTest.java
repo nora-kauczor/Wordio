@@ -83,7 +83,6 @@ class VocabServiceTest {
                 .getAllVocabsOfLanguage("Esperanto", "jane-doe"));
     }
 
-
     @Test
     void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws LanguageNotFoundException {
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
@@ -91,10 +90,12 @@ class VocabServiceTest {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, datesPerUser, "Wordio");
         Vocab testVocab2 = new Vocab("111", "la prueba", "test",
-                "", Language.SPANISH, datesPerUser, "Wordio");
-        Vocab testVocab3 = new Vocab("222", "la prueba", "test",
+                "", Language.SPANISH, datesPerUser, "jane-doe");
+        Vocab vocabDifferentLanguage = new Vocab("222", "la prueba", "test",
                 "", Language.ITALIAN, datesPerUser, "Wordio");
-        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab, testVocab2, testVocab3));
+        Vocab vocabByOtherUser = new Vocab("222", "la prueba", "test",
+                "", Language.SPANISH, datesPerUser, "average-joe");
+        when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab, testVocab2, vocabDifferentLanguage, vocabByOtherUser));
         List<Vocab> expected = List.of(testVocab, testVocab2);
         List<Vocab> actual = vocabService.getAllVocabsOfLanguage("Spanish", "jane-doe");
         assertEquals(expected, actual);
@@ -131,7 +132,6 @@ class VocabServiceTest {
         when(mockVocabRepo.save(any(Vocab.class))).thenReturn(expected);
         Vocab actual = vocabService.createAndActivateVocab(testDTO, "jane-doe");
         assertFalse(actual.getDatesPerUser().get("maxi-muster").isEmpty());
-
     }
 
     @Test
@@ -140,6 +140,7 @@ class VocabServiceTest {
                 "", "Esperanto");
         assertThrows(LanguageNotFoundException.class, () -> vocabService.createAndActivateVocab(testDTO, "jane-doe"));
     }
+
 
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
