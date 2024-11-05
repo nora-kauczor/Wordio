@@ -27,30 +27,22 @@ export default function Form(props: Readonly<Props>) {
     }, []);
 
     function handleClick(clickedButton: string) {
+        const vocab: Vocab = {
+            _id: props.vocabToEdit ? props.vocabToEdit._id : null,
+            word: wordInput,
+            translation: translationInput,
+            info: infoInput,
+            language: props.language,
+            createdBy: props.userName,
+            datesPerUser: props.vocabToEdit ? props.vocabToEdit.datesPerUser : undefined,
+        };
         if (props.vocabToEdit) {
-            const editedVocab: Vocab = {
-                _id: props.vocabToEdit._id,
-                word: wordInput,
-                translation: translationInput,
-                info: infoInput,
-                language: props.language,
-                datesPerUser: props.vocabToEdit.datesPerUser,
-                createdBy: props.userName
-            }
-            props.editVocab(editedVocab)
+            props.editVocab(vocab)
         } else {
-            const newVocab: Vocab = {
-                _id: null,
-                word: wordInput,
-                translation: translationInput,
-                info: infoInput,
-                language: props.language,
-                createdBy: props.userName
-            }
             if (clickedButton === "submit") {
-                props.createVocab(newVocab)
+                props.createVocab(vocab)
             } else {
-                props.createAndActivateVocab(newVocab)
+                props.createAndActivateVocab(vocab)
             }
         }
     }
