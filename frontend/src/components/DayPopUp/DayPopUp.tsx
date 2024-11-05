@@ -9,6 +9,7 @@ type Props = {
     closeDayPopUp: () => void
     deactivateVocab: (_id: string) => void
     openForm: (_id: string) => void
+    userName:string
 }
 
 export default function DayPopUp(props: Readonly<Props>) {
@@ -27,7 +28,8 @@ export default function DayPopUp(props: Readonly<Props>) {
                    calendarMode={true}
                    deactivateVocab={props.deactivateVocab}
                    closeDayPopUp={props.closeDayPopUp}
-                   openForm={props.openForm}/>
+                   openForm={props.openForm}
+                   userName={props.userName}/>
     </div>)
 
 

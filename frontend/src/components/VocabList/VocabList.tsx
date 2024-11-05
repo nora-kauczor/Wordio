@@ -10,6 +10,7 @@ type Props = {
     activateVocab?: (_id: string) => void
     openForm: (_id: string) => void
     closeDayPopUp?: () => void
+    userName:string
 }
 
 export default function VocabList(props: Readonly<Props>) {
@@ -47,30 +48,45 @@ export default function VocabList(props: Readonly<Props>) {
         props.deleteVocab(_id)
     }
 
-    return (<ul id={"vocab-list"}>
+    return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab._id}
-                                       className={"list-item"}
-        >
+                                       className={"list-item"}>
             <div className={"list-item-word-wrapper"}>
                 <p>{vocab.word}</p>
                 <p>{vocab.translation}</p>
             </div>
             <div className={"list-item-button-wrapper"}>
-                {vocab.createdBy != "Wordio" && vocab._id ? <button
+                {vocab.createdBy  === props.userName  && vocab._id ? <button
                     onClick={() => handleClickEdit(vocab._id)}
-                    onKeyDown={() => handleClickEdit(vocab._id)}
-                >edit</button> : <button/>}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') handleClickEdit(
+                            vocab._id);
+                    }}
+                    aria-label={`Edit ${vocab.word}`}
+                >edit</button> : null}
                 <button
                     onClick={() => vocab._id &&
                         (props.calendarMode ? handleClickDeactivate(vocab._id) :
                             handleClickActivate(vocab._id))}
-                    onKeyDown={() => vocab._id &&
-                        (props.calendarMode ? handleClickDeactivate(vocab._id) :
-                            handleClickActivate(vocab._id))}>
+                    onKeyDown={(e) => {
+                        if (vocab._id && (e.key === 'Enter' || e.key === ' ')) {
+                            if (props.calendarMode) {
+                                handleClickDeactivate(vocab._id);
+                            } else {
+                                handleClickActivate(vocab._id);
+                            }
+                        }
+                    }}
+                    aria-label={props.calendarMode ?
+                        `Deactivate ${vocab.word}` : `Activate ${vocab.word}`}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
-                {vocab.createdBy != "Wordio" && vocab._id ? <button
+                {vocab.createdBy === props.userName && vocab._id ? <button
                     onClick={() => handleClickDelete(vocab._id)}
-                    onKeyDown={() => handleClickDelete(vocab._id)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key ===
+                            ' ') handleClickDelete(vocab._id);
+                    }}
+                    aria-label={`Delete ${vocab.word}`}
                 >delete</button> : <button/>}
             </div>
         </li>)}

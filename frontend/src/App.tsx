@@ -254,6 +254,7 @@ function App() {
                            language={language}
                            openForm={openForm}
                            setUseForm={setUseForm}
+                           userName={userName}
                        />}/>
                 <Route path={"/display/:_id"}
                        element={<DisplayPage

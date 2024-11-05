@@ -124,7 +124,8 @@ export default function CalendarPage(props: Readonly<Props>) {
             vocabsOfDay={vocabsOfDayPopUp}
             closeDayPopUp={closeDayPopUp}
             openForm={props.openForm}
-            deactivateVocab={props.deactivateVocab}/>}
+            deactivateVocab={props.deactivateVocab}
+            userName={props.userName}/>}
         <button className={"back-button"} id={"calendar-back-button"} onClick={() => navigate("/")}
                 onKeyDown={() => navigate("/")}>
             ← Back
