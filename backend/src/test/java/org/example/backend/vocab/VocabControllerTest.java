@@ -146,7 +146,7 @@ class VocabControllerTest {
                                           "info":"", "language":"Spanish"},
                   {"_id":"111", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}]
-                        """))
+                  """))
                 .andExpect(jsonPath("$[0].datesPerUser.jane-doe[0]").value("2024-11-01"));
     }
 
