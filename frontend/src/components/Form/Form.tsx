@@ -44,7 +44,6 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                createdBy: props.userName
             }
             if (clickedButton === "create") {
                 props.createVocab(newVocab)

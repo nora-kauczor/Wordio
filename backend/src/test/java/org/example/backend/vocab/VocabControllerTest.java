@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,23 +34,33 @@ class VocabControllerTest {
     private VocabRepo vocabRepo;
 
 
+
     @BeforeEach
     void setUp() {
-        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-        datesPerUser.put("jane-doe", List.of(LocalDate.of(2024, 11, 1)));
-        Vocab testVocab = new Vocab("000", "la prueba", "test",
-                "", Language.SPANISH, datesPerUser, "maxi-muster");
-        vocabRepo.save(testVocab);
+        Map<String, List<LocalDate>> usersReviewDatesForVocab000= new HashMap<>();
+        usersReviewDatesForVocab000.put("jane-doe", List.of(LocalDate.of(2024, 11, 1)));
+        Vocab vocabByWordio = new Vocab("000", "la prueba", "test",
+                "", Language.SPANISH, usersReviewDatesForVocab000, "Wordio");
+        Vocab vocabByUser = new Vocab("111", "la prueba", "test",
+                "", Language.SPANISH, new HashMap<>(), "jane-doe");
+        Vocab vocabDifferentLanguage = new Vocab("222", "la prueba", "test",
+                "", Language.ITALIAN, new HashMap<>(), "Wordio");
+        Vocab vocabByOtherUser = new Vocab("333", "la prueba", "test",
+                "", Language.SPANISH, new HashMap<>(), "average-joe");
+        vocabRepo.save(vocabByWordio);
+        vocabRepo.save(vocabByUser);
+        vocabRepo.save(vocabDifferentLanguage);
+        vocabRepo.save(vocabByOtherUser);
     }
 
-    @WithMockUser
+
     @Test
     void changeReviewDates_shouldThrowNoSuchElementException_whenCalledWithNonexistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/change-dates/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
+
     @Test
     void changeReviewDates_shouldReturnVocabWithNewReviewDates_whenCalledWithExistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/change-dates/000"))
@@ -60,13 +71,13 @@ class VocabControllerTest {
                         """))
                 .andExpect(jsonPath("$.datesPerUser.jane-doe[0]").value("2024-11-02"));
     }
-    @WithMockUser
+
     @Test
     void deactivateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
-    @WithMockUser
+
     @Test
     void deactivateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/deactivate/000"))
@@ -78,14 +89,14 @@ class VocabControllerTest {
                 .andExpect(jsonPath("$.datesPerUser.jane-doe").isEmpty());
     }
 
-    @WithMockUser
+
     @Test
     void activateVocab_shouldReturn404_whenCalledWithNonexistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
+
     @Test
     void activateVocab_shouldReturnVocabWithReviewDates_whenCalledWithExistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab/activate/000"))
@@ -97,14 +108,14 @@ class VocabControllerTest {
                 .andExpect(jsonPath("$.datesPerUser.jane-doe").isNotEmpty());
     }
 
-    @WithMockUser
+
     @Test
     void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Esperanto"))
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
+
     @Test
     void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Spanish"))
@@ -117,7 +128,7 @@ class VocabControllerTest {
     }
 
 
-    @WithMockUser
+
     @Test
     void createVocab_shouldReturnNewVocabObject_whenCalledWithVocabDTO() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
@@ -135,7 +146,7 @@ class VocabControllerTest {
 
     }
 
-    @WithMockUser
+
     @Test
     void createVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab")
@@ -147,7 +158,7 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
+
     @Test
     void createAndActivateVocab_shouldReturnNewVocabObjectWithReviewDates_whenCalledWithVocabDTO() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab/activate")
@@ -166,7 +177,7 @@ class VocabControllerTest {
 
     }
 
-    @WithMockUser
+
     @Test
     void createAndActivateVocab_throwsLanguageNotFoundException_whenCalledWithVocabWithNonExistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/vocab/activate")
@@ -178,7 +189,7 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
 }
 
-    @WithMockUser
+
     @Test
     void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
@@ -195,7 +206,7 @@ class VocabControllerTest {
 
     }
 
-    @WithMockUser
+
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentID() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
@@ -207,7 +218,7 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
+
     @Test
     void editVocab_shouldReturn405_whenCalledWithNonEditableVocab() throws Exception {
         Vocab nonEditableVocab = new Vocab("123", "la prueba", "test", "", Language.SPANISH, new HashMap<>(), "Wordio");
@@ -221,7 +232,7 @@ class VocabControllerTest {
         .andExpect(status().isMethodNotAllowed());
     }
 
-    @WithMockUser
+
     @Test
     void editVocab_shouldReturn404_whenCalledWithVocabWithNonexistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/vocab")
@@ -233,7 +244,7 @@ class VocabControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser
+
     @Test
     void deleteVocab_shouldReturnString_whenCalledWithId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/000"))
@@ -241,7 +252,7 @@ class VocabControllerTest {
                 .andExpect(content().string("Vocab successfully deleted."));
     }
 
-    @WithMockUser
+
     @Test
     void deleteVocab_shouldReturn404_whenCalledWithNonexistentID() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/vocab/nonexistent-id"))

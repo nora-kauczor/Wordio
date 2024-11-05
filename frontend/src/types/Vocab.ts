@@ -5,5 +5,5 @@ export type Vocab = {
     info: string,
     language: string,
     datesPerUser?: { [userName: string]: string[] }
-    createdBy: string;
+    createdBy?: string;
 }
