@@ -14,12 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @RequiredArgsConstructor
 @Service
 public class CalendarService {
 
     private final VocabRepo vocabRepo;
-
 
     public Month getMonth(YearMonth yearMonth, String languageString, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
@@ -37,7 +37,7 @@ public class CalendarService {
 
     private List<VocabIdsOfDate> getVocabIdsOfMonth(YearMonth yearMonth, Language language, String userName) {
         List<VocabIdsOfDate> idsAndDates = new ArrayList<>();
-        for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
+            for (int i = 1; i < yearMonth.lengthOfMonth(); i++) {
             LocalDate day = yearMonth.atDay(i);
             VocabIdsOfDate idsAndDateOfDay = getVocabIdsOfDate(day, language, userName);
             idsAndDates.add(idsAndDateOfDay);
@@ -49,10 +49,10 @@ public class CalendarService {
         List<Vocab> allVocabs = vocabRepo.findAll();
         List<Vocab> vocabsOfDate = allVocabs.stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
-                .filter(vocab ->
-                vocab.getDatesPerUser().get(userName).stream()
-                        .anyMatch(reviewDate -> reviewDate.equals(date))).toList();
-        List<String> ids = vocabsOfDate.stream().map(vocab -> vocab.get_id()).toList();
+                .filter(vocab -> vocab.getDatesPerUser() != null && vocab.getDatesPerUser().containsKey(userName))
+                .filter(vocab -> vocab.getDatesPerUser().get(userName).stream()
+                          .anyMatch(reviewDate -> reviewDate.equals(date))).toList();
+        List<String> ids = vocabsOfDate.stream().map(Vocab::get_id).toList();
         return new VocabIdsOfDate(date, ids);
     }
 

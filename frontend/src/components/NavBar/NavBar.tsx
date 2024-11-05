@@ -9,18 +9,18 @@ export default function NavBar(props: Readonly<Props>) {
     const navigate = useNavigate();
     return (
         <ul id={"navbar"}>
-            <li id={"navbar-backlog"} onClick={() =>
+            <li  onClick={() =>
                 navigate('/backlog')}
                 onKeyDown={() =>
                     navigate('/backlog')
                 }>Backlog
             </li>
-            <li id={"navbar-create"}
+            <li
                 onClick={() => props.setUseForm(true)}
                 onKeyDown={() => props.setUseForm(true)}
             >Create
             </li>
-            <li id={"navbar-calendar"}
+            <li
                 onClick={() =>
                     navigate('/calendar')
                 }

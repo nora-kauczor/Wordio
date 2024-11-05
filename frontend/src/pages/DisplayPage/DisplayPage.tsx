@@ -22,7 +22,7 @@ const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
       setDisplayedVocab(props.vocabs.find(vocab => vocab._id === _id?.substring(1)))
     }, [_id, props.vocabs]);
 
-if (!props.vocabs) return <p>Loading...</p>
+if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
 
 
     return (
