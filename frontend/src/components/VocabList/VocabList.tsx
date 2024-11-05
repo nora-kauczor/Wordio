@@ -2,7 +2,6 @@ import {Vocab} from "../../types/Vocab.ts";
 import './VocabList.css'
 import {useNavigate} from "react-router-dom";
 
-
 type Props = {
     vocabs: Vocab[]
     calendarMode: boolean
