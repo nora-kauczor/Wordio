@@ -26,11 +26,12 @@ if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
 
 
     return (
-        <div id={"display-page"}>
+        <div id={"display-page"} role={"main"}>
             <p>You've just activated this vocab. Take your time to memorize it:</p>
             <CardContainer displayedVocab={displayedVocab}/>
             <p>Finished? Click the button below to go back to the homepage</p>
-            <button onClick={()=>navigate("/")}>Go back to Home</button>
+            <button onClick={()=>navigate("/")}
+                    aria-label={"Go back to the homepage"}>Go back to Home</button>
         </div>
     )
 }
