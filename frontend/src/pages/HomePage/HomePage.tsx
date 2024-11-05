@@ -20,7 +20,7 @@ type Props = {
 export default function HomePage(props: Readonly<Props>) {
     const navigate = useNavigate()
 
-    return (<div id={"homepage"}>
+    return (<div id={"homepage"} role={"main"}>
         <article id={"homepage-text-and-button"}>
             {props.finishedReviewing && props.language &&
                 <p className={"homepage-text"}>You've got no vocabulary

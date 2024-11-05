@@ -205,7 +205,7 @@ function App() {
         }
     }
 
-    return (<div id={"app"}>
+    return (<div id={"app"} role={"main"}>
         <Header userName={userName} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>

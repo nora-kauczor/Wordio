@@ -9,7 +9,7 @@ export default function LoginPage() {
         window.open(host + "/oauth2/authorization/github", "_self")
     }
 
-    return (<div id={"login-page"}>
+    return (<div id={"login-page"} role={"main"}>
             <button id={"login-button"}
                     onClick={login}
                     aria-label={"Login with GitHub"}>Login
