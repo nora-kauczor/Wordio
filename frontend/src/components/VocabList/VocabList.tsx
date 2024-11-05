@@ -21,7 +21,6 @@ export default function VocabList(props: Readonly<Props>) {
             return
         }
         props.activateVocab(_id)
-        // TODO trigger rerender
         navigate(`/display/:${_id}`)
     }
 
@@ -30,7 +29,6 @@ export default function VocabList(props: Readonly<Props>) {
             return
         }
         props.deactivateVocab(_id)
-        // TODO trigger rerender
     }
 
     function handleClickEdit(_id: string | null) {
