@@ -32,7 +32,6 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-
     function getAllVocabsOfLanguage() {
         axios.get(`/api/vocab?language=${language}`)
             .then(response => {
@@ -46,11 +45,17 @@ function App() {
         axios.get("/api/vocab/auth")
             .then(response => {
                 setUserId(String(response.data))
-                navigate("/")
             })
             .catch(error => console.error(error))
     }
-   
+
+    useEffect(() => {
+        if (userId) {
+            navigate("/")
+        } else {
+            navigate("/login")
+        }
+    }, [navigate, userId]);
 
     useEffect(() => {
         getUserId()
@@ -60,23 +65,16 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (userId) {
-            navigate("/")
-        }
-    }, [userId]);
-
-    useEffect(() => {
         getAllVocabsOfLanguage()
     }, [language]);
 
-console.log("getTodaysVocabs()", getTodaysVocabs())
 
     function updateVocabsLeftToReview(): void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
-                .find(vocabFromTodays => vocabFromTodays.id ===
-                    vocabToReview.id))
+                .find(
+                    vocabFromTodays => vocabFromTodays.id === vocabToReview.id))
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabFromUpdatedOnes => todaysVocabs
                 .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes.id !=
@@ -92,16 +90,29 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             vocabsLeftToReview.filter((vocab: Vocab) => vocab.id === id))
     }
 
-    function getTodaysVocabs(): Vocab[] {
+
+    function getTodaysVocabs(): Vocab[] | undefined {
         const date: Date = new Date()
         const year: number = date.getFullYear()
         const month: string = String(date.getMonth() + 1).padStart(2, '0')
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
-        const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.datesPerUser?.userId && vocab.datesPerUser?.userId.includes(today))
-        return allOfTodaysVocabs.filter(vocab => vocab.language === language)
+        if (!userId || !language || !vocabs) {
+            return undefined
+        }
+        const userIdNumber: number = parseInt(userId)
+        return vocabs.filter(vocab => {
+            if (!vocab.datesPerUser) {
+                return false
+            }
+            if (!vocab.datesPerUser[userIdNumber]) {
+                return false
+            }
+            return vocab.datesPerUser[userIdNumber].includes(today)
+        })
     }
+
+    console.log("todaysVocabs: ", todaysVocabs)
 
     function activateVocab(id: string): void {
         axios.put(`api/vocab/activate/${id}`)
@@ -112,7 +123,8 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Couldn't activate vocab")})
+                toast.error("Couldn't activate vocab")
+            })
     }
 
     function deactivateVocab(id: string): void {
@@ -124,18 +136,21 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Couldn't deactivate vocab")})
+                toast.error("Couldn't deactivate vocab")
+            })
     }
 
     function changeReviewDates(id: string | null): void {
         axios.put(`api/vocab/change-dates/${id}`)
             .then(() => {
-                console.log(`Vocab ${id}'s review dates successfully deactivated.`)
+                console.log(
+                    `Vocab ${id}'s review dates successfully deactivated.`)
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Something went wrong.")})
+                toast.error("Something went wrong.")
+            })
     }
 
     function logout() {
@@ -155,7 +170,8 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Couldn't delete vocab")})
+                toast.error("Couldn't delete vocab")
+            })
     }
 
     function createVocab(newVocab: Vocab): void {
@@ -168,7 +184,8 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Couldn't create new vocab")})
+                toast.error("Couldn't create new vocab")
+            })
     }
 
     function createAndActivateVocab(newVocab: Vocab): void {
@@ -182,7 +199,8 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Couldn't create and activate new vocab")})
+                toast.error("Couldn't create and activate new vocab")
+            })
     }
 
     function editVocab(editedVocab: Vocab): void {
@@ -196,7 +214,8 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
             })
             .catch(error => {
                 console.error(error)
-                toast.error("Couldn't edit vocab")})
+                toast.error("Couldn't edit vocab")
+            })
     }
 
 
@@ -212,7 +231,7 @@ console.log("getTodaysVocabs()", getTodaysVocabs())
     }
 
     return (<div id={"app"} role={"main"}>
-        <ToastContainer autoClose={2000}  hideProgressBar={true} />
+        <ToastContainer autoClose={2000} hideProgressBar={true}/>
         <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
