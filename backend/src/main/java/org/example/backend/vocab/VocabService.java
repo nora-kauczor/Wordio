@@ -7,6 +7,7 @@ import org.example.backend.exception.VocabIsNotEditableException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,19 @@ public class VocabService {
 
     public Vocab activateVocab(String id, String userName) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        List<LocalDate> dates = generateDates(LocalDate.now());
+        LocalDate today = getTodayTimeZoned();
+        List<LocalDate> dates = generateDates(today);
         vocab.getDatesPerUser().put(userName, dates);
         return vocabRepo.save(vocab);
+    }
+
+    public static LocalDate getTodayTimeZoned() {
+        ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        String zonedDateTimeString = zonedDateTime.toString();
+        int year = Integer.parseInt(zonedDateTimeString.substring(0, 4));
+        int month = Integer.parseInt(zonedDateTimeString.substring(5,7));
+        int day = Integer.parseInt(zonedDateTimeString.substring(8,10));
+        return LocalDate.of(year, month, day);
     }
 
     public List<Vocab> getAllVocabsOfLanguage(String languageString, String userName) throws LanguageNotFoundException {
@@ -59,7 +70,8 @@ public class VocabService {
     public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-        List<LocalDate> dates = generateDates(LocalDate.now());
+        LocalDate today = getTodayTimeZoned();
+        List<LocalDate> dates = generateDates(today);
         datesPerUser.put(userName, dates);
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), language, datesPerUser, userName);

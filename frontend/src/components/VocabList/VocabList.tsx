@@ -49,13 +49,6 @@ export default function VocabList(props: Readonly<Props>) {
         props.deleteVocab(id)
     }
 
-    console.log(props.vocabs[46].createdBy)
-    console.log("typeof props.vocabs[46].createdBy", typeof props.vocabs[46].createdBy)
-
-    console.log(typeof props.userId)
-    // console.log(props.vocabs[46].id)
-    // console.log(props.vocabs[46].createdBy  === props.userId  && props.vocabs[46].id)
-    console.log(props.vocabs[46].createdBy == props.userId )
 
     return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab.id}

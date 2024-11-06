@@ -32,7 +32,6 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    console.log(typeof userId)
 
     function getAllVocabsOfLanguage() {
         axios.get(`/api/vocab?language=${language}`)
@@ -70,6 +69,7 @@ function App() {
         getAllVocabsOfLanguage()
     }, [language]);
 
+console.log("getTodaysVocabs()", getTodaysVocabs())
 
     function updateVocabsLeftToReview(): void {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
