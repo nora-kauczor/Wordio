@@ -27,7 +27,7 @@ class UserControllerTest {
     void getUser_shouldReturn200AndUserObject_whenCalled_ifUserIsLoggedIn() throws Exception {
         AppUser testUser = new AppUser("user", "Hans", null, null);
         userRepo.save(testUser);
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth")
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth/name")
                         .with(oidcLogin()
                                 .userInfoToken(token -> token.claim("login", "Hans"))))
                 .andExpect(status().isOk())
@@ -39,7 +39,7 @@ class UserControllerTest {
     @DirtiesContext
     @Test
     void getUser_shouldReturn200AndDummyUserObject_whenCalled_ifUserIsNotLoggedIn() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth/name"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {"id":"NotFound","name":"","avatarUrl":null,"authority":null}

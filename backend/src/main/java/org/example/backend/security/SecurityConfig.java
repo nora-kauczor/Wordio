@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/vocab").authenticated()
                         .requestMatchers("/api/vocab/login").permitAll()
                         .requestMatchers("/api/vocab/auth").permitAll()
+                        .requestMatchers("/api/vocab/auth/name").permitAll()
                         .requestMatchers("/api/vocab/**").authenticated()
                         .requestMatchers("/api/calendar").authenticated()
                         .anyRequest().permitAll())

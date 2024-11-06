@@ -22,4 +22,13 @@ public class UserController {
                 .getAuthentication()
                 .getName();
     }
+
+    @GetMapping("/name")
+    public AppUser getUser(@AuthenticationPrincipal OAuth2User user) {
+        if
+        ( user == null) {
+            return new AppUser("NotFound", "", null, null);
+        }
+        return userRepo.findById(user.getName()).orElseThrow();
+    }
 }
