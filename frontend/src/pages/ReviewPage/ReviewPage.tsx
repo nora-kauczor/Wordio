@@ -7,7 +7,7 @@ import Confetti from 'react-confetti';
 import useLocalStorageState from "use-local-storage-state";
 
 type Props = {
-    vocabsLeftToReview: Vocab[]
+    vocabsToReview: Vocab[]
     removeVocabFromVocabsToReview: (id: string | null) => void
     changeReviewDates: (id: string | null) => void
 }
@@ -17,13 +17,13 @@ export default function ReviewPage(props: Readonly<Props>) {
     const [currentIndex, setCurrentIndex] = useLocalStorageState("currentIndex",
         {defaultValue: 0});
     const [currentVocab, setCurrentVocab] = useLocalStorageState("currentVocab",
-        {defaultValue: props.vocabsLeftToReview[0]});
+        {defaultValue: props.vocabsToReview[0]});
     const [userInput, setUserInput] = useState<string>("")
     const [showFireworks, setShowFireworks] = useState(false);
     const navigate = useNavigate()
 
     useEffect(() => {
-        setCurrentVocab(props.vocabsLeftToReview[currentIndex])
+        setCurrentVocab(props.vocabsToReview[currentIndex])
     }, [currentIndex]);
 
     function getInputWithoutExtraSpaces(userInput: string): string {
