@@ -16,9 +16,9 @@ import {useNavigate} from "react-router-dom";
 
 type Props = {
     vocabs: Vocab[]
-    deactivateVocab: (_id: string) => void
+    deactivateVocab: (id: string) => void
     language: string
-    openForm: (_id: string) => void
+    openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     userName:string
 }
@@ -90,7 +90,7 @@ export default function CalendarPage(props: Readonly<Props>) {
         setDayOfDayPopUp(vocabIdsOfDate.date)
         const ids: string[] | null = vocabIdsOfDate.vocabIds;
         const vocabs: Vocab[] = props.vocabs.filter(
-            vocab => vocab._id && ids?.includes(vocab._id))
+            vocab => vocab.id && ids?.includes(vocab.id))
         setVocabsOfDayPopUp(vocabs)
     }
 

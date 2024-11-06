@@ -6,10 +6,10 @@ import React, {useEffect} from "react";
 
 type Props = {
     vocabs: Vocab[]
-    deleteVocab: (_id: string) => void
-    activateVocab: (_id: string) => void
+    deleteVocab: (id: string) => void
+    activateVocab: (id: string) => void
     language: string
-    openForm: (_id: string) => void
+    openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     userName: string
 }

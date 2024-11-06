@@ -15,12 +15,12 @@ type Props = {
 export default function DisplayPage(props: Readonly<Props>) {
 const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
     const navigate = useNavigate()
-    const { _id } = useParams()
+    const { id } = useParams()
 
     useEffect(() => {
         if (!props.vocabs){return}
-      setDisplayedVocab(props.vocabs.find(vocab => vocab._id === _id?.substring(1)))
-    }, [_id, props.vocabs]);
+      setDisplayedVocab(props.vocabs.find(vocab => vocab.id === id?.substring(1)))
+    }, [id, props.vocabs]);
 
 if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
 

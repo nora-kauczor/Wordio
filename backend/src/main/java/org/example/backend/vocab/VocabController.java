@@ -39,24 +39,24 @@ public class VocabController {
         return vocabService.editVocab(editedVocab, user.getName());
     }
 
-    @PutMapping("/change-dates/{_id}")
-    public Vocab changeReviewDates(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
-        return vocabService.changeReviewDates(_id, user.getName());
+    @PutMapping("/change-dates/{id}")
+    public Vocab changeReviewDates(@PathVariable String id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
+        return vocabService.changeReviewDates(id, user.getName());
     }
 
-    @PutMapping("/deactivate/{_id}")
-    public Vocab deactivateVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user ) throws IdNotFoundException {
-        return vocabService.deactivateVocab(_id, user.getName());
+    @PutMapping("/deactivate/{id}")
+    public Vocab deactivateVocab(@PathVariable String id, @AuthenticationPrincipal OAuth2User user ) throws IdNotFoundException {
+        return vocabService.deactivateVocab(id, user.getName());
     }
 
-    @PutMapping("/activate/{_id}")
-    public Vocab activateVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
-        return vocabService.activateVocab(_id, user.getName());
+    @PutMapping("/activate/{id}")
+    public Vocab activateVocab(@PathVariable String id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException {
+        return vocabService.activateVocab(id, user.getName());
     }
 
-    @DeleteMapping("/{_id}")
-    public String deleteVocab(@PathVariable String _id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException {
-        return vocabService.deleteVocab(_id, user.getName());
+    @DeleteMapping("/{id}")
+    public String deleteVocab(@PathVariable String id, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException {
+        return vocabService.deleteVocab(id, user.getName());
     }
 
 }

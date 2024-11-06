@@ -7,8 +7,8 @@ type Props = {
     day: string
     vocabsOfDay: Vocab[]
     closeDayPopUp: () => void
-    deactivateVocab: (_id: string) => void
-    openForm: (_id: string) => void
+    deactivateVocab: (id: string) => void
+    openForm: (id: string) => void
     userName:string
 }
 

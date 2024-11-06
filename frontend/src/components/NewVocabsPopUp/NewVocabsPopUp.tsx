@@ -31,9 +31,9 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     }
 
     function goToDisplayPageWithRandomVocab(){
-        if (!getRandomVocab() || !getRandomVocab()._id) {return}
-        const _id = getRandomVocab()._id
-        navigate(`/display/:${_id}`)
+        if (!getRandomVocab() || !getRandomVocab().id) {return}
+        const id = getRandomVocab().id
+        navigate(`/display/:${id}`)
     }
 
 

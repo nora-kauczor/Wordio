@@ -68,21 +68,21 @@ function App() {
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
-                .find(vocabFromTodays => vocabFromTodays._id ===
-                    vocabToReview._id))
+                .find(vocabFromTodays => vocabFromTodays.id ===
+                    vocabToReview.id))
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabFromUpdatedOnes => todaysVocabs
-                .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes._id !=
-                    vocabFromUpdatedOnes._id))
+                .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes.id !=
+                    vocabFromUpdatedOnes.id))
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes,
             ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
-    function removeVocabFromVocabsToReview(_id: string | null): void {
+    function removeVocabFromVocabsToReview(id: string | null): void {
         setVocabsLeftToReview(
-            vocabsLeftToReview.filter((vocab: Vocab) => vocab._id === _id))
+            vocabsLeftToReview.filter((vocab: Vocab) => vocab.id === id))
     }
 
     function getTodaysVocabs(): Vocab[] {
@@ -96,10 +96,10 @@ function App() {
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
-    function activateVocab(_id: string): void {
-        axios.put(`api/vocab/activate/${_id}`)
+    function activateVocab(id: string): void {
+        axios.put(`api/vocab/activate/${id}`)
             .then(() => {
-                console.log(`Vocab ${_id} successfully activated.`)
+                console.log(`Vocab ${id} successfully activated.`)
                 toast.success("Vocab successfully activated.")
                 getAllVocabsOfLanguage()
             })
@@ -108,10 +108,10 @@ function App() {
                 toast.error("Couldn't activate vocab")})
     }
 
-    function deactivateVocab(_id: string): void {
-        axios.put(`api/vocab/deactivate/${_id}`)
+    function deactivateVocab(id: string): void {
+        axios.put(`api/vocab/deactivate/${id}`)
             .then(() => {
-                console.log(`Vocab ${_id} successfully deactivated.`)
+                console.log(`Vocab ${id} successfully deactivated.`)
                 toast.success("Vocab successfully deactivated.")
                 getAllVocabsOfLanguage()
             })
@@ -120,10 +120,10 @@ function App() {
                 toast.error("Couldn't deactivate vocab")})
     }
 
-    function changeReviewDates(_id: string | null): void {
-        axios.put(`api/vocab/change-dates/${_id}`)
+    function changeReviewDates(id: string | null): void {
+        axios.put(`api/vocab/change-dates/${id}`)
             .then(() => {
-                console.log(`Vocab ${_id}'s review dates successfully deactivated.`)
+                console.log(`Vocab ${id}'s review dates successfully deactivated.`)
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -139,10 +139,10 @@ function App() {
     }
 
 
-    function deleteVocab(_id: string): void {
-        axios.delete(`api/vocab/${_id}`)
+    function deleteVocab(id: string): void {
+        axios.delete(`api/vocab/${id}`)
             .then(() => {
-                console.log(`Vocab ${_id} successfully deleted.`)
+                console.log(`Vocab ${id} successfully deleted.`)
                 toast.success("Vocab successfully deleted")
                 getAllVocabsOfLanguage()
             })
@@ -168,7 +168,7 @@ function App() {
         setUseForm(false)
         axios.post("/api/vocab/activate", newVocab)
             .then(response => {
-                navigate(`/display/:${response.data._id}`)
+                navigate(`/display/:${response.data.id}`)
                 console.log("New vocab was successfully created and activated.")
                 toast.success("New vocab successfully created and activated")
                 getAllVocabsOfLanguage()
@@ -183,7 +183,7 @@ function App() {
         setUseForm(false)
         axios.put(`api/vocab/`, editedVocab)
             .then(() => {
-                console.log(`Vocab ${editedVocab._id} successfully edited.`)
+                console.log(`Vocab ${editedVocab.id} successfully edited.`)
                 toast.success("Vocab successfully edited")
                 getAllVocabsOfLanguage()
             })
@@ -193,13 +193,13 @@ function App() {
     }
 
 
-    function openForm(_id: string | undefined) {
+    function openForm(id: string | undefined) {
         if (displayNewVocabsPopUp) {
             setDisplayNewVocabsPopUp(false)
         }
         setUseForm(true)
-        if (!_id) {
-            const vocab = vocabs.find(vocab => vocab._id === _id)
+        if (!id) {
+            const vocab = vocabs.find(vocab => vocab.id === id)
             setVocabToEdit(vocab)
         }
     }
@@ -256,7 +256,7 @@ function App() {
                            setUseForm={setUseForm}
                            userName={userName}
                        />}/>
-                <Route path={"/display/:_id"}
+                <Route path={"/display/:id"}
                        element={<DisplayPage
                            vocabs={vocabs}
                        />}/>

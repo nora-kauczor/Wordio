@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public record VocabDTOEdit(
-        String _id,
+        String id,
         String word,
         String translation,
         String info,

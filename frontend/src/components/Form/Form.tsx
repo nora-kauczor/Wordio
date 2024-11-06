@@ -28,7 +28,7 @@ export default function Form(props: Readonly<Props>) {
 
     function handleClick(clickedButton: string) {
         const vocab: Vocab = {
-            _id: props.vocabToEdit ? props.vocabToEdit._id : null,
+            id: props.vocabToEdit ? props.vocabToEdit.id : null,
             word: wordInput,
             translation: translationInput,
             info: infoInput,

@@ -8,8 +8,8 @@ import useLocalStorageState from "use-local-storage-state";
 
 type Props = {
     vocabsLeftToReview: Vocab[]
-    removeVocabFromVocabsToReview: (_id: string | null) => void
-    changeReviewDates: (_id: string | null) => void
+    removeVocabFromVocabsToReview: (id: string | null) => void
+    changeReviewDates: (id: string | null) => void
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
@@ -55,8 +55,8 @@ export default function ReviewPage(props: Readonly<Props>) {
             userInput)
         if (currentVocab.word.toLowerCase() !==
             inputWithoutExtraSpaces.toLowerCase()) {
-            props.changeReviewDates(currentVocab._id)
-            navigate(`/display:${currentVocab._id}`)
+            props.changeReviewDates(currentVocab.id)
+            navigate(`/display:${currentVocab.id}`)
         } else {
             setShowFireworks(true);
             setTimeout(() => {
@@ -64,7 +64,7 @@ export default function ReviewPage(props: Readonly<Props>) {
             }, 2500);
             getNextVocab()
         }
-        props.removeVocabFromVocabsToReview(currentVocab._id)
+        props.removeVocabFromVocabsToReview(currentVocab.id)
     }
 
     function getNextVocab(): void {
