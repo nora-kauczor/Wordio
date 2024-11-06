@@ -4,6 +4,5 @@ public record VocabDTOCreate(
         String word,
         String translation,
         String info,
-        String language,
-        String createdBy) {
+        String language) {
 }

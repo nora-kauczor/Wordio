@@ -16,7 +16,7 @@ import Header from "./components/Header/Header.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
 import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
-import { toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
@@ -38,7 +38,6 @@ function App() {
             .then(() => updateVocabsLeftToReview())
             .catch(error => console.error(error))
     }
-
 
     function getUserName(): void {
         axios.get("/api/vocab/auth")
@@ -93,7 +92,7 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.datesPerUser?.userName.includes(today))
+            .filter(vocab => vocab.datesPerUser?.userName && vocab.datesPerUser?.userName.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
@@ -206,6 +205,7 @@ function App() {
     }
 
     return (<div id={"app"} role={"main"}>
+        <ToastContainer autoClose={2000}  hideProgressBar={true} />
         <Header userName={userName} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>

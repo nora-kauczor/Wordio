@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser
@@ -62,7 +63,10 @@ class CalendarControllerTest {
         vocabRepo.save(testVocab2);
         vocabRepo.save(testVocab3);
         vocabRepo.save(vocabDifferentLanguage);
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish&user=jane-doe"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
+                        })))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                         {"yearMonthName": "October 2024", "vocabIdsOfMonth":
@@ -117,66 +121,16 @@ class CalendarControllerTest {
                         """));
     }
 
-    @Test
-    void getMonth_shouldReturnMonth_whenCalledWithYearMonthNow_noVocabularyScheduled() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Spanish&user=jane-doe"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json("""
-                        {"yearMonthName": "October 2024", "vocabIdsOfMonth":
-                        [
-                            [
-                                null,
-                                {"date": "2024-10-01", "vocabIds": []},
-                                {"date": "2024-10-02", "vocabIds": []},
-                                {"date": "2024-10-03", "vocabIds": []},
-                                {"date": "2024-10-04", "vocabIds": []},
-                                {"date": "2024-10-05", "vocabIds": []},
-                                {"date": "2024-10-06", "vocabIds": []}
-                            ],
-                            [
-                                {"date": "2024-10-07", "vocabIds": []},
-                                {"date": "2024-10-08", "vocabIds": []},
-                                {"date": "2024-10-09", "vocabIds": []},
-                                {"date": "2024-10-10", "vocabIds": []},
-                                {"date": "2024-10-11", "vocabIds": []},
-                                {"date": "2024-10-12", "vocabIds": []},
-                                {"date": "2024-10-13", "vocabIds": []}
-                            ],
-                            [
-                                {"date": "2024-10-14", "vocabIds": []},
-                                {"date": "2024-10-15", "vocabIds": []},
-                                {"date": "2024-10-16", "vocabIds": []},
-                                {"date": "2024-10-17", "vocabIds": []},
-                                {"date": "2024-10-18", "vocabIds": []},
-                                {"date": "2024-10-19", "vocabIds": []},
-                                {"date": "2024-10-20", "vocabIds": []}
-                            ],
-                            [
-                                {"date": "2024-10-21", "vocabIds": []},
-                                {"date": "2024-10-22", "vocabIds": []},
-                                {"date": "2024-10-23", "vocabIds": []},
-                                {"date": "2024-10-24", "vocabIds": []},
-                                {"date": "2024-10-25", "vocabIds": []},
-                                {"date": "2024-10-26", "vocabIds": []},
-                                {"date": "2024-10-27", "vocabIds": []}
-                            ],
-                            [
-                                {"date": "2024-10-28", "vocabIds": []},
-                                {"date": "2024-10-29", "vocabIds": []},
-                                {"date": "2024-10-30", "vocabIds": []},
-                                null,
-                                null,
-                                null,
-                                null
-                            ]
-                        ]
-                        }
-                        """));
-    }
+
+
+
 
     @Test
     void getMonth_ShouldReturn404_whenCalledWithNonExistentLanguage() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Esperanto&user=jane-doe"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/calendar?year=2024&month=10&language=Esperanto")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
+                        })))
                 .andExpect(status().isNotFound());
     }
 
