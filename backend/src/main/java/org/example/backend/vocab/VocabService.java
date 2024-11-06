@@ -20,22 +20,22 @@ public class VocabService {
     private final VocabRepo vocabRepo;
 
 
-    public Vocab changeReviewDates(String _id, String userName) throws IdNotFoundException {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
+    public Vocab changeReviewDates(String id, String userName) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         LocalDate firstDayOfOldReviewDates = vocab.getDatesPerUser().get(userName).getFirst();
         List<LocalDate> newDates = generateDates(firstDayOfOldReviewDates.plusDays(1));
         vocab.getDatesPerUser().put(userName, newDates);
         return vocabRepo.save(vocab);
     }
 
-    public Vocab deactivateVocab(String _id, String userName) throws IdNotFoundException {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
+    public Vocab deactivateVocab(String id, String userName) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         vocab.getDatesPerUser().put(userName, List.of());
         return vocabRepo.save(vocab);
     }
 
-    public Vocab activateVocab(String _id, String userName) throws IdNotFoundException {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
+    public Vocab activateVocab(String id, String userName) throws IdNotFoundException {
+        Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         List<LocalDate> dates = generateDates(LocalDate.now());
         vocab.getDatesPerUser().put(userName, dates);
         return vocabRepo.save(vocab);
@@ -67,21 +67,21 @@ public class VocabService {
     }
 
     public Vocab editVocab(VocabDTOEdit vocabDTO, String userName) throws IdNotFoundException, VocabIsNotEditableException {
-        Vocab vocab = vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
+        Vocab vocab = vocabRepo.findById(vocabDTO.id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
         if (!vocab.getCreatedBy().equals(userName)) {
             throw new VocabIsNotEditableException("Method not allowed.");
         }
-        Vocab editedVocab = new Vocab(vocab.get_id(), vocabDTO.word(), vocabDTO.translation(),
+        Vocab editedVocab = new Vocab(vocab.getId(), vocabDTO.word(), vocabDTO.translation(),
                 vocabDTO.info(), vocab.getLanguage(), vocab.getDatesPerUser(), vocab.getCreatedBy());
         return vocabRepo.save(editedVocab);
     }
 
-    public String deleteVocab(String _id, String userName) throws IdNotFoundException, VocabIsNotEditableException {
-        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
+    public String deleteVocab(String id, String userName) throws IdNotFoundException, VocabIsNotEditableException {
+        Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         if (!vocab.getCreatedBy().equals(userName)) {
             throw new VocabIsNotEditableException("Method not allowed.");
         }
-        vocabRepo.deleteById(_id);
+        vocabRepo.deleteById(id);
         return "Vocab successfully deleted.";
     }
 

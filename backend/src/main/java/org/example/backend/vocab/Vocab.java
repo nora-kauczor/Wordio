@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class Vocab {
-    @Id private String _id;
+    @Id private String id;
     private String word;
     private String translation;
     private String info;

@@ -8,6 +8,7 @@ type Props = {
     createVocab: (vocab: Vocab) => void
     createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
+    userName: string
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -26,28 +27,22 @@ export default function Form(props: Readonly<Props>) {
     }, []);
 
     function handleClick(clickedButton: string) {
+        const vocab: Vocab = {
+            id: props.vocabToEdit ? props.vocabToEdit.id : null,
+            word: wordInput,
+            translation: translationInput,
+            info: infoInput,
+            language: props.language,
+            createdBy: props.userName,
+            datesPerUser: props.vocabToEdit ? props.vocabToEdit.datesPerUser : undefined,
+        };
         if (props.vocabToEdit) {
-            const editedVocab: Vocab = {
-                _id: props.vocabToEdit._id,
-                word: wordInput,
-                translation: translationInput,
-                info: infoInput,
-                language: props.language,
-                datesPerUser: props.vocabToEdit.datesPerUser
-            }
-            props.editVocab(editedVocab)
+            props.editVocab(vocab)
         } else {
-            const newVocab: Vocab = {
-                _id: null,
-                word: wordInput,
-                translation: translationInput,
-                info: infoInput,
-                language: props.language,
-            }
             if (clickedButton === "submit") {
-                props.createVocab(newVocab)
+                props.createVocab(vocab)
             } else {
-                props.createAndActivateVocab(newVocab)
+                props.createAndActivateVocab(vocab)
             }
         }
     }
@@ -67,9 +62,11 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(value)
     }
 
-    return (<div id={"form"} className={"pop-up"}>
+    return (<div id={"form"} className={"pop-up"}
+                 role={"dialog"} aria-labelledby={"form-title"} aria-modal={"true"}>
         <button className={"close-button"}
                 onClick={() => props.setUseForm(false)}
+                aria-label={"Close form"}
         >✕
         </button>
         <h2 className={"popup-header"}>{props.vocabToEdit ? 'Edit your vocab' :
@@ -77,11 +74,16 @@ export default function Form(props: Readonly<Props>) {
         <div id={"input-and-label-wrapper"}>
             <label htmlFor={"word-input"}>Your Vocab</label>
             <input name={"word"} id={"word-input"} value={wordInput}
-                   onChange={handleChange}/>
+                   onChange={handleChange}
+                   aria-required={"true"}
+                   required
+            />
             <label htmlFor={"translation-input"}>Translation into
                 English</label>
             <input name={"translation"} id={"translation-input"}
-                   value={translationInput} onChange={handleChange}/>
+                   value={translationInput} onChange={handleChange}
+                   aria-required={"true"}
+                   required/>
             <label htmlFor={"info-input"}>Additional info, e.g.
                 "colloquial"</label>
             <input name={"info"} id={"info-input"} value={infoInput}

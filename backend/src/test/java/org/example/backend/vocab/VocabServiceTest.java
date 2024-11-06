@@ -171,7 +171,7 @@ class VocabServiceTest {
                 "", Language.SPANISH, new HashMap<>(), "Wordio");
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
                 "added infotext", "Spanish", new HashMap<>(), "jane-doe");
-        when(mockVocabRepo.findById(vocabDTO._id())).thenReturn(Optional.of(oldVocab));
+        when(mockVocabRepo.findById(vocabDTO.id())).thenReturn(Optional.of(oldVocab));
         assertThrows(VocabIsNotEditableException.class, () -> vocabService.editVocab(vocabDTO, "jane-doe"));
     }
 

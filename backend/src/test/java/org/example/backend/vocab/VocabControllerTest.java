@@ -69,7 +69,7 @@ class VocabControllerTest {
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {"_id":"000", "word":"la prueba", "translation":"test",
+                        {"id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}
                         """))
                 .andExpect(jsonPath("$.datesPerUser.jane-doe[0]").value("2024-11-02"));
@@ -92,7 +92,7 @@ class VocabControllerTest {
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {"_id":"000", "word":"la prueba", "translation":"test",
+                        {"id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}
                         """))
                 .andExpect(jsonPath("$.datesPerUser.jane-doe").isEmpty());
@@ -117,7 +117,7 @@ class VocabControllerTest {
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {"_id":"000", "word":"la prueba", "translation":"test",
+                        {"id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}
                         """))
                 .andExpect(jsonPath("$.datesPerUser.jane-doe").isNotEmpty());
@@ -142,9 +142,9 @@ class VocabControllerTest {
                 })))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        [{"_id":"000", "word":"la prueba", "translation":"test",
+                        [{"id":"000", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"},
-                  {"_id":"111", "word":"la prueba", "translation":"test",
+                  {"id":"111", "word":"la prueba", "translation":"test",
                                           "info":"", "language":"Spanish"}]
                   """))
                 .andExpect(jsonPath("$[0].datesPerUser.jane-doe[0]").value("2024-11-01"));
@@ -167,7 +167,7 @@ class VocabControllerTest {
                         { "word":"la prueba", "translation":"test",
                                                                   "info":"", "language":"Spanish", "datesPerUser":{}, "createdBy":  "jane-doe"}
                         """))
-                .andExpect(jsonPath("$._id").isNotEmpty());
+                .andExpect(jsonPath("$.id").isNotEmpty());
 
     }
 
@@ -203,7 +203,7 @@ class VocabControllerTest {
                         { "word":"la prueba", "translation":"test",
                                                                   "info":"", "language":"Spanish", "createdBy":  "jane-doe"}
                         """))
-                .andExpect(jsonPath("$._id").isNotEmpty())
+                .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.datesPerUser.jane-doe").isNotEmpty());
 
     }
@@ -232,12 +232,12 @@ class VocabControllerTest {
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "_id":"111","word":"la prueba", "translation":"test",
+                                { "id":"111","word":"la prueba", "translation":"test",
                                                                           "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "jane-doe"}
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        { "_id":"111", "word":"la prueba", "translation":"test",
+                        { "id":"111", "word":"la prueba", "translation":"test",
                                                                   "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "jane-doe"}
                         """));
 
@@ -252,7 +252,7 @@ class VocabControllerTest {
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "_id":"nonexistent-id","word":"la prueba", "translation":"test",
+                                { "id":"nonexistent-id","word":"la prueba", "translation":"test",
                                                                           "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "Wordio"}
                                 """))
                 .andExpect(status().isNotFound());
@@ -269,7 +269,7 @@ class VocabControllerTest {
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "_id":"123","word":"la prueba", "translation":"test",
+                                { "id":"123","word":"la prueba", "translation":"test",
                                                                           "info":"added infotext", "language":"Spanish", "datesPerUser":{}, "createdBy":  "Wordio"}
                                 """))
                 .andExpect(status().isMethodNotAllowed());

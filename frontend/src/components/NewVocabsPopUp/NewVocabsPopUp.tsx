@@ -31,33 +31,40 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
     }
 
     function goToDisplayPageWithRandomVocab(){
-        if (!getRandomVocab() || !getRandomVocab()._id) {return}
-        const _id = getRandomVocab()._id
-        navigate(`/display/:${_id}`)
+        if (!getRandomVocab() || !getRandomVocab().id) {return}
+        const id = getRandomVocab().id
+        navigate(`/display/:${id}`)
     }
 
 
     return (<div id={"new-vocabs-popup"}
                  className={"pop-up"}>
         <button onClick={() => props.setDisplayNewVocabsPopUp(false)}
-                className={"close-button"}>✕
+                className={"close-button"}
+                aria-label={"Close new vocabulary pop-up"}>✕
         </button>
         <h2 className={"popup-header"}>Learn new vocabulary</h2>
 
         <div id={"button-wrapper"}>
             <button className={"new-vocabs-button"}
                     onClick={handleClick}
-                    onKeyDown={handleClick}>Enter new
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
+                    aria-label={"Enter new vocabulary"}
+            >Enter new
                 vocab
             </button>
             <button className={"new-vocabs-button"}
                     onClick={() => navigate("/backlog")}
-                    onKeyDown={() => navigate("/backlog")}>Pick
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate("/backlog"); }}
+                    aria-label={"Pick from backlog"}
+            >Pick
                 from backlog
             </button>
             <button className={"new-vocabs-button"}
                     onClick={goToDisplayPageWithRandomVocab}
-                    onKeyDown={goToDisplayPageWithRandomVocab}>Get random
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') goToDisplayPageWithRandomVocab(); }}
+                    aria-label={"Get random vocabulary"}
+            >Get random
                 vocab
             </button>
         </div>

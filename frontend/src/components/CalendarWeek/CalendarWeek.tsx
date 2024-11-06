@@ -13,12 +13,13 @@ type Props = {
 export default function CalendarWeek(props: Readonly<Props>) {
 
     return(
-        <ul id={"calendar-week"}>
+        <ul id={"calendar-week"} role={"list"}>
             {props.vocabIdsOfWeek.length > 0 && props.vocabIdsOfWeek.map(vocabIdsOfDate =>
                 vocabIdsOfDate ?
                 <CalendarDay key={vocabIdsOfDate.date}
                     vocabIdsOfDate={vocabIdsOfDate}
-                             openDayPopUpAndPassItVocabs={props.openDayPopUpAndPassItVocabs}/> : <CalendarDay  key={uid()}
+                             openDayPopUpAndPassItVocabs={props.openDayPopUpAndPassItVocabs}/> :
+                    <CalendarDay  key={uid()}
                                                                                                                vocabIdsOfDate={null}
                                                                                                                openDayPopUpAndPassItVocabs={props.openDayPopUpAndPassItVocabs}/>) }
         </ul>
