@@ -15,16 +15,6 @@ public class UserController {
 
     private final UserRepo userRepo;
 
-
-    @GetMapping("/name")
-    public AppUser getUserName(@AuthenticationPrincipal OAuth2User user) {
-        if
-       ( user == null) {
-            return new AppUser("NotFound", "", null, null);
-        }
-        return userRepo.findById(user.getName()).orElseThrow();
-    }
-
     @GetMapping
     public String getUserId(){
         return SecurityContextHolder
