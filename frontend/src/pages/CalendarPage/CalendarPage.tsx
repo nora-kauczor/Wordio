@@ -20,7 +20,6 @@ type Props = {
     language: string
     openForm: (_id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName: string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -50,7 +49,7 @@ export default function CalendarPage(props: Readonly<Props>) {
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
         axios.get(
-            `/api/calendar?year=${year}&month=${month}&language=${props.language}&user=${props.userName}`)
+            `/api/calendar?year=${year}&month=${month}&language=${props.language}`)
             .then(response => setMonth(response.data))
             .catch(error => console.error(error))
     }
@@ -77,7 +76,7 @@ export default function CalendarPage(props: Readonly<Props>) {
                 (currentYearNumber + 1)
         }
         axios.get(
-            `/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}&user=${props.userName}`)
+            `/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}`)
             .then(response => setMonth(response.data))
             .then(response => console.log(response))
             .catch(error => console.error(error))

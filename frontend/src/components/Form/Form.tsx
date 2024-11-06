@@ -8,7 +8,6 @@ type Props = {
     createVocab: (vocab: Vocab) => void
     createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
-    userName: string
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -34,8 +33,7 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                datesPerUser: props.vocabToEdit.datesPerUser,
-                createdBy: props.userName
+                datesPerUser: props.vocabToEdit.datesPerUser
             }
             props.editVocab(editedVocab)
         } else {
@@ -45,7 +43,6 @@ export default function Form(props: Readonly<Props>) {
                 translation: translationInput,
                 info: infoInput,
                 language: props.language,
-                createdBy: props.userName
             }
             if (clickedButton === "submit") {
                 props.createVocab(newVocab)

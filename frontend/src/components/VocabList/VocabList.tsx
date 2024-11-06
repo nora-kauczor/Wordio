@@ -1,6 +1,7 @@
 import {Vocab} from "../../types/Vocab.ts";
 import './VocabList.css'
 import {useNavigate} from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
     vocabs: Vocab[]

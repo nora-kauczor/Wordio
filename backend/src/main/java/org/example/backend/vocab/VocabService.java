@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import static org.example.backend.vocab.Language.getEnumByString;
 import static org.example.backend.vocab.Vocab.generateDates;
 
@@ -42,48 +41,45 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
-    public List<Vocab> getAllVocabsOfLanguage(String languageString) throws LanguageNotFoundException {
+    public List<Vocab> getAllVocabsOfLanguage(String languageString, String userName) throws LanguageNotFoundException {
         Language language = getEnumByString(languageString);
         return vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userName))
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .toList();
     }
 
-    public Vocab createVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
+    public Vocab createVocab(VocabDTOCreate vocabDTO, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
-        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-        datesPerUser.put(vocabDTO.createdBy(), List.of());
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, datesPerUser, vocabDTO.createdBy());
+                vocabDTO.info(), language, new HashMap<>(), userName);
         return vocabRepo.save(newVocab);
     }
 
-    public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO) throws LanguageNotFoundException {
+    public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
         List<LocalDate> dates = generateDates(LocalDate.now());
-        datesPerUser.put(vocabDTO.createdBy(), dates);
+        datesPerUser.put(userName, dates);
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, datesPerUser, vocabDTO.createdBy());
+                vocabDTO.info(), language, datesPerUser, userName);
         return vocabRepo.save(newVocab);
     }
 
-    public Vocab editVocab(VocabDTOEdit vocabDTO) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
-        if (!vocabRepo.existsById(vocabDTO._id())) {
-            throw new IdNotFoundException("ID not found.");
-        }
-        if (vocabDTO.createdBy().equals("Wordio")) {
+    public Vocab editVocab(VocabDTOEdit vocabDTO, String userName) throws IdNotFoundException, VocabIsNotEditableException {
+        Vocab vocab = vocabRepo.findById(vocabDTO._id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
+        if (!vocab.getCreatedBy().equals(userName)) {
             throw new VocabIsNotEditableException("Method not allowed.");
         }
-        Language language = Language.getEnumByString(vocabDTO.language());
-        Vocab editedVocab = new Vocab(vocabDTO._id(), vocabDTO.word(), vocabDTO.translation(),
-                vocabDTO.info(), language, vocabDTO.datesPerUser(), vocabDTO.createdBy());
+        Vocab editedVocab = new Vocab(vocab.get_id(), vocabDTO.word(), vocabDTO.translation(),
+                vocabDTO.info(), vocab.getLanguage(), vocab.getDatesPerUser(), vocab.getCreatedBy());
         return vocabRepo.save(editedVocab);
     }
 
-    public String deleteVocab(String _id) throws IdNotFoundException {
-        if (!vocabRepo.existsById(_id)) {
-            throw new IdNotFoundException("ID not found.");
+    public String deleteVocab(String _id, String userName) throws IdNotFoundException, VocabIsNotEditableException {
+        Vocab vocab = vocabRepo.findById(_id).orElseThrow(() -> new IdNotFoundException("ID not found."));
+        if (!vocab.getCreatedBy().equals(userName)) {
+            throw new VocabIsNotEditableException("Method not allowed.");
         }
         vocabRepo.deleteById(_id);
         return "Vocab successfully deleted.";
