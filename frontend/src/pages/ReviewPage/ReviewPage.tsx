@@ -47,7 +47,7 @@ export default function ReviewPage(props: Readonly<Props>) {
             }
 
         }
-        return charsWithoutExtraSpaces.reduce((a, b) => a + b)
+        return charsWithoutExtraSpaces.reduce((a, b) => a + b, "")
     }
 
     function checkAnswer() {
