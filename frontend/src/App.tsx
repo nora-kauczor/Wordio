@@ -26,14 +26,15 @@ function App() {
         {defaultValue: ""});
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
         "vocabsLeftToReview", {defaultValue: []})
+    const [vocabsToReviewLoaded, setVocabsToReviewLoaded] = useState<boolean>(false)
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
         "todaysVocabs", {defaultValue: []})
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    // @eslint-disable-next-line react-hooks/exhaustive-deps
     const getAllVocabsOfLanguage = useCallback(() => {
+        if (!language || !userId) {return}
         axios.get(`/api/vocab?language=${language}`)
             .then(response => {
                 setVocabs(response.data)
@@ -69,7 +70,11 @@ function App() {
 
     function updateVocabsLeftToReview(): void {
         const updatedTodaysVocabs: Vocab[] | undefined = getTodaysVocabs()
-        if (!updatedTodaysVocabs) {return}
+        if (!updatedTodaysVocabs) {
+            console.error(
+                "Couldn't get vocabs to review because today's vocabs are undefined");
+            return
+        }
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
                 .find(
@@ -82,7 +87,12 @@ function App() {
             ...newVocabs]
         setVocabsLeftToReview(updatedVocabsToReview)
         setTodaysVocabs(updatedTodaysVocabs)
+        setTimeout(() => {
+            setVocabsToReviewLoaded(true);
+        }, 2000);
     }
+
+    console.log(vocabsLeftToReview)
 
     function removeVocabFromVocabsToReview(id: string | null): void {
         setVocabsLeftToReview(
@@ -245,16 +255,18 @@ function App() {
                    />}/>
             <Route element={<ProtectedRoutes
                 userId={userId}/>}>
-                <Route path={"/"}
-                       element={<HomePage
-                           userId={userId}
-                           vocabs={vocabs}
-                           finishedReviewing={vocabsLeftToReview.length < 1}
-                           setUseForm={setUseForm}
-                           language={language}
-                           setLanguage={setLanguage}
-                           displayNewVocabsPopUp={displayNewVocabsPopUp}
-                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
+                {!vocabsToReviewLoaded && <Route path={"/"}
+                                                element={<p className={"loading-message"}>Loading...</p>}/>}
+                {vocabsToReviewLoaded && <Route path={"/"}
+                        element={<HomePage
+                            userId={userId}
+                            vocabs={vocabs}
+                            finishedReviewing={vocabsLeftToReview.length < 1}
+                            setUseForm={setUseForm}
+                            language={language}
+                            setLanguage={setLanguage}
+                            displayNewVocabsPopUp={displayNewVocabsPopUp}
+                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>}
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
                     setUseForm={setUseForm}
