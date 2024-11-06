@@ -7,7 +7,7 @@ type Props = {
     vocabs:Vocab[]
     setDisplayNewVocabsPopUp: React.Dispatch<React.SetStateAction<boolean>>
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName: string | undefined
+    userId: string | undefined
 }
 
 export default function NewVocabsPopUp(props: Readonly<Props>) {
@@ -23,7 +23,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
             .filter(vocab =>
                 vocab.datesPerUser &&
                 Object.keys(vocab.datesPerUser).length !== 0
-                || !vocab.datesPerUser?.userName
+                || !vocab.datesPerUser?.userId
             )
         const numberOfVocabs: number = inactiveVocabs.length
         const randomIndex = Math.floor(Math.random() * numberOfVocabs)-1

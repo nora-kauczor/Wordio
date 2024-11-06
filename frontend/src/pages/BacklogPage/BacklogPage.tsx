@@ -11,7 +11,7 @@ type Props = {
     language: string
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName: string
+    userId: string
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
@@ -29,7 +29,7 @@ export default function BacklogPage(props: Readonly<Props>) {
                    activateVocab={props.activateVocab}
                    deleteVocab={props.deleteVocab}
                    openForm={props.openForm}
-                   userName={props.userName}/>
+                   userId={props.userId}/>
     </div>)
 
 }

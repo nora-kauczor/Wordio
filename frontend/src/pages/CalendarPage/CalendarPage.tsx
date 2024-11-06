@@ -20,7 +20,7 @@ type Props = {
     language: string
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName:string
+    userId:string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -128,7 +128,7 @@ export default function CalendarPage(props: Readonly<Props>) {
             closeDayPopUp={closeDayPopUp}
             openForm={props.openForm}
             deactivateVocab={props.deactivateVocab}
-            userName={props.userName}/>}
+            userId={props.userId}/>}
         <button className={"back-button"} id={"calendar-back-button"} onClick={() => navigate("/")}
                 onKeyDown={() => navigate("/")}
                 aria-label={"Go back to the main page"}>

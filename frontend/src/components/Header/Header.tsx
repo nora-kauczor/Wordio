@@ -1,7 +1,7 @@
 import './Header.css'
 
 type Props = {
-    userName: string
+    userId: string
     logout: () => void
     language: string
     setLanguage: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +15,7 @@ export default function Header(props: Readonly<Props>) {
 
     return (<div id={"header"}>
         <p id={"app-name"} aria-live={"polite"}>Wordio</p>
-        {props.userName && props.language && (
+        {props.userId && props.language && (
             <div>
                 <label htmlFor={"select-language"} className={"visually-hidden"}>
                     Select your language
@@ -28,7 +28,7 @@ export default function Header(props: Readonly<Props>) {
             </div>
             )}
 
-        {props.userName && <button id={"logout-button"}
+        {props.userId && <button id={"logout-button"}
                                    onClick={props.logout}
                                    aria-label={"Log out"}
                                    title={"Log out"}>

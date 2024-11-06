@@ -12,7 +12,7 @@ type Props = {
     language?: string
     vocabs: Vocab[]
     setLanguage: React.Dispatch<React.SetStateAction<string>>
-    userName: string
+    userId: string
     displayNewVocabsPopUp: boolean
     setDisplayNewVocabsPopUp: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -50,7 +50,7 @@ export default function HomePage(props: Readonly<Props>) {
             </button>}
         </article>
         {props.displayNewVocabsPopUp && props.vocabs && <div className={"overlay"}/>}
-        {props.displayNewVocabsPopUp && props && <NewVocabsPopUp userName={props.userName}
+        {props.displayNewVocabsPopUp && props && <NewVocabsPopUp userId={props.userId}
                                                vocabs={props.vocabs}
                                                setUseForm={props.setUseForm}
                                                setDisplayNewVocabsPopUp={props.setDisplayNewVocabsPopUp}/>}

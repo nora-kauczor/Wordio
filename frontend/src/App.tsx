@@ -21,7 +21,7 @@ import {toast, ToastContainer} from "react-toastify";
 function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
-    const [userName, setUserName] = useState<string>("")
+    const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState("language",
         {defaultValue: ""});
     const [vocabsLeftToReview, setVocabsLeftToReview] = useLocalStorageState<Vocab[]>(
@@ -39,25 +39,27 @@ function App() {
             .catch(error => console.error(error))
     }
 
-    function getUserName(): void {
+    function getUserId(): void {
         axios.get("/api/vocab/auth")
-            .then(response => setUserName(response.data.name))
+            .then(response => setUserId(response.data))
             .then(() => navigate("/"))
             .catch(error => console.error(error))
     }
 
+   
+
     useEffect(() => {
-        getUserName()
+        getUserId()
         if (language) {
             getAllVocabsOfLanguage()
         }
     }, []);
 
     useEffect(() => {
-        if (userName) {
+        if (userId) {
             navigate("/")
         }
-    }, [userName]);
+    }, [userId]);
 
     useEffect(() => {
         getAllVocabsOfLanguage()
@@ -92,7 +94,7 @@ function App() {
         const day: string = String(date.getDate()).padStart(2, '0')
         const today: string = `${year}-${month}-${day}`
         const allOfTodaysVocabs: Vocab[] = vocabs
-            .filter(vocab => vocab.datesPerUser?.userName && vocab.datesPerUser?.userName.includes(today))
+            .filter(vocab => vocab.datesPerUser?.userId && vocab.datesPerUser?.userId.includes(today))
         return allOfTodaysVocabs.filter(vocab => vocab.language === language)
     }
 
@@ -132,7 +134,7 @@ function App() {
     }
 
     function logout() {
-        setUserName("")
+        setUserId("")
         const host = window.location.host === 'localhost:5173' ?
             'http://localhost:8080' : window.location.origin
         window.open(host + '/api/auth/logout', '_self')
@@ -206,12 +208,12 @@ function App() {
 
     return (<div id={"app"} role={"main"}>
         <ToastContainer autoClose={2000}  hideProgressBar={true} />
-        <Header userName={userName} logout={logout}
+        <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
         <div style={{height: "50px"}}/>
         {useForm && <div className={"overlay"}/>}
-        {useForm && <Form userName={userName} language={language}
+        {useForm && <Form userId={userId} language={language}
                           editVocab={editVocab} createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
                           vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
@@ -221,10 +223,10 @@ function App() {
                    element={<LoginPage
                    />}/>
             <Route element={<ProtectedRoutes
-                userName={userName}/>}>
+                userId={userId}/>}>
                 <Route path={"/"}
                        element={<HomePage
-                           userName={userName}
+                           userId={userId}
                            vocabs={vocabs}
                            finishedReviewing={vocabsLeftToReview.length < 1}
                            setUseForm={setUseForm}
@@ -233,7 +235,7 @@ function App() {
                            displayNewVocabsPopUp={displayNewVocabsPopUp}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>
                 <Route path={"/calendar"} element={<CalendarPage
-                    userName={userName}
+                    userId={userId}
                     setUseForm={setUseForm}
                     openForm={openForm}
                     vocabs={vocabs}
@@ -248,13 +250,13 @@ function App() {
                        element={<BacklogPage
                            vocabs={vocabs.filter(vocab => vocab.datesPerUser &&
                                Object.keys(vocab.datesPerUser).length !== 0 ||
-                               !vocab.datesPerUser?.userName)}
+                               !vocab.datesPerUser?.userId)}
                            deleteVocab={deleteVocab}
                            activateVocab={activateVocab}
                            language={language}
                            openForm={openForm}
                            setUseForm={setUseForm}
-                           userName={userName}
+                           userId={userId}
                        />}/>
                 <Route path={"/display/:id"}
                        element={<DisplayPage
