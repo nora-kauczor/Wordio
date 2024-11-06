@@ -17,14 +17,16 @@ public class UserController {
 
     @GetMapping
     public String getUserId(){
-        return SecurityContextHolder
+        String userId = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName();
+        if (userId.equals("anonymousUser")) {return "";}
+        return userId;
     }
 
     @GetMapping("/name")
-    public AppUser getUser(@AuthenticationPrincipal OAuth2User user) {
+    public AppUser getUserName(@AuthenticationPrincipal OAuth2User user) {
         if
         ( user == null) {
             return new AppUser("NotFound", "", null, null);

@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,9 +23,26 @@ class UserControllerTest {
     @Autowired
     private UserRepo userRepo;
 
+    @Test
+    void getUserId_shouldReturnUserId_whenCalled_ifUserIsLoggedIn() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth")
+                        .with(user("12345").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("12345"));
+    }
+
+    @Test
+    void getUserId_shouldReturnEmptyString_whenCalled_ifUserIsNotLoggedIn() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+    }
+
+
+
     @DirtiesContext
     @Test
-    void getUser_shouldReturn200AndUserObject_whenCalled_ifUserIsLoggedIn() throws Exception {
+    void getUserName_shouldReturn200AndUserObject_whenCalled_ifUserIsLoggedIn() throws Exception {
         AppUser testUser = new AppUser("user", "Hans", null, null);
         userRepo.save(testUser);
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth/name")
@@ -38,7 +56,7 @@ class UserControllerTest {
 
     @DirtiesContext
     @Test
-    void getUser_shouldReturn200AndDummyUserObject_whenCalled_ifUserIsNotLoggedIn() throws Exception {
+    void getUserName_shouldReturn200AndDummyUserObject_whenCalled_ifUserIsNotLoggedIn() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab/auth/name"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
