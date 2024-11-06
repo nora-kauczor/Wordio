@@ -32,20 +32,25 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
+    console.log(typeof userId)
+
     function getAllVocabsOfLanguage() {
         axios.get(`/api/vocab?language=${language}`)
-            .then(response => setVocabs(response.data))
-            .then(() => updateVocabsLeftToReview())
+            .then(response => {
+                setVocabs(response.data)
+                updateVocabsLeftToReview()
+            })
             .catch(error => console.error(error))
     }
 
     function getUserId(): void {
         axios.get("/api/vocab/auth")
-            .then(response => setUserId(response.data))
-            .then(() => navigate("/"))
+            .then(response => {
+                setUserId(String(response.data))
+                navigate("/")
+            })
             .catch(error => console.error(error))
     }
-
    
 
     useEffect(() => {

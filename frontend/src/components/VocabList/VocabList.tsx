@@ -49,6 +49,14 @@ export default function VocabList(props: Readonly<Props>) {
         props.deleteVocab(id)
     }
 
+    console.log(props.vocabs[46].createdBy)
+    console.log("typeof props.vocabs[46].createdBy", typeof props.vocabs[46].createdBy)
+
+    console.log(typeof props.userId)
+    // console.log(props.vocabs[46].id)
+    // console.log(props.vocabs[46].createdBy  === props.userId  && props.vocabs[46].id)
+    console.log(props.vocabs[46].createdBy == props.userId )
+
     return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab.id}
                                        className={"list-item"}>
@@ -81,14 +89,20 @@ export default function VocabList(props: Readonly<Props>) {
                     aria-label={props.calendarMode ?
                         `Deactivate ${vocab.word}` : `Activate ${vocab.word}`}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
-                {vocab.createdBy === props.userId && vocab.id ? <button
+                {vocab.createdBy === props.userId && vocab.id ?
+                    <button
                     onClick={() => handleClickDelete(vocab.id)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key ===
                             ' ') handleClickDelete(vocab.id);
                     }}
                     aria-label={`Delete ${vocab.word}`}
-                >delete</button> : <button/>}
+                >
+                        delete
+                    </button>
+                    :
+                    <button/>
+                }
             </div>
         </li>)}
     </ul>)
