@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
 import CalendarPage from "./pages/CalendarPage/CalendarPage.tsx";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
 import BacklogPage from "./pages/BacklogPage/BacklogPage.tsx";
@@ -32,14 +32,16 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    function getAllVocabsOfLanguage() {
+    // @eslint-disable-next-line react-hooks/exhaustive-deps
+    const getAllVocabsOfLanguage = useCallback(() => {
         axios.get(`/api/vocab?language=${language}`)
             .then(response => {
                 setVocabs(response.data)
                 updateVocabsLeftToReview()
             })
             .catch(error => console.error(error))
-    }
+    }, [language, userId])
+
 
     function getUserId(): void {
         axios.get("/api/vocab/auth")
@@ -62,15 +64,12 @@ function App() {
         if (language) {
             getAllVocabsOfLanguage()
         }
-    }, []);
-
-    useEffect(() => {
-        getAllVocabsOfLanguage()
-    }, [language]);
+    }, [getAllVocabsOfLanguage, language]);
 
 
     function updateVocabsLeftToReview(): void {
-        const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
+        const updatedTodaysVocabs: Vocab[] | undefined = getTodaysVocabs()
+        if (!updatedTodaysVocabs) {return}
         const vocabsToReviewWithoutDeletedOnes: Vocab[] = vocabsLeftToReview
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
                 .find(
@@ -87,9 +86,8 @@ function App() {
 
     function removeVocabFromVocabsToReview(id: string | null): void {
         setVocabsLeftToReview(
-            vocabsLeftToReview.filter((vocab: Vocab) => vocab.id === id))
+            vocabsLeftToReview.filter((vocab: Vocab) => vocab.id !== id))
     }
-
 
     function getTodaysVocabs(): Vocab[] | undefined {
         const date: Date = new Date()
@@ -112,7 +110,6 @@ function App() {
         })
     }
 
-    console.log("todaysVocabs: ", todaysVocabs)
 
     function activateVocab(id: string): void {
         axios.put(`api/vocab/activate/${id}`)
