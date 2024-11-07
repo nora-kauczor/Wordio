@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReviewPage from "./pages/ReviewPage/ReviewPage.tsx";
 import CalendarPage from "./pages/CalendarPage/CalendarPage.tsx";
 import axios from "axios";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import Form from "./components/Form/Form.tsx";
 import {Vocab} from "./types/Vocab.ts";
 import BacklogPage from "./pages/BacklogPage/BacklogPage.tsx";
@@ -34,33 +34,20 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    const getAllVocabsOfLanguage = useCallback(() => {
-        if (!language || !userId) {
-            return
-        }
-        axios.get(`/api/vocab?language=${language}`)
-            .then(response => {
-                setVocabs(response.data)
-                updateVocabsToReview().then(() => setVocabsToReviewLoaded(true))
-            })
-            .catch(error => console.error(error))
-    }, [language, userId])
-
     useEffect(() => {
         getUserId()
-        if (language) {
+    }, []);
+
+    useEffect(() => {
+        if (language && userId) {
             getAllVocabsOfLanguage()
         }
-    }, [getAllVocabsOfLanguage, language]);
+    }, [language, userId]);
 
-
-    function getUserId(): void {
-        axios.get("/api/vocab/auth")
-            .then(response => {
-                setUserId(String(response.data))
-            })
-            .catch(error => console.error(error))
-    }
+    useEffect(() => {
+        updateVocabsToReview()
+        setVocabsToReviewLoaded(true)
+    }, [vocabs]);
 
     useEffect(() => {
         if (userId) {
@@ -70,12 +57,33 @@ function App() {
         }
     }, [navigate, userId]);
 
-    // async function updateVocabsToReviewAndDisplayHomePage(){
-    //     await updateVocabsToReview()
-    //     setVocabsToReviewLoaded(true);
-    // }
+    function getAllVocabsOfLanguage() {
+        if (!language || !userId) {
+            return
+        }
+        axios.get(`/api/vocab?language=${language}`)
+            .then(response => {
+                setVocabs(response.data)
+            })
+            .catch(error => console.error(error))
+    }
 
-    async function updateVocabsToReview(): Promise<void> {
+    function getUserId(): void {
+        axios.get("/api/vocab/auth")
+            .then(response => {
+                setUserId(String(response.data))
+            })
+            .catch(error => console.error(error))
+    }
+
+    function logout() {
+        setUserId("")
+        const host = window.location.host === 'localhost:5173' ?
+            'http://localhost:8080' : window.location.origin
+        window.open(host + '/api/auth/logout', '_self')
+    }
+
+    function updateVocabsToReview(): void {
         if (!userId || !language || !vocabs) {
             console.error(
                 "Couldn't get vocabs to review because userId or language or vocabs was missing.")
@@ -86,19 +94,19 @@ function App() {
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
                 .find(
                     vocabFromTodays => vocabFromTodays.id === vocabToReview.id))
+
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabFromUpdatedOnes => todaysVocabs
                 .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes.id !=
                     vocabFromUpdatedOnes.id))
+
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes,
             ...newVocabs]
-
+        console.log(updatedTodaysVocabs)
         setVocabsToReview(updatedVocabsToReview)
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
-
-    // HILFSFUNKTION
     function getTodaysVocabs(): Vocab[] {
         const date: Date = new Date()
         const year: number = date.getFullYear()
@@ -161,14 +169,6 @@ function App() {
             })
     }
 
-    function logout() {
-        setUserId("")
-        const host = window.location.host === 'localhost:5173' ?
-            'http://localhost:8080' : window.location.origin
-        window.open(host + '/api/auth/logout', '_self')
-    }
-
-
     function deleteVocab(id: string): void {
         axios.delete(`api/vocab/${id}`)
             .then(() => {
@@ -225,7 +225,6 @@ function App() {
                 toast.error("Couldn't edit vocab")
             })
     }
-
 
     function openForm(id: string | undefined) {
         if (displayNewVocabsPopUp) {
