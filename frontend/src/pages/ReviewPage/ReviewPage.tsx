@@ -7,8 +7,8 @@ import Confetti from 'react-confetti';
 import useLocalStorageState from "use-local-storage-state";
 import {
     getInputWithoutExtraSpaces
-} from "../../utils/getInputWithoutExtraSpaces.ts";
-import {getRightAnswers} from "../../utils/getRightAnswer.ts";
+} from "./utils/getInputWithoutExtraSpaces.ts";
+import {getRightAnswers} from "./utils/getRightAnswer.ts";
 
 type Props = {
     vocabsToReview: Vocab[]
