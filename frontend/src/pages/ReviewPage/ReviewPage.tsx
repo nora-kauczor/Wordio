@@ -6,6 +6,9 @@ import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
 import useLocalStorageState from "use-local-storage-state";
 import {getWordWithoutBrackets} from "../../utils/getWordWithoutBrackets.ts";
+import {
+    getWordWithoutBracketsIncludingContent
+} from "../../utils/getWordWithoutBracketsIncludingContent.ts";
 import {getWordWithoutArticle} from "../../utils/getWordWithoutArticle.ts";
 import {
     getInputWithoutExtraSpaces
@@ -33,42 +36,37 @@ export default function ReviewPage(props: Readonly<Props>) {
     }, [currentIndex]);
 
 
-
-
-
     // TODO wenn zwei wörte rund mit slash getrennt: splitte es auf und prüfe
     // jeweils beide TODO wenn buchstabe in klammer: prüfe auf
 
 
-
-    function getWordWithoutBracketsIncludingContent(word: string) {
-
-    }
-
     function getRightAnswers(word: string): string[] {
         const wordWithoutBrackets: string = getWordWithoutBrackets(
             currentVocab.word)
-
-        const wordWithoutArticle: string = getWordWithoutArticle(
+        const wordWithoutBracketsIncludingContent = getWordWithoutBracketsIncludingContent(
             currentVocab.word)
-        const wordWithoutArticleWithoutBrackets: string = getWordWithoutArticle(
-            wordWithoutBrackets)
-
-        const leftSideOfSlash:string = getLeftSideOfSlash(currentVocab.word)
-        const rightSideOfSlash:string = getRightSideOfSlash(currentVocab.word)
-        return [wordWithoutBrackets, wordWithoutArticle,
-            wordWithoutArticleWithoutBrackets]
+        const wordWithoutArticle: string = getWordWithoutArticle(
+            currentVocab.word, props.language)
+        const wordWithoutArticleWithoutBrackets: string = getWordWithoutBrackets(
+            wordWithoutArticle)
+        const wordWithoutArticleWithoutBracketsIncludingContent: string = getWordWithoutBracketsIncludingContent(
+            wordWithoutArticle)
+        // const leftSideOfSlash:string = getLeftSideOfSlash(currentVocab.word)
+        // const rightSideOfSlash:string =
+        // getRightSideOfSlash(currentVocab.word)
+        return [wordWithoutBrackets, wordWithoutBracketsIncludingContent,
+            wordWithoutArticle, wordWithoutArticleWithoutBrackets,
+            wordWithoutArticleWithoutBracketsIncludingContent]
     }
 
+    console.log(getWordWithoutBracketsIncludingContent("petit(eee)iii"))
 
     function checkAnswer() {
         const rightAnswers: string[] = getRightAnswers(currentVocab.word)
         const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
             userInput)
         if (inputWithoutExtraSpaces.toLowerCase() ===
-            currentVocab.word.toLowerCase() ||
-            inputWithoutExtraSpaces.toLowerCase() ===
-            wordWithoutArticle.toLowerCase()) {
+            currentVocab.word.toLowerCase()) {
             setShowFireworks(true);
             setTimeout(() => {
                 setShowFireworks(false);

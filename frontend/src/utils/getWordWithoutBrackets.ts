@@ -1,4 +1,4 @@
-export function getWordWithoutBrackets(word: string) {
+export function getWordWithoutBrackets(word: string):string {
     if (!word.includes("(")) {
         return word
     }
@@ -12,11 +12,10 @@ export function getWordWithoutBrackets(word: string) {
     for (let i: number = 0; i < word.length; i++) {
         if (wordWithoutOpeningTag.charAt(i) === ")") {
             let lastPart: string = "";
-            if (wordWithoutOpeningTag.charAt(
-                wordWithoutOpeningTag.length - 1) === ")") {
-                console.log("condition met")
-                lastPart = ""
-            } else {
+            if
+            (wordWithoutOpeningTag.charAt(
+                wordWithoutOpeningTag.length - 1) !== ")")
+            {
                 lastPart =
                     wordWithoutOpeningTag.slice(i + 1, word.length - 1)
             }
