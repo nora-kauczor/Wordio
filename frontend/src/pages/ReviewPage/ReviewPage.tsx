@@ -5,16 +5,10 @@ import {Vocab} from "../../types/Vocab.ts";
 import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
 import useLocalStorageState from "use-local-storage-state";
-import {getWordWithoutBrackets} from "../../utils/getWordWithoutBrackets.ts";
-import {
-    getWordWithoutBracketsIncludingContent
-} from "../../utils/getWordWithoutBracketsIncludingContent.ts";
-import {getWordWithoutArticle} from "../../utils/getWordWithoutArticle.ts";
 import {
     getInputWithoutExtraSpaces
 } from "../../utils/getInputWithoutExtraSpaces.ts";
-import {getLeftSideOfSlash} from "../../utils/getLeftSideOfSlash.ts";
-import {getRightSideOfSlash} from "../../utils/getRightSideOfSlash.ts";
+import {getRightAnswers} from "../../utils/getRightAnswer.ts";
 
 type Props = {
     vocabsToReview: Vocab[]
@@ -37,28 +31,6 @@ export default function ReviewPage(props: Readonly<Props>) {
         setCurrentVocab(props.vocabsToReview[currentIndex])
     }, [currentIndex]);
 
-
-    // TODO wenn zwei wörte rund mit slash getrennt: splitte es auf und prüfe
-    // jeweils beide TODO wenn buchstabe in klammer: prüfe auf
-
-
-    function getRightAnswers(word:string, language:string): string[] {
-        const wordWithoutBrackets: string = getWordWithoutBrackets(
-          word)
-        const wordWithoutBracketsIncludingContent = getWordWithoutBracketsIncludingContent(
-            word)
-        const wordWithoutArticle: string = getWordWithoutArticle(
-            word, language)
-        const wordWithoutArticleWithoutBrackets: string = getWordWithoutBrackets(
-            word)
-        const wordWithoutArticleWithoutBracketsIncludingContent: string = getWordWithoutBracketsIncludingContent(
-            wordWithoutArticle)
-        const leftSideOfSlash:string = getLeftSideOfSlash(word)
-        const rightSideOfSlash:string = getRightSideOfSlash(word)
-        return [wordWithoutBrackets, wordWithoutBracketsIncludingContent,
-            wordWithoutArticle, wordWithoutArticleWithoutBrackets,
-            wordWithoutArticleWithoutBracketsIncludingContent]
-    }
 
     function checkAnswer() {
         const rightAnswers: string[] = getRightAnswers(currentVocab.word, props.language)
