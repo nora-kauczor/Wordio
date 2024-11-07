@@ -5,6 +5,11 @@ import {Vocab} from "../../types/Vocab.ts";
 import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
 import useLocalStorageState from "use-local-storage-state";
+import {getWordWithoutBrackets} from "../../utils/getWordWithoutBrackets.ts";
+import {getWordWithoutArticle} from "../../utils/getWordWithoutArticle.ts";
+import {
+    getInputWithoutExtraSpaces
+} from "../../utils/getInputWithoutExtraSpaces.ts";
 
 type Props = {
     vocabsToReview: Vocab[]
@@ -27,97 +32,37 @@ export default function ReviewPage(props: Readonly<Props>) {
         setCurrentVocab(props.vocabsToReview[currentIndex])
     }, [currentIndex]);
 
-    function getInputWithoutExtraSpaces(userInput: string): string {
-        const trimmedInput: string = userInput.trim()
-        const chars: string[] = trimmedInput.split('');
-        const charsWithoutExtraSpaces: string[] = chars;
-        let z: number = 0;
-        while (z < charsWithoutExtraSpaces.length) {
-            if (charsWithoutExtraSpaces[z] === " " &&
-                charsWithoutExtraSpaces[z + 1] === " ") {
-                charsWithoutExtraSpaces.splice(z + 1, 1)
-            } else {
-                z++
-            }
-        }
-        return charsWithoutExtraSpaces.reduce((a, b) => a + b, "")
-    }
 
-    function getWordWithoutArticle(word: string): string {
-        const spanishArticles: string[] = ["el", "la", "los", "las", "un",
-            "una", "unos", "unas"];
-        const frenchArticles: string[] = ["le", "la", "les", "un", "une", "des",
-            "l'"];
-        const italianArticles: string[] = ["il", "lo", "la", "i", "gli", "le",
-            "un", "uno", "una", "un'"];
-        let articles: string[] = [];
-        if (props.language === "Spanish") {
-            articles = spanishArticles
-        } else {
-            if (props.language === "Italian") {
-                articles = italianArticles
-            } else if (props.language === "French") {
-                articles = frenchArticles
-            } else {
-                return word
-            }
-        }
-        for (let i: number = 0; i < 4; i++) {
-            if (articles.includes(word.substring(0, i)) &&
-                word.charAt(i + 1) === " ") {
-                return word.slice(i + 2, word.length)
-            }
-        }
-        return word;
-    }
+
+
 
     // TODO wenn zwei wörte rund mit slash getrennt: splitte es auf und prüfe
     // jeweils beide TODO wenn buchstabe in klammer: prüfe auf
 
-    function getWordWithoutBrackets(word: string) {
-        if (!word.includes("(")) {
-            return word
-        }
-        let wordWithoutOpeningTag: string = word;
-        for (let i: number = 0; i < word.length; i++) {
-            if (word.charAt(i) === "(") {
-                wordWithoutOpeningTag =
-                    word.slice(0, i) + word.slice(i + 1, word.length)
-            }
-        }
-        for (let i: number = 0; i < word.length; i++) {
-            if (wordWithoutOpeningTag.charAt(i) === ")") {
-                let lastPart: string = "";
-                if (wordWithoutOpeningTag.charAt(
-                    wordWithoutOpeningTag.length - 1) === ")") {
-                    console.log("condition met")
-                    lastPart = ""
-                } else {
-                    lastPart =
-                        wordWithoutOpeningTag.slice(i + 1, word.length - 1)
-                }
-                return wordWithoutOpeningTag.slice(0, i) + lastPart
-            }
-        }
-    }
 
 
     function getWordWithoutBracketsIncludingContent(word: string) {
 
     }
 
-    function checkAnswer() {
-// get all right solutions
+    function getRightAnswers(word: string): string[] {
         const wordWithoutBrackets: string = getWordWithoutBrackets(
             currentVocab.word)
+
         const wordWithoutArticle: string = getWordWithoutArticle(
             currentVocab.word)
         const wordWithoutArticleWithoutBrackets: string = getWordWithoutArticle(
             wordWithoutBrackets)
-        const rightAnswers: string[] = [wordWithoutBrackets, wordWithoutArticle,
+
+        const leftSideOfSlash:string = getLeftSideOfSlash(currentVocab.word)
+        const rightSideOfSlash:string = getRightSideOfSlash(currentVocab.word)
+        return [wordWithoutBrackets, wordWithoutArticle,
             wordWithoutArticleWithoutBrackets]
+    }
 
 
+    function checkAnswer() {
+        const rightAnswers: string[] = getRightAnswers(currentVocab.word)
         const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
             userInput)
         if (inputWithoutExtraSpaces.toLowerCase() ===
