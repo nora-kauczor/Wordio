@@ -1,4 +1,5 @@
 import './Header.css'
+import {useNavigate} from "react-router-dom";
 
 type Props = {
     userId: string
@@ -8,13 +9,18 @@ type Props = {
 }
 
 export default function Header(props: Readonly<Props>) {
-
+const navigate = useNavigate()
     function handleChange(event: React.ChangeEvent<HTMLSelectElement>){
         props.setLanguage(event.target.value)
     }
 
     return (<div id={"header"}>
-        <p id={"app-name"} aria-live={"polite"}>Wordio</p>
+        <button
+            onClick={() => navigate("/")}
+            id={"app-name"}
+            aria-live={"polite"}>
+            Wordio
+        </button>
         {props.userId && props.language && (
             <div>
                 <label htmlFor={"select-language"} className={"visually-hidden"}>
