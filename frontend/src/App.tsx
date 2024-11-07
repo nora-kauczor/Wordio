@@ -55,7 +55,7 @@ function App() {
         } else {
             navigate("/login")
         }
-    }, [navigate, userId]);
+    },  [userId]);
 
     function getAllVocabsOfLanguage() {
         if (!language || !userId) {
@@ -275,6 +275,7 @@ function App() {
                     deactivateVocab={deactivateVocab}/>}/>
                 <Route path={"/review"}
                        element={<ReviewPage
+                           language={language}
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsToReview={vocabsToReview}
                            changeReviewDates={changeReviewDates}/>}/>
