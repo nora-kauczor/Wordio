@@ -13,6 +13,8 @@ import {getWordWithoutArticle} from "../../utils/getWordWithoutArticle.ts";
 import {
     getInputWithoutExtraSpaces
 } from "../../utils/getInputWithoutExtraSpaces.ts";
+import {getLeftSideOfSlash} from "../../utils/getLeftSideOfSlash.ts";
+import {getRightSideOfSlash} from "../../utils/getRightSideOfSlash.ts";
 
 type Props = {
     vocabsToReview: Vocab[]
@@ -40,29 +42,26 @@ export default function ReviewPage(props: Readonly<Props>) {
     // jeweils beide TODO wenn buchstabe in klammer: prüfe auf
 
 
-    function getRightAnswers(word: string): string[] {
+    function getRightAnswers(word:string, language:string): string[] {
         const wordWithoutBrackets: string = getWordWithoutBrackets(
-            currentVocab.word)
+          word)
         const wordWithoutBracketsIncludingContent = getWordWithoutBracketsIncludingContent(
-            currentVocab.word)
+            word)
         const wordWithoutArticle: string = getWordWithoutArticle(
-            currentVocab.word, props.language)
+            word, language)
         const wordWithoutArticleWithoutBrackets: string = getWordWithoutBrackets(
-            wordWithoutArticle)
+            word)
         const wordWithoutArticleWithoutBracketsIncludingContent: string = getWordWithoutBracketsIncludingContent(
             wordWithoutArticle)
-        // const leftSideOfSlash:string = getLeftSideOfSlash(currentVocab.word)
-        // const rightSideOfSlash:string =
-        // getRightSideOfSlash(currentVocab.word)
+        const leftSideOfSlash:string = getLeftSideOfSlash(word)
+        const rightSideOfSlash:string = getRightSideOfSlash(word)
         return [wordWithoutBrackets, wordWithoutBracketsIncludingContent,
             wordWithoutArticle, wordWithoutArticleWithoutBrackets,
             wordWithoutArticleWithoutBracketsIncludingContent]
     }
 
-    console.log(getWordWithoutBracketsIncludingContent("petit(eee)iii"))
-
     function checkAnswer() {
-        const rightAnswers: string[] = getRightAnswers(currentVocab.word)
+        const rightAnswers: string[] = getRightAnswers(currentVocab.word, props.language)
         const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
             userInput)
         if (inputWithoutExtraSpaces.toLowerCase() ===
