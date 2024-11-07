@@ -157,7 +157,7 @@ function App() {
         axios.put(`api/vocab/change-dates/${id}`)
             .then(() => {
                 console.log(
-                    `Vocab ${id}'s review dates successfully deactivated.`)
+                    `Vocab ${id}'s review dates successfully updated.`)
                 getAllVocabsOfLanguage()
             })
             .catch(error => {

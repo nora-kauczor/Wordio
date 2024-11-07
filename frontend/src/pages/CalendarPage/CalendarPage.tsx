@@ -122,6 +122,8 @@ export default function CalendarPage(props: Readonly<Props>) {
                 vocabIdsOfWeek={vocabIdsOfWeek}
                 openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
         </article>
+        {/*// TODO overlay legt sich auch über das pop up selbst....*/}
+        {vocabsOfDayPopUp.length > 0 && <div className={"overlay"}/>}
         {vocabsOfDayPopUp.length > 0 && <DayPopUp
             day={dayOfDayPopUp}
             vocabsOfDay={vocabsOfDayPopUp}
