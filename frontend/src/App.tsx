@@ -86,7 +86,7 @@ function App() {
     function updateVocabsToReview(): void {
         if (!userId || !language || !vocabs) {
             console.error(
-                "Couldn't get vocabs to review because userId or language or vocabs was missing.")
+                "Couldn't get vocabs to review because userId, language or vocabs was missing.")
             return
         }
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()

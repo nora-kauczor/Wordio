@@ -71,16 +71,59 @@ export default function ReviewPage(props: Readonly<Props>) {
         return word;
     }
 
+    // TODO wenn zwei wörte rund mit slash getrennt: splitte es auf und prüfe
+    // jeweils beide TODO wenn buchstabe in klammer: prüfe auf
+
+    function getWordWithoutBrackets(word: string) {
+        if (!word.includes("(")) {
+            return word
+        }
+        let wordWithoutOpeningTag: string = word;
+        for (let i: number = 0; i < word.length; i++) {
+            if (word.charAt(i) === "(") {
+                wordWithoutOpeningTag =
+                    word.slice(0, i) + word.slice(i + 1, word.length)
+            }
+        }
+        for (let i: number = 0; i < word.length; i++) {
+            if (wordWithoutOpeningTag.charAt(i) === ")") {
+                let lastPart: string = "";
+                if (wordWithoutOpeningTag.charAt(
+                    wordWithoutOpeningTag.length - 1) === ")") {
+                    console.log("condition met")
+                    lastPart = ""
+                } else {
+                    lastPart =
+                        wordWithoutOpeningTag.slice(i + 1, word.length - 1)
+                }
+                return wordWithoutOpeningTag.slice(0, i) + lastPart
+            }
+        }
+    }
+
+
+    function getWordWithoutBracketsIncludingContent(word: string) {
+
+    }
 
     function checkAnswer() {
+// get all right solutions
+        const wordWithoutBrackets: string = getWordWithoutBrackets(
+            currentVocab.word)
+        const wordWithoutArticle: string = getWordWithoutArticle(
+            currentVocab.word)
+        const wordWithoutArticleWithoutBrackets: string = getWordWithoutArticle(
+            wordWithoutBrackets)
+        const rightAnswers: string[] = [wordWithoutBrackets, wordWithoutArticle,
+            wordWithoutArticleWithoutBrackets]
+
+
         const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
             userInput)
-        const currentWordWithoutArticle = getWordWithoutArticle(
-            currentVocab.word)
         if (inputWithoutExtraSpaces.toLowerCase() ===
             currentVocab.word.toLowerCase() ||
             inputWithoutExtraSpaces.toLowerCase() ===
-            currentWordWithoutArticle.toLowerCase()) {
+            wordWithoutArticle.toLowerCase()) {
             setShowFireworks(true);
             setTimeout(() => {
                 setShowFireworks(false);
