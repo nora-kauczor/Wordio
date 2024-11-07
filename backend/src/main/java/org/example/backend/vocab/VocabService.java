@@ -37,20 +37,12 @@ public class VocabService {
 
     public Vocab activateVocab(String id, String userName) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
-        LocalDate today = getTodayTimeZoned();
+        LocalDate today = ZonedDateTime.now().toLocalDate();
         List<LocalDate> dates = generateDates(today);
         vocab.getDatesPerUser().put(userName, dates);
         return vocabRepo.save(vocab);
     }
 
-    public static LocalDate getTodayTimeZoned() {
-        ZonedDateTime zonedDateTime = ZonedDateTime.now();
-        String zonedDateTimeString = zonedDateTime.toString();
-        int year = Integer.parseInt(zonedDateTimeString.substring(0, 4));
-        int month = Integer.parseInt(zonedDateTimeString.substring(5,7));
-        int day = Integer.parseInt(zonedDateTimeString.substring(8,10));
-        return LocalDate.of(year, month, day);
-    }
 
     public List<Vocab> getAllVocabsOfLanguage(String languageString, String userName) throws LanguageNotFoundException {
         Language language = getEnumByString(languageString);
@@ -70,7 +62,8 @@ public class VocabService {
     public Vocab createAndActivateVocab(VocabDTOCreate vocabDTO, String userName) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(vocabDTO.language());
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-        LocalDate today = getTodayTimeZoned();
+        LocalDate today = ZonedDateTime.now().toLocalDate();
+        System.out.println(today.getClass().getName());
         List<LocalDate> dates = generateDates(today);
         datesPerUser.put(userName, dates);
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
