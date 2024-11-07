@@ -26,17 +26,11 @@ export default function ReviewPage(props: Readonly<Props>) {
         setCurrentVocab(props.vocabsToReview[currentIndex])
     }, [currentIndex]);
 
+
     function getInputWithoutExtraSpaces(userInput: string): string {
-        const chars: string[] = userInput.split('');
-        let charsWithoutExtraSpaces: string[] = chars;
-        let i: number = 0;
-        while (charsWithoutExtraSpaces[i] === " ") {
-            charsWithoutExtraSpaces.splice(i, 1)
-        }
-        let k = charsWithoutExtraSpaces.length - 1
-        while (chars[k] === " ") {
-            charsWithoutExtraSpaces.splice(k, 1)
-        }
+        const trimmedInput:string = userInput.trim()
+        const chars: string[] = trimmedInput.split('');
+        const charsWithoutExtraSpaces: string[] = chars;
         let z: number = 0;
         while (z < charsWithoutExtraSpaces.length) {
             if (charsWithoutExtraSpaces[z] === " " &&
@@ -49,6 +43,7 @@ export default function ReviewPage(props: Readonly<Props>) {
         }
         return charsWithoutExtraSpaces.reduce((a, b) => a + b, "")
     }
+
 
     function checkAnswer() {
         const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(

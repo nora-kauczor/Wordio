@@ -94,15 +94,12 @@ function App() {
             .filter((vocabToReview: Vocab) => updatedTodaysVocabs
                 .find(
                     vocabFromTodays => vocabFromTodays.id === vocabToReview.id))
-
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabFromUpdatedOnes => todaysVocabs
                 .find((vocabFromOldOnes: Vocab) => vocabFromOldOnes.id !=
                     vocabFromUpdatedOnes.id))
-
         const updatedVocabsToReview: Vocab[] = [...vocabsToReviewWithoutDeletedOnes,
             ...newVocabs]
-        console.log(updatedTodaysVocabs)
         setVocabsToReview(updatedVocabsToReview)
         setTodaysVocabs(updatedTodaysVocabs)
     }
