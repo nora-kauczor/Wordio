@@ -23,11 +23,13 @@ export default function ReviewPage(props: Readonly<Props>) {
     const [showFireworks, setShowFireworks] = useState(false);
     const [displayAnswer, setDisplayAnswer] = useState(false);
     const [inputColor, setInputColor] = useState<string>("inherit")
+    const [showBackButton, setShowBackButton] = useState(false)
     const navigate = useNavigate()
 
 
     useEffect(() => {
-        if (inputColor !== "red") {
+        if (props.vocabsToReview.length < 1){setShowBackButton(true)}
+        if (inputColor !== "red" && !showBackButton) {
             setTimeout(() => {
                 setCurrentVocab(props.vocabsToReview[0])
             }, 5000);
@@ -40,16 +42,15 @@ export default function ReviewPage(props: Readonly<Props>) {
         setInputColor("inherit")
     }, [currentVocab, setCurrentVocab]);
 
-    // TODO funktioniert an sich aber ist manchmal nicht schnell genug
+
     function getNextVocab(): void {
         if (props.vocabsToReview && props.vocabsToReview[0] !== currentVocab) {
             setCurrentVocab(props.vocabsToReview[0])
             setDisplayAnswer(false)
         }
-
     }
 
-    if (!currentVocab) return <p
+    if (!currentVocab && !showBackButton) return <p
         className={"loading-message"}>Loading...</p>
 
     function checkAnswer() {
@@ -63,15 +64,15 @@ export default function ReviewPage(props: Readonly<Props>) {
             setDisplayAnswer(true)
             setShowFireworks(true)
             setInputColor("green")
-                setTimeout(() => {
-                    setShowFireworks(false)
-                }, 5000);
-                setTimeout(() => {
-                    setDisplayAnswer(false)
-                }, 5000);
-                setTimeout(() => {
-                    setInputColor("inherit")
-                }, 5000);
+            setTimeout(() => {
+                setShowFireworks(false)
+            }, 5000);
+            setTimeout(() => {
+                setDisplayAnswer(false)
+            }, 5000);
+            setTimeout(() => {
+                setInputColor("inherit")
+            }, 5000);
             if (props.vocabsToReview.length < 2) {
                 setTimeout(() => {
                     navigate("/")
@@ -81,13 +82,11 @@ export default function ReviewPage(props: Readonly<Props>) {
             props.changeReviewDates(currentVocab.id)
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error("Wrong answer. The review dates for this vocab are being changed.")
-            // TODO: evtl toast message: dates werden geändert...
+            toast.error(
+                "Wrong answer. The review dates for this vocab are being changed.")
         }
-
         props.removeVocabFromVocabsToReview(currentVocab.id)
     }
-
 
 
     return (<div id={"review-page"} className={"page"} role={"main"}>
@@ -106,12 +105,16 @@ export default function ReviewPage(props: Readonly<Props>) {
                    placeholder={"Type your answer here"}
                    disabled={displayAnswer}
             />
-            {!displayAnswer ?
-                <button className={"review-page-button big-button"}
+
+            {!displayAnswer && !showBackButton &&  <button className={"review-page-button big-button"}
                         onClick={checkAnswer}
                         aria-label={"Submit your answer"}>show answer
-                </button> : <button className={"review-page-button"}
+                </button> }
+            {displayAnswer && !showBackButton &&   <button className={"review-page-button big-button"}
                                     onClick={getNextVocab}>next</button>}
+            {showBackButton && <button className={"back-button"}
+                                       onClick={() => navigate(
+                                           "/")}>Back</button>}
         </div>
     </div>)
 }
