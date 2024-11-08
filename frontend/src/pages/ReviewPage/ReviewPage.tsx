@@ -26,8 +26,8 @@ export default function ReviewPage(props: Readonly<Props>) {
     const [showBackButton, setShowBackButton] = useState(false)
     const navigate = useNavigate()
 
-
     useEffect(() => {
+// TODO das soll aber nur passieren, wenn die antwort falsch war?
         if (props.vocabsToReview.length < 1){setShowBackButton(true)}
         if (inputColor !== "red" && !showBackButton) {
             setTimeout(() => {
@@ -37,11 +37,9 @@ export default function ReviewPage(props: Readonly<Props>) {
     }, [props.vocabsToReview]);
 
     useEffect(() => {
-        console.log(currentVocab)
         setUserInput("")
         setInputColor("inherit")
     }, [currentVocab, setCurrentVocab]);
-
 
     function getNextVocab(): void {
         if (props.vocabsToReview && props.vocabsToReview[0] !== currentVocab) {
@@ -50,8 +48,8 @@ export default function ReviewPage(props: Readonly<Props>) {
         }
     }
 
-    if (!currentVocab && !showBackButton) return <p
-        className={"loading-message"}>Loading...</p>
+    if (!currentVocab && !showBackButton)
+        return <p className={"loading-message"}>Loading...</p>
 
     function checkAnswer() {
         const rightAnswers: string[] = getRightAnswers(currentVocab.word,
@@ -73,27 +71,26 @@ export default function ReviewPage(props: Readonly<Props>) {
             setTimeout(() => {
                 setInputColor("inherit")
             }, 5000);
-            if (props.vocabsToReview.length < 2) {
-                setTimeout(() => {
-                    navigate("/")
-                }, 5000);
-            }
+            // if (props.vocabsToReview.length < 2) {
+            //     setTimeout(() => {
+            //         navigate("/")
+            //     }, 5000);
+            // }
         } else {
             props.changeReviewDates(currentVocab.id)
             setInputColor("red")
             setDisplayAnswer(true)
             toast.error(
-                "Wrong answer. The review dates for this vocab are being changed.")
+                "Wrong answer. Changing review dates for this vocab.")
         }
         props.removeVocabFromVocabsToReview(currentVocab.id)
     }
 
-
     return (<div id={"review-page"} className={"page"} role={"main"}>
         <ToastContainer autoClose={2000} hideProgressBar={true}/>
         {showFireworks && <Confetti/>}
-        {currentVocab && <CardContainer displayedVocab={currentVocab}
-                                        displayWord={displayAnswer}/>}
+        <CardContainer displayedVocab={currentVocab}
+                                        displayWord={displayAnswer}/>
         <label htmlFor={"review-input"} className={"visually-hidden"}>Your
             answer</label>
         <div id={"review-input-and-button-wrapper"}>

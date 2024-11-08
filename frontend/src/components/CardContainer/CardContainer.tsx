@@ -8,7 +8,7 @@ type Props = {
 
 
 export default function CardContainer(props: Readonly<Props>) {
-    if (!props.displayedVocab) return <p>loading...</p>
+    if (!props.displayedVocab) return <p>Loading...</p>
     return (<div id={"card-container"}>
         <article
             className={"review-card + card"}
