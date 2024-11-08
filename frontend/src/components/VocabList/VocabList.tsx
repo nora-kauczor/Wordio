@@ -52,7 +52,7 @@ export default function VocabList(props: Readonly<Props>) {
 
     return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab.id}
-                                       className={"list-item"}>
+                                       className={"list-item + card"}>
             <div className={"list-item-word-wrapper"}>
                 <p>{vocab.word}</p>
                 <p>{vocab.translation}</p>

@@ -23,7 +23,7 @@ export default function BacklogPage(props: Readonly<Props>) {
     if (props.vocabs.length < 1 || !Array.isArray(props.vocabs)) return <p
         className={"loading-message"}>Loading...</p>
 
-    return (<div id={"backlog-page"} role={"main"}>
+    return (<div id={"backlog-page"} className={"page"} role={"main"}>
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}
                    activateVocab={props.activateVocab}

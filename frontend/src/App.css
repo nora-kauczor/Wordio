@@ -1,7 +1,13 @@
 #app {
-    height: 100vh;
+    /*height: 100vh;*/
+    width: 100%;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 
+/*TODO page should not be scrollable because all content is already visibel*/

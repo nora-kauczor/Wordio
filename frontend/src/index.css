@@ -11,7 +11,7 @@ body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
     color: black;
-    background-color: #E6F0FA;
+    background-color: #D1E7F5;
 }
 
 h1, h2, h3 {
@@ -26,6 +26,28 @@ button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+}
+
+.page {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.big-button {
+    margin: 0;
+    padding: 1rem 0;
+    width: 70%;
+    font-size: 20px;
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .close-button {
@@ -89,4 +111,11 @@ button {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: lightgray 3px solid;
+    border-radius: 0.3rem;
+    background-color: #FFF8DC;
 }

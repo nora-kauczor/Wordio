@@ -90,20 +90,22 @@ setUserInput("")
         }
 
 
-        return (<div id={"review-page"} role={"main"}>
+        return (<div id={"review-page"} className={"page"} role={"main"}>
             {showFireworks && <Confetti/>}
             {currentVocab && <CardContainer displayedVocab={currentVocab}
                                             displayWord={displayAnswer}/>}
             <label htmlFor={"review-input"} className={"visually-hidden"}>Your
                 answer</label>
+            <div id={"review-input-and-button-wrapper"}>
             <input id={"review-input"}
                    onChange={element => setUserInput(element.target.value)}
                    aria-label={"Enter your answer"}
                    placeholder={"Type your answer here"}
                    disabled={displayAnswer}
             />
-            {!displayAnswer ? <button onClick={checkAnswer}
-                                      aria-label={"Submit your answer"}>submit
-            </button> : <button onClick={getNextVocab}>next</button>}
-        </div>)
+            {!displayAnswer ? <button className={"review-page-button big-button"} onClick={checkAnswer}
+                                      aria-label={"Submit your answer"}>show answer
+            </button> : <button className={"review-page-button"} onClick={getNextVocab}>next</button>}
+            </div>
+            </div>)
     }

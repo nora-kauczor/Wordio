@@ -20,7 +20,7 @@ type Props = {
 export default function HomePage(props: Readonly<Props>) {
     const navigate = useNavigate()
 
-    return (<div id={"homepage"} role={"main"}>
+    return (<div id={"homepage"} className={"page"} role={"main"}>
         <article id={"homepage-text-and-button"}>
             {props.finishedReviewing && props.language &&
                 <p className={"homepage-text"}>You've got no vocabulary
@@ -35,14 +35,14 @@ export default function HomePage(props: Readonly<Props>) {
                     started with your daily vocab
                     review</p>}
             {props.finishedReviewing && props.language && <button
-                className={"homepage-button"}
+                className={"big-button"}
                 onClick={() => props.setDisplayNewVocabsPopUp(true)}
                 onKeyDown={(e) => e.key === 'Enter' && props.setDisplayNewVocabsPopUp(true)}
                 aria-label={"Open new vocabulary popup"}
             >
                 New vocabulary</button>}
             {!props.finishedReviewing && props.language && <button
-                className={"homepage-button"}
+                className={"big-button"}
                 onClick={() => navigate("/review")}
                 onKeyDown={(e) => e.key === 'Enter' && navigate("/review")}
                 aria-label={"Start vocabulary review"}

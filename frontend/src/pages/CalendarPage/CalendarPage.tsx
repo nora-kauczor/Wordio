@@ -100,7 +100,7 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
 
-    return (<div id={"calendar-page"} role={"main"}>
+    return (<div id={"calendar-page"} className={"page"} role={"main"}>
         <div id={"button-and-header-container"}>
             {month &&<button
                 className={"calendar-button"}
