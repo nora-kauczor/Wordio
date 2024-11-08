@@ -4,11 +4,11 @@ import CardContainer from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
 import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
-import useLocalStorageState from "use-local-storage-state";
 import {
     getInputWithoutExtraSpaces
 } from "./utils/getInputWithoutExtraSpaces.ts";
 import {getRightAnswers} from "./utils/getRightAnswer.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 type Props = {
     vocabsToReview: Vocab[]
@@ -18,52 +18,39 @@ type Props = {
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
-
-    const [currentIndex, setCurrentIndex] = useLocalStorageState("currentIndex",
-        {defaultValue: 0});
-    // TODO wäre es nicht sinnvoll immer den gleichen index zu nehmen? also
-    // z.b. 0 TODO evtl kein local storage da man ja auf der "seite" bleibt?
-    const [currentVocab, setCurrentVocab] = useLocalStorageState("currentVocab",
-        {defaultValue: props.vocabsToReview[0]});
+    const [currentVocab, setCurrentVocab] = useState<Vocab>();
     const [userInput, setUserInput] = useState<string>("")
     const [showFireworks, setShowFireworks] = useState(false);
     const [displayAnswer, setDisplayAnswer] = useState(false);
     const [inputColor, setInputColor] = useState<string>("inherit")
     const navigate = useNavigate()
 
-    useEffect(() => {
-        // sobald vocabsToReview aktualisiert wurden, aktualisiere die
-        // currentVocab
-        setCurrentVocab(props.vocabsToReview[currentIndex])
-    }, [currentIndex]);
 
     useEffect(() => {
-        // sobald die neue vokabel gespeichert wurde, verstecke die
-        // antwort-karte
-        setDisplayAnswer(false)
-    }, [currentVocab]);
-
-    // useEffect(() => {
-    //     if (props.vocabsToReview.length < 1 || !currentVocab)
-    //         navigate("/")
-    // }, []);
-
-    useEffect(() => {
-        if (showFireworks) {
-            return
+        if (inputColor !== "red") {
+            setTimeout(() => {
+                setCurrentVocab(props.vocabsToReview[0])
+            }, 5000);
         }
-        // TODO erst überprüfen wenn vocabstoreview geupdated sind
-        if (props.vocabsToReview.length < 1) {
-            navigate("/")
-        } else {
-            getNextVocab()
-        }
-    }, [showFireworks])
+    }, [props.vocabsToReview]);
 
-    function getNextVocab(): void {
+    useEffect(() => {
+        console.log(currentVocab)
+        setUserInput("")
         setInputColor("inherit")
-        setCurrentIndex(0)
+    }, [currentVocab, setCurrentVocab]);
+
+    // TODO funktioniert an sich aber ist manchmal nicht schnell genug
+    function getNextVocab(): void {
+        if (props.vocabsToReview && props.vocabsToReview[0] !== currentVocab) {
+            setCurrentVocab(props.vocabsToReview[0])
+            setDisplayAnswer(false)
+        }
+
     }
+
+    if (!currentVocab) return <p
+        className={"loading-message"}>Loading...</p>
 
     function checkAnswer() {
         const rightAnswers: string[] = getRightAnswers(currentVocab.word,
@@ -76,28 +63,35 @@ export default function ReviewPage(props: Readonly<Props>) {
             setDisplayAnswer(true)
             setShowFireworks(true)
             setInputColor("green")
-            setTimeout(() => {
-                setShowFireworks(false)
-            }, 2500);
-            setTimeout(() => {
-                setDisplayAnswer(false)
-            }, 2500);
-            setTimeout(() => {
-                setInputColor("inherit")
-            }, 2500);
-            // TODO wird das geleert?
-            setUserInput("")
+                setTimeout(() => {
+                    setShowFireworks(false)
+                }, 5000);
+                setTimeout(() => {
+                    setDisplayAnswer(false)
+                }, 5000);
+                setTimeout(() => {
+                    setInputColor("inherit")
+                }, 5000);
+            if (props.vocabsToReview.length < 2) {
+                setTimeout(() => {
+                    navigate("/")
+                }, 5000);
+            }
         } else {
             props.changeReviewDates(currentVocab.id)
             setInputColor("red")
             setDisplayAnswer(true)
+            toast.error("Wrong answer. The review dates for this vocab are being changed.")
+            // TODO: evtl toast message: dates werden geändert...
         }
 
         props.removeVocabFromVocabsToReview(currentVocab.id)
     }
 
 
+
     return (<div id={"review-page"} className={"page"} role={"main"}>
+        <ToastContainer autoClose={2000} hideProgressBar={true}/>
         {showFireworks && <Confetti/>}
         {currentVocab && <CardContainer displayedVocab={currentVocab}
                                         displayWord={displayAnswer}/>}
@@ -106,6 +100,7 @@ export default function ReviewPage(props: Readonly<Props>) {
         <div id={"review-input-and-button-wrapper"}>
             <input id={"review-input"}
                    onChange={element => setUserInput(element.target.value)}
+                   value={userInput}
                    className={inputColor}
                    aria-label={"Enter your answer"}
                    placeholder={"Type your answer here"}
