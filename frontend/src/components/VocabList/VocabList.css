@@ -5,14 +5,13 @@
     width: 100%;
     margin: 0;
     padding: 0
-
 }
 
 .list-item {
     display: flex;
     justify-content: space-around;
-    background-color: lightblue;
     margin: 15px;
+    padding: 10px;
 }
 
 .list-item-word-wrapper

@@ -20,7 +20,7 @@ type Props = {
     language: string
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userName:string
+    userId:string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -100,7 +100,7 @@ export default function CalendarPage(props: Readonly<Props>) {
     }
 
 
-    return (<div id={"calendar-page"} role={"main"}>
+    return (<div id={"calendar-page"} className={"page"} role={"main"}>
         <div id={"button-and-header-container"}>
             {month &&<button
                 className={"calendar-button"}
@@ -122,13 +122,15 @@ export default function CalendarPage(props: Readonly<Props>) {
                 vocabIdsOfWeek={vocabIdsOfWeek}
                 openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
         </article>
+        {/*// TODO overlay legt sich auch über das pop up selbst....*/}
+        {vocabsOfDayPopUp.length > 0 && <div className={"overlay"}/>}
         {vocabsOfDayPopUp.length > 0 && <DayPopUp
             day={dayOfDayPopUp}
             vocabsOfDay={vocabsOfDayPopUp}
             closeDayPopUp={closeDayPopUp}
             openForm={props.openForm}
             deactivateVocab={props.deactivateVocab}
-            userName={props.userName}/>}
+            userId={props.userId}/>}
         <button className={"back-button"} id={"calendar-back-button"} onClick={() => navigate("/")}
                 onKeyDown={() => navigate("/")}
                 aria-label={"Go back to the main page"}>

@@ -9,7 +9,7 @@ type Props = {
     closeDayPopUp: () => void
     deactivateVocab: (id: string) => void
     openForm: (id: string) => void
-    userName:string
+    userId:string
 }
 
 export default function DayPopUp(props: Readonly<Props>) {
@@ -29,7 +29,7 @@ export default function DayPopUp(props: Readonly<Props>) {
                    deactivateVocab={props.deactivateVocab}
                    closeDayPopUp={props.closeDayPopUp}
                    openForm={props.openForm}
-                   userName={props.userName}/>
+                   userId={props.userId}/>
     </div>)
 
 

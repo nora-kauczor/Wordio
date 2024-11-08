@@ -11,7 +11,7 @@ type Props = {
     activateVocab?: (id: string) => void
     openForm: (id: string) => void
     closeDayPopUp?: () => void
-    userName:string
+    userId:string
 }
 
 export default function VocabList(props: Readonly<Props>) {
@@ -49,15 +49,16 @@ export default function VocabList(props: Readonly<Props>) {
         props.deleteVocab(id)
     }
 
+
     return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab.id}
-                                       className={"list-item"}>
+                                       className={"list-item + card"}>
             <div className={"list-item-word-wrapper"}>
                 <p>{vocab.word}</p>
                 <p>{vocab.translation}</p>
             </div>
             <div className={"list-item-button-wrapper"}>
-                {vocab.createdBy  === props.userName  && vocab.id ? <button
+                {vocab.createdBy  === props.userId  && vocab.id ? <button
                     onClick={() => handleClickEdit(vocab.id)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') handleClickEdit(
@@ -81,14 +82,20 @@ export default function VocabList(props: Readonly<Props>) {
                     aria-label={props.calendarMode ?
                         `Deactivate ${vocab.word}` : `Activate ${vocab.word}`}>
                     {props.calendarMode ? "deactivate" : "activate"}</button>
-                {vocab.createdBy === props.userName && vocab.id ? <button
+                {vocab.createdBy === props.userId && vocab.id ?
+                    <button
                     onClick={() => handleClickDelete(vocab.id)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key ===
                             ' ') handleClickDelete(vocab.id);
                     }}
                     aria-label={`Delete ${vocab.word}`}
-                >delete</button> : <button/>}
+                >
+                        delete
+                    </button>
+                    :
+                    <button/>
+                }
             </div>
         </li>)}
     </ul>)

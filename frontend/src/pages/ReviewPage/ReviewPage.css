@@ -1,1 +1,28 @@
-#review-page {display: flex; flex-direction: column;}
+#review-page {
+    gap: 40px;
+    height: 70%;
+    margin: 0;
+}
+
+#review-input-and-button-wrapper {
+    width: 70vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+#review-input {
+    margin: 0;
+    padding: 15px;
+    border: 2px gray solid;
+    font-size: inherit;
+    border-radius: 0.3rem;
+}
+
+.review-page-button {
+    align-self: center;
+}

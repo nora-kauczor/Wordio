@@ -3,23 +3,27 @@ import {Vocab} from "../../types/Vocab.ts";
 
 type Props = {
     displayedVocab: Vocab | undefined
+    displayWord: boolean
 }
 
 
 export default function CardContainer(props: Readonly<Props>) {
-
+    if (!props.displayedVocab) return <p>loading...</p>
     return (<div id={"card-container"}>
-        {props.displayedVocab && <article id={"word-card"}
-                                          className={"card"}
-                                          aria-labelledby={"word-label"}>
+        <article
+            className={"review-card + card"}
+            aria-labelledby={"word-label"}>
             <h2 id={"word-label"} className={"visually-hidden"}>Word</h2>
-            {props.displayedVocab.word}</article>}
-        {props.displayedVocab && <article id={"translation-card"}
-                                          className={"card"}
-                                          aria-labelledby={"translation-label"}>
+            <p> {props.displayWord ? props.displayedVocab.word : undefined}</p>
+
+        </article>
+        <article
+            className={"review-card  + card"}
+            aria-labelledby={"translation-label"}>
             <h2 id={"translation-label"}
                 className={"visually-hidden"}>Translation</h2>
-            {props.displayedVocab.translation}
-        </article>}
+            <p> {props.displayedVocab.translation}</p>
+
+        </article>
     </div>)
 }
