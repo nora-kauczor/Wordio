@@ -28,6 +28,7 @@ export default function ReviewPage(props: Readonly<Props>) {
     const [userInput, setUserInput] = useState<string>("")
     const [showFireworks, setShowFireworks] = useState(false);
     const [displayAnswer, setDisplayAnswer] = useState(false);
+    const [inputColor, setInputColor] = useState<string>("inherit")
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -48,64 +49,74 @@ export default function ReviewPage(props: Readonly<Props>) {
     // }, []);
 
     useEffect(() => {
-            if (showFireworks) {
-                return
-            }
-            // TODO erst ¨¨berprüfen wenn vocastoreview geupdated sind
-            if (props.vocabsToReview.length < 1) {
-                navigate("/")
-            } else {
-                getNextVocab()
-            }
-        },[showFireworks])
+        if (showFireworks) {
+            return
+        }
+        // TODO erst überprüfen wenn vocabstoreview geupdated sind
+        if (props.vocabsToReview.length < 1) {
+            navigate("/")
+        } else {
+            getNextVocab()
+        }
+    }, [showFireworks])
 
-        function getNextVocab(): void {
-            setCurrentIndex(0)
+    function getNextVocab(): void {
+        setInputColor("inherit")
+        setCurrentIndex(0)
+    }
+
+    function checkAnswer() {
+        const rightAnswers: string[] = getRightAnswers(currentVocab.word,
+            props.language)
+        const rightAnswersLowerCase = rightAnswers.map(
+            answer => answer.toLowerCase())
+        const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
+            userInput)
+        if (rightAnswersLowerCase.includes(inputWithoutExtraSpaces)) {
+            setDisplayAnswer(true)
+            setShowFireworks(true)
+            setInputColor("green")
+            setTimeout(() => {
+                setShowFireworks(false)
+            }, 2500);
+            setTimeout(() => {
+                setDisplayAnswer(false)
+            }, 2500);
+            setTimeout(() => {
+                setInputColor("inherit")
+            }, 2500);
+            // TODO wird das geleert?
+            setUserInput("")
+        } else {
+            props.changeReviewDates(currentVocab.id)
+            setInputColor("red")
+            setDisplayAnswer(true)
         }
 
-        function checkAnswer() {
-            const rightAnswers: string[] = getRightAnswers(currentVocab.word,
-                props.language)
-            const rightAnswersLowerCase = rightAnswers.map(
-                answer => answer.toLowerCase())
-            const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
-                userInput)
-            if (rightAnswersLowerCase.includes(inputWithoutExtraSpaces)) {
-                setDisplayAnswer(true)
-                setShowFireworks(true)
-                setTimeout(() => {
-                    setShowFireworks(false)
-                }, 2500);
-                setTimeout(() => {
-                    setDisplayAnswer(false)
-                }, 2500);
-setUserInput("")
-            } else {
-                props.changeReviewDates(currentVocab.id)
-                // TODO Zeige den Misserfolg irgendwie an
-                setDisplayAnswer(true)
-            }
-
-            props.removeVocabFromVocabsToReview(currentVocab.id)
-        }
+        props.removeVocabFromVocabsToReview(currentVocab.id)
+    }
 
 
-        return (<div id={"review-page"} className={"page"} role={"main"}>
-            {showFireworks && <Confetti/>}
-            {currentVocab && <CardContainer displayedVocab={currentVocab}
-                                            displayWord={displayAnswer}/>}
-            <label htmlFor={"review-input"} className={"visually-hidden"}>Your
-                answer</label>
-            <div id={"review-input-and-button-wrapper"}>
+    return (<div id={"review-page"} className={"page"} role={"main"}>
+        {showFireworks && <Confetti/>}
+        {currentVocab && <CardContainer displayedVocab={currentVocab}
+                                        displayWord={displayAnswer}/>}
+        <label htmlFor={"review-input"} className={"visually-hidden"}>Your
+            answer</label>
+        <div id={"review-input-and-button-wrapper"}>
             <input id={"review-input"}
                    onChange={element => setUserInput(element.target.value)}
+                   className={inputColor}
                    aria-label={"Enter your answer"}
                    placeholder={"Type your answer here"}
                    disabled={displayAnswer}
             />
-            {!displayAnswer ? <button className={"review-page-button big-button"} onClick={checkAnswer}
-                                      aria-label={"Submit your answer"}>show answer
-            </button> : <button className={"review-page-button"} onClick={getNextVocab}>next</button>}
-            </div>
-            </div>)
-    }
+            {!displayAnswer ?
+                <button className={"review-page-button big-button"}
+                        onClick={checkAnswer}
+                        aria-label={"Submit your answer"}>show answer
+                </button> : <button className={"review-page-button"}
+                                    onClick={getNextVocab}>next</button>}
+        </div>
+    </div>)
+}

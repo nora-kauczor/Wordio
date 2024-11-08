@@ -23,6 +23,14 @@
     border-radius: 0.3rem;
 }
 
+.red {
+    color: red !important;
+}
+
+.green {
+    color:green !important;
+}
+
 .review-page-button {
     align-self: center;
 }
