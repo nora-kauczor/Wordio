@@ -26,9 +26,6 @@ public class VocabController {
 
     @PostMapping
     public Vocab createVocab(@RequestBody VocabDTOCreate vocabDTO, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        System.out.println("user: "+user);
-        System.out.println("user.getName(): "+user.getName());
-        System.out.println("user.getAttributes().get(\"sub\"): "+user.getAttributes().get("sub"));
         return vocabService.createVocab(vocabDTO, user.getName());
     }
 
