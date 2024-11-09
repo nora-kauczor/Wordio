@@ -117,6 +117,9 @@ function App() {
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
+    console.log("todaysVocabs: " +
+        "", todaysVocabs)
+
     function getTodaysVocabs(): Vocab[] {
         const date: Date = new Date()
         const year: number = date.getFullYear()
@@ -246,8 +249,10 @@ function App() {
         }
     }
 
+
     return (<div id={"app"} role={"main"}>
-        <ToastContainer autoClose={2000} hideProgressBar={true}/>
+        <ToastContainer autoClose={2000} hideProgressBar={true}
+                        closeButton={false}/>
         <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
@@ -293,12 +298,17 @@ function App() {
                            changeReviewDates={changeReviewDates}/>}/>
                 <Route path={"/backlog"}
                        element={<BacklogPage
-                           vocabs={vocabs.filter(
-                               vocab => {
-                                   if  (!vocab.datesPerUser) {return true}
-                                   if (!vocab.datesPerUser[userId]) {return true}
-                                   if (vocab.datesPerUser[userId].length < 1) {return true}
-                               })}
+                           vocabs={vocabs.filter(vocab => {
+                               if (!vocab.datesPerUser) {
+                                   return true
+                               }
+                               if (!vocab.datesPerUser[userId]) {
+                                   return true
+                               }
+                               if (vocab.datesPerUser[userId].length < 1) {
+                                   return true
+                               }
+                           })}
                            deleteVocab={deleteVocab}
                            activateVocab={activateVocab}
                            language={language}
@@ -309,6 +319,7 @@ function App() {
                 <Route path={"/display/:id"}
                        element={<DisplayPage
                            vocabs={vocabs}
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
                        />}/>
             </Route>
         </Routes>

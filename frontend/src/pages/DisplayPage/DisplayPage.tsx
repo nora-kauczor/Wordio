@@ -2,7 +2,7 @@ import './DisplayPage.css'
 import CardContainer
     from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     useNavigate,
     useParams
@@ -10,6 +10,7 @@ import {
 
 type Props = {
     vocabs:Vocab[]
+    setDisplayNewVocabsPopUp: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function DisplayPage(props: Readonly<Props>) {
@@ -25,13 +26,20 @@ const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
 if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
 
 
+    function handleClick(){
+
+        navigate("/")
+        props.setDisplayNewVocabsPopUp(false)
+
+    }
+
     return (
         <div id={"display-page"} className={"page"} role={"main"}>
             <p>You've just activated this vocab. Take your time to memorize it:</p>
             <CardContainer displayedVocab={displayedVocab} displayWord={true}/>
             <p>Finished? Click the button below to go back to the homepage</p>
-            <button onClick={()=>navigate("/")}
-                    aria-label={"Go back to the homepage"}>Go back to Home</button>
+            <button onClick={handleClick}
+                    aria-label={"Go back to the homepage"} className={"back-button"}>Go back to Home</button>
         </div>
     )
 }
