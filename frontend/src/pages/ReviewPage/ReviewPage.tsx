@@ -28,7 +28,9 @@ export default function ReviewPage(props: Readonly<Props>) {
 
     useEffect(() => {
 // TODO das soll aber nur passieren, wenn die antwort falsch war?
-        if (props.vocabsToReview.length < 1){setShowBackButton(true)}
+        if (props.vocabsToReview.length < 1) {
+            setShowBackButton(true)
+        }
         if (inputColor !== "red" && !showBackButton) {
             setTimeout(() => {
                 setCurrentVocab(props.vocabsToReview[0])
@@ -48,8 +50,8 @@ export default function ReviewPage(props: Readonly<Props>) {
         }
     }
 
-    if (!currentVocab && !showBackButton)
-        return <p className={"loading-message"}>Loading...</p>
+    if (!currentVocab && !showBackButton) return <p
+        className={"loading-message"}>Loading...</p>
 
     function checkAnswer() {
         const rightAnswers: string[] = getRightAnswers(currentVocab.word,
@@ -82,44 +84,45 @@ export default function ReviewPage(props: Readonly<Props>) {
             // TODO Färbung funktioniert nicht
             setInputColor("red")
             setDisplayAnswer(true)
-            // TODO passendere lösung als das errormessage für die rückmeldung (nicht sinnvoll)
-           // TODO custom toast message? ohne rote färbung?
-           //  toast.error(
-           //      "Wrong answer. Changing review dates for this vocab.")
+            toast.error("Oops! Don't worry, you'll make it next time! 💪"
+                // , {icon: false}
+            )
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
                 props.removeVocabFromVocabsToReview(currentVocab.id);
             }, 1000);
         }
 
+        }
+
+        return (<div id={"review-page"} className={"page"} role={"main"}>
+            <ToastContainer autoClose={2000} hideProgressBar={true} icon={false}/>
+            {showFireworks && <Confetti/>}
+            <CardContainer displayedVocab={currentVocab}
+                           displayWord={displayAnswer}/>
+            <label htmlFor={"review-input"} className={"visually-hidden"}>Your
+                answer</label>
+            <div id={"review-input-and-button-wrapper"}>
+                <input id={"review-input"}
+                       onChange={element => setUserInput(element.target.value)}
+                       value={userInput}
+                       className={inputColor}
+                       aria-label={"Enter your answer"}
+                       placeholder={"Type your answer here"}
+                       disabled={displayAnswer}
+                />
+
+                {!displayAnswer && !showBackButton &&
+                    <button className={"review-page-button big-button"}
+                            onClick={checkAnswer}
+                            aria-label={"Submit your answer"}>show answer
+                    </button>}
+                {displayAnswer && !showBackButton &&
+                    <button className={"review-page-button big-button"}
+                            onClick={getNextVocab}>next</button>}
+                {showBackButton && <button className={"back-button"}
+                                           onClick={() => navigate(
+                                               "/")}>Back</button>}
+            </div>
+        </div>)
     }
-
-    return (<div id={"review-page"} className={"page"} role={"main"}>
-        <ToastContainer autoClose={2000} hideProgressBar={true}/>
-        {showFireworks && <Confetti/>}
-        <CardContainer displayedVocab={currentVocab}
-                                        displayWord={displayAnswer}/>
-        <label htmlFor={"review-input"} className={"visually-hidden"}>Your
-            answer</label>
-        <div id={"review-input-and-button-wrapper"}>
-            <input id={"review-input"}
-                   onChange={element => setUserInput(element.target.value)}
-                   value={userInput}
-                   className={inputColor}
-                   aria-label={"Enter your answer"}
-                   placeholder={"Type your answer here"}
-                   disabled={displayAnswer}
-            />
-
-            {!displayAnswer && !showBackButton &&  <button className={"review-page-button big-button"}
-                        onClick={checkAnswer}
-                        aria-label={"Submit your answer"}>show answer
-                </button> }
-            {displayAnswer && !showBackButton &&   <button className={"review-page-button big-button"}
-                                    onClick={getNextVocab}>next</button>}
-            {showBackButton && <button className={"back-button"}
-                                       onClick={() => navigate(
-                                           "/")}>Back</button>}
-        </div>
-    </div>)
-}
