@@ -76,14 +76,22 @@ export default function ReviewPage(props: Readonly<Props>) {
             //         navigate("/")
             //     }, 5000);
             // }
+            props.removeVocabFromVocabsToReview(currentVocab.id)
         } else {
             props.changeReviewDates(currentVocab.id)
+            // TODO Färbung funktioniert nicht
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error(
-                "Wrong answer. Changing review dates for this vocab.")
+            // TODO passendere lösung als das errormessage für die rückmeldung (nicht sinnvoll)
+           // TODO custom toast message? ohne rote färbung?
+           //  toast.error(
+           //      "Wrong answer. Changing review dates for this vocab.")
+            setTimeout(() => {
+                props.changeReviewDates(currentVocab.id);
+                props.removeVocabFromVocabsToReview(currentVocab.id);
+            }, 1000);
         }
-        props.removeVocabFromVocabsToReview(currentVocab.id)
+
     }
 
     return (<div id={"review-page"} className={"page"} role={"main"}>
