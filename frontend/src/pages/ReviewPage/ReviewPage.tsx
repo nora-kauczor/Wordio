@@ -86,9 +86,7 @@ export default function ReviewPage(props: Readonly<Props>) {
             props.changeReviewDates(currentVocab.id)
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error("Oops! Don't worry, you'll make it next time! 💪"
-                // , {icon: false}
-            )
+            toast.error("Oops! Don't worry, you'll make it next time! 💪")
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
                 props.removeVocabFromVocabsToReview(currentVocab.id);

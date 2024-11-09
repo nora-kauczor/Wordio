@@ -117,8 +117,7 @@ function App() {
         setTodaysVocabs(updatedTodaysVocabs)
     }
 
-    console.log("todaysVocabs: " +
-        "", todaysVocabs)
+    console.log("todaysVocabs: " + "", todaysVocabs)
 
     function getTodaysVocabs(): Vocab[] {
         const date: Date = new Date()
@@ -282,7 +281,8 @@ function App() {
                                                     language={language}
                                                     setLanguage={setLanguage}
                                                     displayNewVocabsPopUp={displayNewVocabsPopUp}
-                                                    setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}/>}/>}
+                                                    setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
+                                                    activateVocab={activateVocab}/>}/>}
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
                     setUseForm={setUseForm}
