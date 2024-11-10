@@ -1,0 +1,42 @@
+#language-pop-up {
+    height: 40%;
+    width: 50%;
+    max-width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+#language-pop-up-button-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px
+}
+
+.language-pop-up-button {
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0;
+    padding: 5px 0;
+    color: black;
+    background-color: white;
+}
+
+.language-icon, .language-name {
+    margin: 0;
+    padding: 0;
+}
+
+.language-icon {font-size: 1.75rem;}
+
+.language-name {
+    font-size: 1rem;
+}

@@ -99,7 +99,7 @@ export default function ReviewPage(props: Readonly<Props>) {
     // wieder refresh beim reinhovern)
 
     return (<div id={"review-page"} className={"page"} role={"main"}>
-        <div/>
+        <div style={{height: "10px"}}/>
         <ToastContainer autoClose={2000} hideProgressBar={true} icon={false}
                         closeButton={false}/>
         {showFireworks && <Confetti/>}
