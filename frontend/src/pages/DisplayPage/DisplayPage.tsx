@@ -25,21 +25,20 @@ const [displayedVocab, setDisplayedVocab] = useState<Vocab>()
 
 if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
 
-
     function handleClick(){
-
         navigate("/")
         props.setDisplayNewVocabsPopUp(false)
 
     }
 
-    return (
-        <div id={"display-page"} className={"page"} role={"main"}>
-            <p>You've just activated this vocab. Take your time to memorize it:</p>
+    return (<div id={"display-page"} className={"page"} role={"main"}>
+            <div style={{height: "40px"}}/>
+            <p id={"display-page-text"}> Take your time to memorize
+                the new vocab:</p>
             <CardContainer displayedVocab={displayedVocab} displayWord={true}/>
-            <p>Finished? Click the button below to go back to the homepage</p>
             <button onClick={handleClick}
-                    aria-label={"Go back to the homepage"} className={"back-button"}>Go back to Home</button>
-        </div>
-    )
+                    aria-label={"Go back to the homepage"}
+                    className={"back-button"}>Go back to Home
+            </button>
+        </div>)
 }

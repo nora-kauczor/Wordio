@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 2rem;
+    height: calc(3rem - 40px);
     max-height: 80px;
     width: 100%;
     padding: 20px;

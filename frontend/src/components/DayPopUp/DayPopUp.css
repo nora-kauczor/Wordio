@@ -1,19 +1,18 @@
 #day-popup {
-    width: 70%;
+    width: 15rem;
     max-width: 500px;
     height: auto;
+    max-height: 500px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
     justify-content: space-evenly;
     align-items: center;
-    overflow-y: auto;
-
+    margin: 0;
+    padding:  20px 20px 20px 10px;
 }
 
-button {
-    &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+#date {
+    padding: 0;
+    margin: 5px 0 20px 0;
 }
+

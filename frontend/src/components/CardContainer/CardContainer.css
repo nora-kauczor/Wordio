@@ -11,10 +11,13 @@
 }
 
 .review-card {
-    padding: 50px 0;
+    text-align: center;
+    line-height: 35px;
+    padding: 50px 20px;
     width: 65vw;
+    max-width: 220px;
+    min-height: 60px;
     height: 7vh;
-    /*TODO define max height*/
     max-height: 200px;
     font-size: 24px;
     display: flex;

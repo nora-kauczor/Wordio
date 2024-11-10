@@ -23,7 +23,7 @@ export default function DayPopUp(props: Readonly<Props>) {
                 className={"close-button"}
                 aria-label={"Close popup"}>✕
         </button>
-        <h3>{displayDate}</h3>
+        <h3 id={"date"}>{displayDate}</h3>
         <VocabList vocabs={props.vocabsOfDay}
                    calendarMode={true}
                    deactivateVocab={props.deactivateVocab}

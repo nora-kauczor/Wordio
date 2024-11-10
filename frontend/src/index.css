@@ -27,6 +27,10 @@ button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .page {
@@ -45,10 +49,6 @@ button {
     padding: 1rem 0;
     width: 70%;
     font-size: 20px;
-    &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
 }
 
 .close-button {
@@ -57,6 +57,9 @@ button {
     cursor: pointer;
     padding: 0;
     margin: 0;
+    position: fixed;
+    top: 10px;
+    right: 15px;
 }
 
 .back-button {
