@@ -235,6 +235,20 @@ function App() {
         }
     }
 
+    function getInactiveVocabs(){
+        return vocabs.filter(vocab => {
+            if (!vocab.datesPerUser) {
+                return true
+            }
+            if (!vocab.datesPerUser[userId]) {
+                return true
+            }
+            if (vocab.datesPerUser[userId].length < 1) {
+                return true
+            }
+        })
+    }
+
     return (<div id={"app"} role={"main"}>
         <ToastContainer autoClose={2000} hideProgressBar={true}
                         closeButton={false}/>
@@ -284,17 +298,8 @@ function App() {
                            changeReviewDates={changeReviewDates}/>}/>
                 <Route path={"/backlog"}
                        element={<BacklogPage
-                           vocabs={vocabs.filter(vocab => {
-                               if (!vocab.datesPerUser) {
-                                   return true
-                               }
-                               if (!vocab.datesPerUser[userId]) {
-                                   return true
-                               }
-                               if (vocab.datesPerUser[userId].length < 1) {
-                                   return true
-                               }
-                           })}
+                           vocabs={getInactiveVocabs()}
+                           allVocabsActivated={getInactiveVocabs().length < 1}
                            deleteVocab={deleteVocab}
                            activateVocab={activateVocab}
                            language={language}
@@ -306,6 +311,7 @@ function App() {
                        element={<DisplayPage
                            vocabs={vocabs}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
+
                        />}/>
             </Route>
         </Routes>
