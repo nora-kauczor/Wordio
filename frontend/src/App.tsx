@@ -22,9 +22,8 @@ function App() {
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userId, setUserId] = useState<string>("")
-    // const [language, setLanguage] = useLocalStorageState("language",
-    //     {defaultValue: ""});
-    const [language, setLanguage] = useState<string>("");
+    const [language, setLanguage] = useLocalStorageState<string>("language",
+        {defaultValue: ""});
     const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
         "vocabsToReview", {defaultValue: []})
     const [vocabsToReviewLoaded, setVocabsToReviewLoaded] = useState<boolean>(
@@ -236,7 +235,6 @@ function App() {
         }
     }
 
-
     return (<div id={"app"} role={"main"}>
         <ToastContainer autoClose={2000} hideProgressBar={true}
                         closeButton={false}/>
@@ -249,7 +247,7 @@ function App() {
                           editVocab={editVocab} createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
                           vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
-        <NavBar useForm={useForm} setUseForm={setUseForm}/>
+        {userId && <NavBar useForm={useForm} setUseForm={setUseForm}/>}
         <Routes>
             <Route path={"/login"}
                    element={<LoginPage

@@ -8,6 +8,10 @@
     justify-content: center;
     gap: 12px;
 }
+#headline {
+    padding-top: 5px;
+    font-size: 20px;
+}
 
 #language-pop-up-button-container {
     height: 100%;
@@ -20,12 +24,12 @@
 }
 
 .language-pop-up-button {
-    width: 60%;
+    width: 65%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     margin: 0;
-    padding: 5px 0;
+    padding: 5px;
     color: black;
     background-color: white;
 }

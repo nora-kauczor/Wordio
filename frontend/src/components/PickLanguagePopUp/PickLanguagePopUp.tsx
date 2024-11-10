@@ -7,7 +7,7 @@ type Props = {
 export default function PickLanguagePopUp(props: Readonly<Props>) {
     return (<div id={"language-pop-up"} className={"pop-up"}
                  role={"dialog"} aria-labelledby={"language-popup-header"}>
-        <h2>Pick a language</h2>
+        <h2 id={"headline"}>Pick a language</h2>
         <article id={"language-pop-up-button-container"}>
             <button className={"language-pop-up-button"}
                     onClick={() => props.setLanguage("Spanish")}

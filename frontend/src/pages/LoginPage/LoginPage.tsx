@@ -10,9 +10,12 @@ export default function LoginPage() {
     }
 
     return (<div id={"login-page"} className={"page"} role={"main"}>
-            <button id={"login-button"}
-                    onClick={login}
-                    aria-label={"Login with GitHub"}>Login
-            </button>
-        </div>)
+        <article id={"login-page-text"}>Welcome to Wordio! <br/><br/> Log in to
+            start your language learning journey.
+        </article>
+        <button id={"login-button"}
+                onClick={login}
+                aria-label={"Login with GitHub"}>Login with GitHub
+        </button>
+    </div>)
 }
