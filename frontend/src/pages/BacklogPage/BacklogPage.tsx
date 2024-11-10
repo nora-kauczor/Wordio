@@ -24,6 +24,7 @@ export default function BacklogPage(props: Readonly<Props>) {
         className={"loading-message"}>Loading...</p>
 
     return (<div id={"backlog-page"} className={"page"} role={"main"}>
+        <div style={{height: "50px"}}/>
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}
                    activateVocab={props.activateVocab}

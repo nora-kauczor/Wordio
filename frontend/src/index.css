@@ -3,6 +3,8 @@
     --header-color: darkblue;
     --navbar-font-color: white;
     --navbar-color: darkblue;
+    --navbar-highlight-font-color: black;
+    --navbar-highlight-color: white;
     --dropdown-color: white;
 }
 
@@ -12,10 +14,6 @@ body {
     font-family: 'Roboto', sans-serif;
     color: black;
     background-color: #D1E7F5;
-}
-
-h1, h2, h3 {
-    color: inherit;
 }
 
 button {

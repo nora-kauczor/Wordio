@@ -242,7 +242,7 @@ function App() {
         <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
-        <div style={{height: "50px"}}/>
+
         {useForm && <div className={"overlay"}/>}
         {useForm && <Form userId={userId} language={language}
                           editVocab={editVocab} createVocab={createVocab}
