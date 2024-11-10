@@ -1,7 +1,7 @@
 import './BacklogPage.css'
 import {Vocab} from "../../types/Vocab.ts";
 import VocabList from "../../components/VocabList/VocabList.tsx";
-import React, {useEffect} from "react";
+import React from "react";
 
 
 type Props = {
@@ -15,10 +15,6 @@ type Props = {
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
-
-    useEffect(() => {
-        props.setUseForm(false)
-    }, [props]);
 
     if (props.vocabs.length < 1 || !Array.isArray(props.vocabs)) return <p
         className={"loading-message"}>Loading...</p>

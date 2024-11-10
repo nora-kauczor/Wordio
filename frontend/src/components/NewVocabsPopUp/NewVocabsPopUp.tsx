@@ -60,7 +60,7 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
                 className={"close-button"}
                 aria-label={"Close new vocabulary pop-up"}>✕
         </button>
-        <h2 className={"popup-header"}>Learn new vocabulary</h2>
+        <h2 className={"popup-header"}>New vocabulary</h2>
 
         <div id={"button-wrapper"}>
             <button className={"new-vocabs-button"}

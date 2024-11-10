@@ -53,11 +53,14 @@ export default function VocabList(props: Readonly<Props>) {
     return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab.id}
                                        className={"list-item + card"}>
-            <div className={"list-item-word-wrapper"}>
+            <article id={"text-wrapper"}>
                 <p>{vocab.word}</p>
+                <div id={"translation-and-info-wrapper"}>
                 <p>{vocab.translation}</p>
-            </div>
-            <div className={"list-item-button-wrapper"}>
+                <p id={"vocab-info"}>{vocab.info}</p>
+                </div>
+            </article>
+            <div id={"list-item-button-wrapper"}>
                 {vocab.createdBy  === props.userId  && vocab.id ? <button
                     onClick={() => handleClickEdit(vocab.id)}
                     onKeyDown={(e) => {

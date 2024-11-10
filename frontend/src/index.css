@@ -6,6 +6,7 @@
     --navbar-highlight-font-color: black;
     --navbar-highlight-color: white;
     --dropdown-color: white;
+    --calendar-color: rgba(255, 250, 240, 0.93);
 }
 
 body {
@@ -109,6 +110,7 @@ button {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+
 }
 
 .card {
@@ -116,4 +118,5 @@ button {
     border: lightgray 3px solid;
     border-radius: 0.3rem;
     background-color: #FFF8DC;
+    color: black;
 }

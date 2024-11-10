@@ -32,5 +32,4 @@ export default function DayPopUp(props: Readonly<Props>) {
                    userId={props.userId}/>
     </div>)
 
-
 }

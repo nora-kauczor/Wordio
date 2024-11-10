@@ -18,29 +18,39 @@ export default function NavBar(props: Readonly<Props>) {
         }
     };
     return (<ul id={"navbar"}>
-            <li onClick={() => navigate('/backlog')}
-                onKeyDown={(event) => handleKeyDown(event, '/backlog')}
-                className={`navbar-button ${path === '/backlog' && !props.useForm ?
-                    'highlighted' : ''}`}
-                aria-label={"Go to Backlog"}
-            ><p className={"navbar-button-text"}>Backlog</p>
-            </li>
-            <li
-                onClick={() => props.setUseForm(true)}
-                onKeyDown={(event) => handleKeyDown(event, '')}
-                className={`navbar-button ${props.useForm ? 'highlighted' :
-                    ''}`}
-                aria-label={"Create a new item"}
-            ><p className={"navbar-button-text"}>Create</p>
-            </li>
-            <li
-                onClick={() => navigate('/calendar')}
-                onKeyDown={(event) => handleKeyDown(event, '/calendar')}
-                className={`navbar-button ${path === '/calendar' && !props.useForm  ?
-                    'highlighted' : ''}`}
-                aria-label={"Go to Calendar"}
+        {/*<li onClick={() => navigate('/')}*/}
+        {/*    onKeyDown={(event) => handleKeyDown(event, '/')}*/}
+        {/*    className={`navbar-button ${path === '/' && !props.useForm ?*/}
+        {/*        'highlighted' : ''}`}*/}
+        {/*    aria-label={"Go to Homepage"}*/}
+        {/*><p className={"navbar-button-text"}>Home</p>*/}
+        {/*</li>*/}
+        <li onClick={() => navigate('/backlog')}
+            onKeyDown={(event) => handleKeyDown(event, '/backlog')}
+            className={`navbar-button ${path === '/backlog' && !props.useForm ?
+                'highlighted' : ''}`}
+            aria-label={"Go to Backlog"}
+        ><p className={"navbar-button-text"}>Backlog</p>
+        </li>
+        <li
+            onClick={() => props.setUseForm(true)}
+            onKeyDown={(event) => handleKeyDown(event, '')}
+            className={`navbar-button ${props.useForm ? 'highlighted' : ''}`}
+            aria-label={"Create a new item"}
+        ><p className={"navbar-button-text"}>Create</p>
+        </li>
+        <li
+            onClick={() => {
+                navigate('/calendar')
+            }}
+            onKeyDown={(event) => {
+                handleKeyDown(event, '/calendar')
+            }}
+            className={`navbar-button ${path === '/calendar' && !props.useForm ?
+                'highlighted' : ''}`}
+            aria-label={"Go to Calendar"}
 
-            ><p className={"navbar-button-text"}>Calendar</p>
-            </li>
-        </ul>)
+        ><p className={"navbar-button-text"}>Calendar</p>
+        </li>
+    </ul>)
 }

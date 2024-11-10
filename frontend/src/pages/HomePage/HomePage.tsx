@@ -29,13 +29,13 @@ export default function HomePage(props: Readonly<Props>) {
                     scheduled
                     for today or you've already reviewed
                     all of it. <br/><br/>To start learning
-                    (more) words click below </p>}
+                    (more) words click below. </p>}
             {!props.finishedReviewing && props.language &&
-                <p className={"homepage-text"}>Nice to see you! <br/>Click below
+                <p className={"homepage-text"}>Nice to see you! <br/><br/>Click below
                     to
                     get
                     started with your daily vocab
-                    review</p>}
+                    review.</p>}
             {props.finishedReviewing && props.language && <button
                 className={"big-button"}
                 onClick={() => props.setDisplayNewVocabsPopUp(true)}

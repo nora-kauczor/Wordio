@@ -75,6 +75,7 @@ export default function Form(props: Readonly<Props>) {
             <label htmlFor={"word-input"}>Your Vocab</label>
             <input name={"word"} id={"word-input"} value={wordInput}
                    onChange={handleChange}
+                   maxLength={25}
                    aria-required={"true"}
                    required
             />
@@ -82,6 +83,7 @@ export default function Form(props: Readonly<Props>) {
                 English</label>
             <input name={"translation"} id={"translation-input"}
                    value={translationInput} onChange={handleChange}
+                   maxLength={25}
                    aria-required={"true"}
                    required/>
             <label htmlFor={"info-input"}>Additional info, e.g.

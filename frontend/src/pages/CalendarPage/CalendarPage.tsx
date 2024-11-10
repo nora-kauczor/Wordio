@@ -101,7 +101,7 @@ export default function CalendarPage(props: Readonly<Props>) {
 
 
     return (<div id={"calendar-page"} className={"page"} role={"main"}>
-        <div style={{height: "50px"}}/>
+        <div style={{height: "40px"}}/>
         <div id={"button-and-header-container"}>
             {month && <button
                 className={"calendar-button"}
@@ -135,7 +135,8 @@ export default function CalendarPage(props: Readonly<Props>) {
                 onClick={() => navigate("/")}
                 onKeyDown={() => navigate("/")}
                 aria-label={"Go back to the main page"}>
-            ← Back
+            Go to homepage
         </button>
+        <div style={{height: "40px"}}/>
     </div>)
 }
