@@ -9,6 +9,7 @@ type Props = {
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     userId: string | undefined
     activateVocab: (id: string) => void
+    allVocabsActivated: boolean
 }
 
 export default function NewVocabsPopUp(props: Readonly<Props>) {
@@ -72,26 +73,28 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
             >Enter new
                 vocab
             </button>
-            <button className={"new-vocabs-button"}
-                    onClick={() => navigate("/backlog")}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') navigate(
-                            "/backlog");
-                    }}
-                    aria-label={"Pick from backlog"}
-            >Pick
-                from backlog
-            </button>
-            <button className={"new-vocabs-button"}
-                    onClick={activateAndGoToDisplayPageWithRandomVocab}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key ===
-                            ' ') activateAndGoToDisplayPageWithRandomVocab();
-                    }}
-                    aria-label={"Get random vocabulary"}
-            >Get random
-                vocab
-            </button>
+            {!props.allVocabsActivated &&
+                <button className={"new-vocabs-button"}
+                        onClick={() => navigate("/backlog")}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') navigate(
+                                "/backlog");
+                        }}
+                        aria-label={"Pick from backlog"}
+                >Pick
+                    from backlog
+                </button>}
+            {!props.allVocabsActivated &&
+                <button className={"new-vocabs-button"}
+                        onClick={activateAndGoToDisplayPageWithRandomVocab}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key ===
+                                ' ') activateAndGoToDisplayPageWithRandomVocab();
+                        }}
+                        aria-label={"Get random vocabulary"}
+                >Get random
+                    vocab
+                </button>}
         </div>
     </div>)
 }

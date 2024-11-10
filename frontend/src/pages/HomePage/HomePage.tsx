@@ -8,6 +8,7 @@ import PickLanguagePopUp
 
 type Props = {
     finishedReviewing: boolean
+    allVocabsActivated: boolean
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     language?: string
     vocabs: Vocab[]
@@ -30,7 +31,8 @@ export default function HomePage(props: Readonly<Props>) {
                     all of it. <br/><br/>To start learning
                     (more) words click below. </p>}
             {!props.finishedReviewing && props.language &&
-                <p className={"homepage-text"}>Nice to see you! <br/><br/>Click below
+                <p className={"homepage-text"}>Nice to see you! <br/><br/>Click
+                    below
                     to
                     get
                     started with your daily vocab
@@ -58,7 +60,8 @@ export default function HomePage(props: Readonly<Props>) {
                             vocabs={props.vocabs}
                             setUseForm={props.setUseForm}
                             setDisplayNewVocabsPopUp={props.setDisplayNewVocabsPopUp}
-                            activateVocab={props.activateVocab}/>}
+                            activateVocab={props.activateVocab}
+            allVocabsActivated={props.allVocabsActivated}/>}
         {!props.language && <div className={"overlay"}/>}
         {!props.language &&
             <PickLanguagePopUp setLanguage={props.setLanguage}/>}

@@ -277,6 +277,7 @@ function App() {
                                                     vocabs={vocabs}
                                                     finishedReviewing={vocabsToReview.length <
                                                         1}
+                                                    allVocabsActivated={getInactiveVocabs().length < 1}
                                                     setUseForm={setUseForm}
                                                     language={language}
                                                     setLanguage={setLanguage}
