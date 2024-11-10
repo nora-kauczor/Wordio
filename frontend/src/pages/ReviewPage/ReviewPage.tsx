@@ -27,7 +27,6 @@ export default function ReviewPage(props: Readonly<Props>) {
     const navigate = useNavigate()
 
     useEffect(() => {
-// TODO das soll aber nur passieren, wenn die antwort falsch war?
         if (props.vocabsToReview.length < 1) {
             setShowBackButton(true)
         }
@@ -76,11 +75,11 @@ export default function ReviewPage(props: Readonly<Props>) {
             setTimeout(() => {
                 setInputColor("inherit")
             }, 5000);
-            // if (props.vocabsToReview.length < 2) {
-            //     setTimeout(() => {
-            //         navigate("/")
-            //     }, 5000);
-            // }
+            if (props.vocabsToReview.length < 2) {
+                setTimeout(() => {
+                    navigate("/")
+                }, 5000);
+            }
             props.removeVocabFromVocabsToReview(currentVocab.id)
         } else {
             props.changeReviewDates(currentVocab.id)

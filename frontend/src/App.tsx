@@ -34,9 +34,6 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    console.log("vocabsToReview: ", vocabsToReview)
-
-
     useEffect(() => {
         getUserId()
     }, []);
@@ -89,20 +86,14 @@ function App() {
     function updateVocabsToReview(): void {
         const oldTodaysVocabs: Vocab[] = todaysVocabs
         const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
-        // nicht in toReview, nicht in alten todays, nur in neuen todays ->
-        // muss in neue toReview
         const newVocabs: Vocab[] = updatedTodaysVocabs
             .filter(vocabOfOldOnes => !oldTodaysVocabs
                 .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
                     vocabOfOldOnes.id))
-        console.log("newVocabs :", newVocabs)
-        // egal ob in alten toReview, in alten todays, nicht in neuen todays
-        // -> darf nicht in neue toReview
         const deactivatedVocabs: Vocab[] = oldTodaysVocabs
             .filter(vocabOfOldOnes => !updatedTodaysVocabs
                 .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
                     vocabOfOldOnes.id))
-        // nimm die deaktivierten aus den toReview raus
         let vocabsToReviewWithoutDeactivatedOnes: Vocab[] = []
         if (vocabsToReview.length > 0) {
             vocabsToReviewWithoutDeactivatedOnes =
@@ -110,14 +101,10 @@ function App() {
                     .some(deactivatedVocab => deactivatedVocab.id ===
                         vocabToReview.id))
         }
-        console.log("vocabsToReviewWithoutDeactivatedOnes: ",
-            vocabsToReviewWithoutDeactivatedOnes)
         setVocabsToReview(
             [...vocabsToReviewWithoutDeactivatedOnes, ...newVocabs])
         setTodaysVocabs(updatedTodaysVocabs)
     }
-
-    console.log("todaysVocabs: " + "", todaysVocabs)
 
     function getTodaysVocabs(): Vocab[] {
         const date: Date = new Date()
@@ -255,13 +242,13 @@ function App() {
         <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
-        <div style={{height: "80px"}}/>
+        <div style={{height: "50px"}}/>
         {useForm && <div className={"overlay"}/>}
         {useForm && <Form userId={userId} language={language}
                           editVocab={editVocab} createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
                           vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
-        <NavBar setUseForm={setUseForm}/>
+        <NavBar useForm={useForm} setUseForm={setUseForm}/>
         <Routes>
             <Route path={"/login"}
                    element={<LoginPage
