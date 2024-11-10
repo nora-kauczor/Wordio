@@ -27,6 +27,7 @@ export default function BacklogPage(props: Readonly<Props>) {
                    deleteVocab={props.deleteVocab}
                    openForm={props.openForm}
                    userId={props.userId}/>
+        <div style={{height: "50px"}}/>
     </div>)
 
 }

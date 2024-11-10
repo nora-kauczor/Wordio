@@ -11,6 +11,7 @@ type Props = {
 export default function NavBar(props: Readonly<Props>) {
     const navigate = useNavigate();
     const path = window.location.pathname
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>,
                            path: string) => {
         if (event.key === 'Enter' || event.key === ' ') {

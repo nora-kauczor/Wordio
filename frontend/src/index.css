@@ -3,8 +3,10 @@
     --header-color: darkblue;
     --navbar-font-color: white;
     --navbar-color: darkblue;
-    --navbar-highlight-font-color: black;
-    --navbar-highlight-color: white;
+    --navbar-highlight-font-color: white;
+    /*--navbar-highlight-color: #c8c4c4;*/
+    /*TODO nicht die gleiche farbe wie buttons....*/
+    --navbar-highlight-color: #5A9DE8;
     --dropdown-color: white;
     --calendar-color: rgba(255, 250, 240, 0.93);
 }
