@@ -125,7 +125,7 @@ class VocabControllerTest {
 
 
     @Test
-    void getAllVocabsOfLanguage_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
+    void getAllVocabsOfLanguageByUserName_shouldReturn404_whenCalledWithNonexistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Esperanto")
                         .with(oauth2Login().attributes(attributes -> {
                     attributes.put("sub", "jane-doe");
@@ -135,7 +135,7 @@ class VocabControllerTest {
 
 
     @Test
-    void getAllVocabsOfLanguage_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
+    void getAllVocabsOfLanguageByUserName_ShouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/vocab?language=Spanish")
                         .with(oauth2Login().attributes(attributes -> {
                     attributes.put("sub", "jane-doe");

@@ -3,12 +3,15 @@ package org.example.backend.vocab;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.backend.exception.LanguageNotFoundException;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.example.backend.vocab.Language.getEnumByString;
 
 @AllArgsConstructor
 @Data
@@ -34,5 +37,8 @@ public class Vocab {
         }
         return reviewDates;
     }
+
+
+
 
 }

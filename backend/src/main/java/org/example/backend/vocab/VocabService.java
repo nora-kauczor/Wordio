@@ -45,11 +45,31 @@ public class VocabService {
 
 
 
-    public List<Vocab> getAllVocabsOfLanguage(String languageString, String userName) throws LanguageNotFoundException {
+    public List<Vocab> getAllVocabsOfLanguageByUserName(String languageString, String userName) throws LanguageNotFoundException {
         Language language = getEnumByString(languageString);
         return vocabRepo.findAll().stream()
                 .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userName))
                 .filter(vocab -> vocab.getLanguage().equals(language))
+                .toList();
+    }
+
+    public String TEST()  {
+        return "hello from the other side";}
+
+
+    public List<Vocab> getAllVocabsOfLanguageByUserId(String languageString, String userId) throws LanguageNotFoundException {
+        Language language = getEnumByString(languageString);
+        return vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userId))
+                .filter(vocab -> vocab.getLanguage().equals(language))
+                .toList();
+    }
+
+    public List<Vocab> getAllVocabsOfLanguageDREI(String languageString, String userId) throws LanguageNotFoundException {
+        Language language = getEnumByString(languageString);
+        List<Vocab> allVocabsOfLanguage = vocabRepo.getByLanguage(language);
+        return vocabRepo.findAll().stream()
+                .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userId))
                 .toList();
     }
 

@@ -4,6 +4,7 @@ import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.exception.UserNotFoundException;
 import org.example.backend.vocab.Language;
 import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.example.backend.vocab.VocabService;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +20,8 @@ import static org.mockito.Mockito.*;
 class ReviewDayServiceTest {
     private final ReviewDayRepo mockReviewRepo = mock(ReviewDayRepo.class);
     private final VocabService mockVocabService = mock(VocabService.class);
+//    private final VocabRepo mockVocabRepo = mock(VocabRepo.class); // TEST
+//    private final ReviewDayService reviewService = new ReviewDayService(mockReviewRepo, mockVocabService, mockVocabRepo); // TEST
     private final ReviewDayService reviewService = new ReviewDayService(mockReviewRepo, mockVocabService);
 
     @Test
@@ -47,7 +50,7 @@ class ReviewDayServiceTest {
         datesPerUser.put("user id", List.of(date));
         Vocab testVocab = new Vocab("vocab id", "la prueba",
                 "test", "", Language.SPANISH, datesPerUser, "Wordio");
-        when(mockVocabService.getAllVocabsOfLanguage("Spanish", "user id")).thenReturn(List.of(testVocab));
+        when(mockVocabService.getAllVocabsOfLanguageByUserName("Spanish", "user id")).thenReturn(List.of(testVocab));
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab id", false);
         ReviewDay expected = new ReviewDay(null, date, "user id", idsOfVocabsToReview);

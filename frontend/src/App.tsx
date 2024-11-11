@@ -17,6 +17,7 @@ import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
 import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
 import {toast, ToastContainer} from "react-toastify";
+import {ReviewDay} from "./types/ReviewDay.ts";
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-
+    console.log(vocabs)
     useEffect(() => {
         getUserId()
     }, []);
@@ -81,14 +82,22 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-
     function getVocabsToReview() {
         axios.get(`/api/review?language=${language}`)
             .then(response => {
-                const ids:string[] = Object.keys(response.data)
-                const vocabsToReview:Vocab[] = vocabs
-                    .filter(vocab => ids.some(id => vocab.id === id))
-                setVocabsToReview(vocabsToReview)
+                console.log("response.data: ", response.data)
+                // const reviewDay: ReviewDay = response.data;
+                // if (!reviewDay.vocabIds){setVocabsToReview([])}
+                // const vocabIds: {
+                //     [vocabId: string]: boolean
+                // } = reviewDay.vocabIds;
+                // const idsOfNonReviewedVocabs = Object.entries(vocabIds)
+                //     .filter(([vocabId, isReviewed]) => !isReviewed)
+                //     .map(([vocabId]) => vocabId);
+                // const vocabsToReview: Vocab[] = vocabs
+                //     .filter(vocab => idsOfNonReviewedVocabs.some(
+                //         id => vocab.id === id))
+                // setVocabsToReview(vocabsToReview)
             })
             .catch(error => {
                 console.error(error)
@@ -255,7 +264,7 @@ function App() {
                        element={<HomePage
                            userId={userId}
                            vocabs={vocabs}
-                           finishedReviewing={vocabsToReview.length < 1}
+                           // finishedReviewing={vocabsToReview.length < 1}
                            allVocabsActivated={getInactiveVocabs().length < 1}
                            setUseForm={setUseForm}
                            language={language}
