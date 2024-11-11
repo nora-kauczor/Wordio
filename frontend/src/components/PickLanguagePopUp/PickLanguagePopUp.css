@@ -1,6 +1,7 @@
 #language-pop-up {
     height: 40%;
     width: 50%;
+    min-width: 180px;
     max-width: 260px;
     display: flex;
     flex-direction: column;

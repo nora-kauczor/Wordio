@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({IdNotFoundException.class, LanguageNotFoundException.class})
+    @ExceptionHandler({IdNotFoundException.class, LanguageNotFoundException.class, UserNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFoundExceptions(Exception exception) {
         System.out.println(exception.getMessage());

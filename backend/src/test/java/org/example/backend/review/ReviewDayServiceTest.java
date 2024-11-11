@@ -1,6 +1,7 @@
 package org.example.backend.review;
 
 import org.example.backend.exception.LanguageNotFoundException;
+import org.example.backend.exception.UserNotFoundException;
 import org.example.backend.vocab.Language;
 import org.example.backend.vocab.Vocab;
 import org.example.backend.vocab.VocabService;
@@ -20,9 +21,8 @@ class ReviewDayServiceTest {
     private final VocabService mockVocabService = mock(VocabService.class);
     private final ReviewDayService reviewService = new ReviewDayService(mockReviewRepo, mockVocabService);
 
-
     @Test
-    void getReviewDay()  {
+    void getReviewDay_shouldReturnReviewDayOfCurrentDate_ifItExists_whenCalled() throws LanguageNotFoundException {
         LocalDate date = LocalDate.of(2025, 1, 1);
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab id", false);
@@ -33,7 +33,15 @@ class ReviewDayServiceTest {
     }
 
     @Test
-    void createReviewDay() throws LanguageNotFoundException {
+    void getReviewDay_shouldReturnNewReviewDayOfCurrentDate_ifNonExistedBefore_whenCalled() throws LanguageNotFoundException {
+        LocalDate date = LocalDate.of(2025, 1, 1);
+        when(mockReviewRepo.getByDayAndUserId(date, "user id")).thenReturn(null);
+        reviewService.getReviewDay("Spanish", "user id", date);
+        verify(mockReviewRepo).save(any(ReviewDay.class));
+    }
+
+    @Test
+    void createReviewDay() throws LanguageNotFoundException, UserNotFoundException {
         LocalDate date = LocalDate.of(2025, 1, 1);
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
         datesPerUser.put("user id", List.of(date));

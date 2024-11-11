@@ -27,10 +27,6 @@ function App() {
         {defaultValue: ""})
     const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
         "vocabsToReview", {defaultValue: []})
-    // // const [vocabsToReviewUpdated, setVocabsToReviewUpdated] =
-    // // useState<boolean>( false)
-    // const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
-    //     "todaysVocabs", {defaultValue: []})
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
@@ -85,81 +81,9 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    // function updateVocabsToReview() {
-    //     const oldTodaysVocabs: Vocab[] = todaysVocabs
-    //     // console.log("oldTodaysVocabs: ", oldTodaysVocabs)
-    //     const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
-    //     // console.log("updatedTodaysVocabs: ", updatedTodaysVocabs)
-    //
-    //     const newVocabs: Vocab[] = updatedTodaysVocabs
-    //         .filter(vocabOfOldOnes => !oldTodaysVocabs
-    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-    //                 vocabOfOldOnes.id))
-    //
-    //     const deactivatedVocabs: Vocab[] = oldTodaysVocabs
-    //         .filter(vocabOfOldOnes => !updatedTodaysVocabs
-    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-    //                 vocabOfOldOnes.id))
-    //     // console.log("old vocabsToReview from updateVocabsToReview
-    // function: // ", vocabsToReview) // feliz ist nicht drin -> richtig let
-    // vocabsToReviewWithoutDeactivatedOnes: Vocab[] = [] if
-    // (vocabsToReview.length > 0) { vocabsToReviewWithoutDeactivatedOnes =
-    // vocabsToReview.filter(vocabToReview => !deactivatedVocabs
-    // .some(deactivatedVocab => deactivatedVocab.id === vocabToReview.id)) }
-    // const newVocabsToReview = [...vocabsToReviewWithoutDeactivatedOnes,
-    // ...newVocabs]  setVocabsToReview(newVocabsToReview.filter(vocab =>
-    // !reviewedVocabs.some(reviewedVocab => reviewedVocab.id === vocab.id) ))
-    // setTodaysVocabs(updatedTodaysVocabs)
-
-    // function updateVocabsToReview(): void {
-    //     const oldTodaysVocabs: Vocab[] = todaysVocabs
-    //     // console.log("oldTodaysVocabs: ", oldTodaysVocabs)
-    //     const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
-    //     // console.log("updatedTodaysVocabs: ", updatedTodaysVocabs)
-    //
-    //     const newVocabs: Vocab[] = updatedTodaysVocabs
-    //         .filter(vocabOfOldOnes => !oldTodaysVocabs
-    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-    //                 vocabOfOldOnes.id))
-    //
-    //     const deactivatedVocabs: Vocab[] = oldTodaysVocabs
-    //         .filter(vocabOfOldOnes => !updatedTodaysVocabs
-    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-    //                 vocabOfOldOnes.id))
-    //     // console.log("old vocabsToReview from updateVocabsToReview
-    // function: ", //     vocabsToReview) // feliz ist nicht drin -> richtig
-    // let vocabsToReviewWithoutDeactivatedOnes: Vocab[] = [] if
-    // (vocabsToReview.length > 0) { vocabsToReviewWithoutDeactivatedOnes =
-    // vocabsToReview.filter(vocabToReview => !deactivatedVocabs
-    // .some(deactivatedVocab => deactivatedVocab.id === vocabToReview.id)) }
-    // setVocabsToReview( [...vocabsToReviewWithoutDeactivatedOnes,
-    // ...newVocabs]) setTodaysVocabs(updatedTodaysVocabs) }
-
-    // function getTodaysVocabs(): Vocab[] {
-    //     const date: Date = new Date()
-    //     const year: number = date.getFullYear()
-    //     const month: string = String(date.getMonth() + 1).padStart(2, '0')
-    //     const day: string = String(date.getDate()).padStart(2, '0')
-    //     const today: string = `${year}-${month}-${day}`
-    //     const userIdNumber: number = parseInt(userId)
-    //     return vocabs.filter(vocab => {
-    //         if (!vocab.datesPerUser) {
-    //             return false
-    //         }
-    //         if (!vocab.datesPerUser[userIdNumber]) {
-    //             return false
-    //         }
-    //         return vocab.datesPerUser[userIdNumber].includes(today)
-    //     })
-    // }
-
-    // function removeVocabFromVocabsToReview(id: string | null): void {
-    //     setVocabsToReview(
-    //         vocabsToReview.filter((vocab: Vocab) => vocab.id !== id))
-    // }
 
     function getVocabsToReview() {
-        axios.get(`api/review`)
+        axios.get(`/api/review?language=${language}`)
             .then(response => {
                 const ids:string[] = Object.keys(response.data)
                 const vocabsToReview:Vocab[] = vocabs
@@ -172,7 +96,7 @@ function App() {
     }
 
     function removeVocabFromVocabsToReview(id: string): void {
-        axios.put(`api/review/${id}`)
+        axios.put(`/api/review/${id}`)
             .then(() => {
                 console.log(`Vocab ${id} was marked as reviewed for today.`)
                 getAllVocabsOfLanguage()
