@@ -3,8 +3,6 @@ package org.example.backend.review;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.exception.UserNotFoundException;
-import org.example.backend.security.AppUser;
-import org.example.backend.security.UserRepo;
 import org.example.backend.vocab.Vocab;
 import org.example.backend.vocab.VocabService;
 import org.springframework.stereotype.Service;
@@ -31,17 +29,9 @@ public class ReviewDayService {
             } catch (UserNotFoundException e) {
                 throw new RuntimeException(e);
             }
+            assert newReviewDay != null;
             return reviewDayRepo.save(newReviewDay);
         });
-
-//        try {
-//            return optionalReviewDay.get();
-//            }
-//         catch (NullPointerException nullPointerException){
-//            System.out.println("NullPointerException was caught.");
-//        }
-//        ReviewDay newReviewDay = createReviewDay(language, userName, day);
-//        return reviewDayRepo.save(newReviewDay);
 }
 
 ReviewDay createReviewDay(String language, String userId, LocalDate day) throws LanguageNotFoundException, UserNotFoundException {
@@ -49,15 +39,14 @@ ReviewDay createReviewDay(String language, String userId, LocalDate day) throws 
     if (allVocabsOfLanguage.isEmpty()){
         return new ReviewDay(null, day, userId, new HashMap<>());
     }
-    List<Vocab> todaysVocabs = null;
-    try {
-         todaysVocabs = allVocabsOfLanguage.stream()
-                .filter(vocab -> vocab.getDatesPerUser().get(userId).contains(day))
-                .toList();
-        System.out.println(todaysVocabs);
-    } catch (NullPointerException ignored)
-    {throw new UserNotFoundException("User not found.");
-    }
+    List<Vocab> activeVocabsOfCurrentUser = allVocabsOfLanguage.stream()
+            .filter(vocab -> vocab.getDatesPerUser().containsKey(userId))
+            .toList();
+    if (activeVocabsOfCurrentUser.isEmpty()) {return new ReviewDay(null, day, userId, new HashMap<>());}
+
+    List<Vocab> todaysVocabs = activeVocabsOfCurrentUser.stream()
+            .filter(vocab -> vocab.getDatesPerUser().get(userId).contains(day))
+            .toList();
     Map<String, Boolean> IdsOfVocabsToReview = new HashMap<>();
     for (Vocab todaysVocab : todaysVocabs) {
         String id = todaysVocab.getId();
