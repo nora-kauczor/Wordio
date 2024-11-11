@@ -43,6 +43,8 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
+
+
     public List<Vocab> getAllVocabsOfLanguage(String languageString, String userName) throws LanguageNotFoundException {
         Language language = getEnumByString(languageString);
         return vocabRepo.findAll().stream()

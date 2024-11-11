@@ -19,35 +19,26 @@ import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
 import {toast, ToastContainer} from "react-toastify";
 
 function App() {
+
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState<string>("language",
-        {defaultValue: ""});
+        {defaultValue: ""})
     const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
         "vocabsToReview", {defaultValue: []})
-    const [vocabsToReviewLoaded, setVocabsToReviewLoaded] = useState<boolean>(
-        false)
-    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
-        "todaysVocabs", {defaultValue: []})
+    // // const [vocabsToReviewUpdated, setVocabsToReviewUpdated] =
+    // // useState<boolean>( false)
+    // const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
+    //     "todaysVocabs", {defaultValue: []})
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
+
     useEffect(() => {
         getUserId()
     }, []);
-
-    useEffect(() => {
-        if (language && userId) {
-            getAllVocabsOfLanguage()
-        }
-    }, [language, userId]);
-
-    useEffect(() => {
-        updateVocabsToReview()
-        setVocabsToReviewLoaded(true)
-    }, [vocabs]);
 
     useEffect(() => {
         if (userId) {
@@ -56,6 +47,17 @@ function App() {
             navigate("/login")
         }
     }, [userId]);
+
+    useEffect(() => {
+        if (language && userId) {
+            getAllVocabsOfLanguage()
+        }
+    }, [language, userId]);
+
+    useEffect(() => {
+        getVocabsToReview()
+    }, [vocabs]);
+
 
     function getAllVocabsOfLanguage() {
         if (!language || !userId) {
@@ -83,50 +85,101 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    function updateVocabsToReview(): void {
-        const oldTodaysVocabs: Vocab[] = todaysVocabs
-        const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
-        const newVocabs: Vocab[] = updatedTodaysVocabs
-            .filter(vocabOfOldOnes => !oldTodaysVocabs
-                .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-                    vocabOfOldOnes.id))
-        const deactivatedVocabs: Vocab[] = oldTodaysVocabs
-            .filter(vocabOfOldOnes => !updatedTodaysVocabs
-                .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-                    vocabOfOldOnes.id))
-        let vocabsToReviewWithoutDeactivatedOnes: Vocab[] = []
-        if (vocabsToReview.length > 0) {
-            vocabsToReviewWithoutDeactivatedOnes =
-                vocabsToReview.filter(vocabToReview => !deactivatedVocabs
-                    .some(deactivatedVocab => deactivatedVocab.id ===
-                        vocabToReview.id))
-        }
-        setVocabsToReview(
-            [...vocabsToReviewWithoutDeactivatedOnes, ...newVocabs])
-        setTodaysVocabs(updatedTodaysVocabs)
+    // function updateVocabsToReview() {
+    //     const oldTodaysVocabs: Vocab[] = todaysVocabs
+    //     // console.log("oldTodaysVocabs: ", oldTodaysVocabs)
+    //     const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
+    //     // console.log("updatedTodaysVocabs: ", updatedTodaysVocabs)
+    //
+    //     const newVocabs: Vocab[] = updatedTodaysVocabs
+    //         .filter(vocabOfOldOnes => !oldTodaysVocabs
+    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
+    //                 vocabOfOldOnes.id))
+    //
+    //     const deactivatedVocabs: Vocab[] = oldTodaysVocabs
+    //         .filter(vocabOfOldOnes => !updatedTodaysVocabs
+    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
+    //                 vocabOfOldOnes.id))
+    //     // console.log("old vocabsToReview from updateVocabsToReview
+    // function: // ", vocabsToReview) // feliz ist nicht drin -> richtig let
+    // vocabsToReviewWithoutDeactivatedOnes: Vocab[] = [] if
+    // (vocabsToReview.length > 0) { vocabsToReviewWithoutDeactivatedOnes =
+    // vocabsToReview.filter(vocabToReview => !deactivatedVocabs
+    // .some(deactivatedVocab => deactivatedVocab.id === vocabToReview.id)) }
+    // const newVocabsToReview = [...vocabsToReviewWithoutDeactivatedOnes,
+    // ...newVocabs]  setVocabsToReview(newVocabsToReview.filter(vocab =>
+    // !reviewedVocabs.some(reviewedVocab => reviewedVocab.id === vocab.id) ))
+    // setTodaysVocabs(updatedTodaysVocabs)
+
+    // function updateVocabsToReview(): void {
+    //     const oldTodaysVocabs: Vocab[] = todaysVocabs
+    //     // console.log("oldTodaysVocabs: ", oldTodaysVocabs)
+    //     const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
+    //     // console.log("updatedTodaysVocabs: ", updatedTodaysVocabs)
+    //
+    //     const newVocabs: Vocab[] = updatedTodaysVocabs
+    //         .filter(vocabOfOldOnes => !oldTodaysVocabs
+    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
+    //                 vocabOfOldOnes.id))
+    //
+    //     const deactivatedVocabs: Vocab[] = oldTodaysVocabs
+    //         .filter(vocabOfOldOnes => !updatedTodaysVocabs
+    //             .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
+    //                 vocabOfOldOnes.id))
+    //     // console.log("old vocabsToReview from updateVocabsToReview
+    // function: ", //     vocabsToReview) // feliz ist nicht drin -> richtig
+    // let vocabsToReviewWithoutDeactivatedOnes: Vocab[] = [] if
+    // (vocabsToReview.length > 0) { vocabsToReviewWithoutDeactivatedOnes =
+    // vocabsToReview.filter(vocabToReview => !deactivatedVocabs
+    // .some(deactivatedVocab => deactivatedVocab.id === vocabToReview.id)) }
+    // setVocabsToReview( [...vocabsToReviewWithoutDeactivatedOnes,
+    // ...newVocabs]) setTodaysVocabs(updatedTodaysVocabs) }
+
+    // function getTodaysVocabs(): Vocab[] {
+    //     const date: Date = new Date()
+    //     const year: number = date.getFullYear()
+    //     const month: string = String(date.getMonth() + 1).padStart(2, '0')
+    //     const day: string = String(date.getDate()).padStart(2, '0')
+    //     const today: string = `${year}-${month}-${day}`
+    //     const userIdNumber: number = parseInt(userId)
+    //     return vocabs.filter(vocab => {
+    //         if (!vocab.datesPerUser) {
+    //             return false
+    //         }
+    //         if (!vocab.datesPerUser[userIdNumber]) {
+    //             return false
+    //         }
+    //         return vocab.datesPerUser[userIdNumber].includes(today)
+    //     })
+    // }
+
+    // function removeVocabFromVocabsToReview(id: string | null): void {
+    //     setVocabsToReview(
+    //         vocabsToReview.filter((vocab: Vocab) => vocab.id !== id))
+    // }
+
+    function getVocabsToReview() {
+        axios.get(`api/review`)
+            .then(response => {
+                const ids:string[] = Object.keys(response.data)
+                const vocabsToReview:Vocab[] = vocabs
+                    .filter(vocab => ids.some(id => vocab.id === id))
+                setVocabsToReview(vocabsToReview)
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 
-    function getTodaysVocabs(): Vocab[] {
-        const date: Date = new Date()
-        const year: number = date.getFullYear()
-        const month: string = String(date.getMonth() + 1).padStart(2, '0')
-        const day: string = String(date.getDate()).padStart(2, '0')
-        const today: string = `${year}-${month}-${day}`
-        const userIdNumber: number = parseInt(userId)
-        return vocabs.filter(vocab => {
-            if (!vocab.datesPerUser) {
-                return false
-            }
-            if (!vocab.datesPerUser[userIdNumber]) {
-                return false
-            }
-            return vocab.datesPerUser[userIdNumber].includes(today)
-        })
-    }
-
-    function removeVocabFromVocabsToReview(id: string | null): void {
-        setVocabsToReview(
-            vocabsToReview.filter((vocab: Vocab) => vocab.id !== id))
+    function removeVocabFromVocabsToReview(id: string): void {
+        axios.put(`api/review/${id}`)
+            .then(() => {
+                console.log(`Vocab ${id} was marked as reviewed for today.`)
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 
     function activateVocab(id: string): void {
@@ -235,7 +288,7 @@ function App() {
         }
     }
 
-    function getInactiveVocabs(){
+    function getInactiveVocabs() {
         return vocabs.filter(vocab => {
             if (!vocab.datesPerUser) {
                 return true
@@ -268,22 +321,25 @@ function App() {
                    />}/>
             <Route element={<ProtectedRoutes
                 userId={userId}/>}>
-                {!vocabsToReviewLoaded && <Route path={"/"}
-                                                 element={<p
-                                                     className={"loading-message"}>Loading...</p>}/>}
-                {vocabsToReviewLoaded && <Route path={"/"}
-                                                element={<HomePage
-                                                    userId={userId}
-                                                    vocabs={vocabs}
-                                                    finishedReviewing={vocabsToReview.length <
-                                                        1}
-                                                    allVocabsActivated={getInactiveVocabs().length < 1}
-                                                    setUseForm={setUseForm}
-                                                    language={language}
-                                                    setLanguage={setLanguage}
-                                                    displayNewVocabsPopUp={displayNewVocabsPopUp}
-                                                    setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
-                                                    activateVocab={activateVocab}/>}/>}
+                {/*{!vocabsToReviewUpdated && */}
+                {/*    <Route path={"/"}*/}
+                {/*                                  element={<p*/}
+                {/*                                      className={"loading-message"}>Loading...</p>}/>*/}
+                {/*}*/}
+                {/*{vocabsToReviewUpdated && */}
+                <Route path={"/"}
+                       element={<HomePage
+                           userId={userId}
+                           vocabs={vocabs}
+                           finishedReviewing={vocabsToReview.length < 1}
+                           allVocabsActivated={getInactiveVocabs().length < 1}
+                           setUseForm={setUseForm}
+                           language={language}
+                           setLanguage={setLanguage}
+                           displayNewVocabsPopUp={displayNewVocabsPopUp}
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
+                           activateVocab={activateVocab}/>}/>
+                {/*}*/}
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
                     setUseForm={setUseForm}
@@ -296,7 +352,8 @@ function App() {
                            language={language}
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsToReview={vocabsToReview}
-                           changeReviewDates={changeReviewDates}/>}/>
+                           changeReviewDates={changeReviewDates}
+                       />}/>
                 <Route path={"/backlog"}
                        element={<BacklogPage
                            vocabs={getInactiveVocabs()}
