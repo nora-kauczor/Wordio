@@ -1,6 +1,7 @@
 package org.example.backend.review;
 
 
+import org.example.backend.vocab.Language;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +11,7 @@ import java.time.LocalDate;
 public interface ReviewDayRepo extends MongoRepository<ReviewDay, String> {
 
 
-    ReviewDay getByDayAndUserId(LocalDate day, String userName);
+
+
+    ReviewDay getByDayAndUserIdAndLanguage(LocalDate day, String userId, Language language);
 }

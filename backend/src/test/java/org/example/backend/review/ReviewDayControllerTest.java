@@ -1,5 +1,6 @@
 package org.example.backend.review;
 
+import org.example.backend.vocab.Language;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ class ReviewDayControllerTest {
         LocalDate date = ZonedDateTime.now().toLocalDate();
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab-id", false);
-        ReviewDay reviewDay = new ReviewDay("000", date, "user id", idsOfVocabsToReview);
+        ReviewDay reviewDay = new ReviewDay("000", date, Language.SPANISH, "user id", idsOfVocabsToReview);
         reviewDayRepo.save(reviewDay);
     }
 

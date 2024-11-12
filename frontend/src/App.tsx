@@ -26,14 +26,14 @@ function App() {
     const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState<string>("language",
         {defaultValue: ""})
-    // const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
-    //     "vocabsToReview", {defaultValue: []})
+    // const [vocabsToReview, setVocabsToReview] =
+    // useLocalStorageState<Vocab[]>( "vocabsToReview", {defaultValue: []})
     const [vocabsToReview, setVocabsToReview] = useState<Vocab[]>([])
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
     console.log("running")
-console.log(vocabs)
+    console.log(vocabs)
 
     useEffect(() => {
         console.log("running getUserId()")
@@ -60,7 +60,8 @@ console.log(vocabs)
     useEffect(() => {
         if (vocabs.length > 0) {
             console.log("running now getVocabsToReview()")
-        getVocabsToReview()}
+            getVocabsToReview()
+        }
     }, [vocabs]);
 
 
@@ -92,60 +93,45 @@ console.log(vocabs)
 
     function getVocabById(id: string): Vocab | void {
         console.log(id)
-console.log(vocabs)
+        console.log(vocabs)
         if (vocabs.length < 1) {
             console.error("Couldn't get Vocab by ID because vocabs was empty.");
 
         } else {
             return vocabs.find(vocab => vocab.id === id)
         }
-
-
     }
-
 
     // console.log(vocabs[0])
 
     function getVocabsToReview() {
         axios.get(`/api/review?language=${language}`)
             .then(response => {
-
+                console.log(response.data)
                 const idsOfNonReviewedVocabs = Object.entries(
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
                     .map(innerArray => innerArray[0]);
-
-
                 if (vocabs.length < 1) {
                     console.error(
                         "Couldn't get vocabs to review because vocabs was empty.");
-
                 } else {
-
-
-                const vocabsToReview: Vocab[] = idsOfNonReviewedVocabs.map(
-                   id => {
-
-                       return getVocabById(id)
-                   })
-
-                // const vocabsToReview: Vocab[] = vocabs.filter(vocab => {
-                //     if (!vocab.id) {
-                //         return false
-                //     } else {
-                //         idsOfNonReviewedVocabs.some(id => id == vocab.id)
-                //     }
-                // })
-                // console.log(vocabsToReview)
-                setVocabsToReview(vocabsToReview)
-            }
+                    const vocabsToReview: Vocab[] = idsOfNonReviewedVocabs.map(
+                        id => {
+                            return getVocabById(id)
+                        })
+                    console.log(
+                        "log vocabsToReview from inside getVocabsToReview function: ",
+                        vocabsToReview)
+                    setVocabsToReview(vocabsToReview)
+                }
             })
             .catch(error => {
                 console.error(error)
             })
     }
 
-    // console.log(vocabsToReview)
+    console.log(vocabsToReview)
 
     function removeVocabFromVocabsToReview(id: string): void {
         axios.put(`/api/review/${id}`)
