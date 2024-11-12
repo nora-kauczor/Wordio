@@ -26,8 +26,8 @@ function App() {
         {defaultValue: ""});
     const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
         "vocabsToReview", {defaultValue: []})
-    const [vocabsToReviewLoaded, setVocabsToReviewLoaded] = useState<boolean>(
-        false)
+    // const [vocabsToReviewLoaded, setVocabsToReviewLoaded] = useState<boolean>(
+    //     false)
     const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
         "todaysVocabs", {defaultValue: []})
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
@@ -46,7 +46,7 @@ function App() {
 
     useEffect(() => {
         updateVocabsToReview()
-        setVocabsToReviewLoaded(true)
+        // setVocabsToReviewLoaded(true)
     }, [vocabs]);
 
     useEffect(() => {
@@ -56,6 +56,7 @@ function App() {
             navigate("/login")
         }
     }, [userId]);
+
 
     function getAllVocabsOfLanguage() {
         if (!language || !userId) {
@@ -95,6 +96,10 @@ function App() {
                 .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
                     vocabOfOldOnes.id))
         let vocabsToReviewWithoutDeactivatedOnes: Vocab[] = []
+        if (!vocabsToReview) {
+            setVocabsToReview([])
+            return
+        }
         if (vocabsToReview.length > 0) {
             vocabsToReviewWithoutDeactivatedOnes =
                 vocabsToReview.filter(vocabToReview => !deactivatedVocabs
@@ -235,7 +240,7 @@ function App() {
         }
     }
 
-    function getInactiveVocabs(){
+    function getInactiveVocabs() {
         return vocabs.filter(vocab => {
             if (!vocab.datesPerUser) {
                 return true
@@ -268,22 +273,28 @@ function App() {
                    />}/>
             <Route element={<ProtectedRoutes
                 userId={userId}/>}>
-                {!vocabsToReviewLoaded && <Route path={"/"}
-                                                 element={<p
-                                                     className={"loading-message"}>Loading...</p>}/>}
-                {vocabsToReviewLoaded && <Route path={"/"}
-                                                element={<HomePage
-                                                    userId={userId}
-                                                    vocabs={vocabs}
-                                                    finishedReviewing={vocabsToReview.length <
-                                                        1}
-                                                    allVocabsActivated={getInactiveVocabs().length < 1}
-                                                    setUseForm={setUseForm}
-                                                    language={language}
-                                                    setLanguage={setLanguage}
-                                                    displayNewVocabsPopUp={displayNewVocabsPopUp}
-                                                    setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
-                                                    activateVocab={activateVocab}/>}/>}
+                {/*{!vocabsToReviewLoaded && */}
+                {/*    <Route path={"/"}*/}
+                {/*                                 element={<p*/}
+                {/*                                     className={"loading-message"}>Loading...</p>}/>*/}
+                {/*}*/}
+                {/*{vocabsToReviewLoaded && vocabsToReview &&*/}
+                    <Route path={"/"}
+                                                                  element={
+                                                                      <HomePage
+                                                                          userId={userId}
+                                                                          vocabs={vocabs}
+                                                                          finishedReviewing={ vocabsToReview && vocabsToReview.length <
+                                                                              1}
+                                                                          allVocabsActivated={getInactiveVocabs().length <
+                                                                              1}
+                                                                          setUseForm={setUseForm}
+                                                                          language={language}
+                                                                          setLanguage={setLanguage}
+                                                                          displayNewVocabsPopUp={displayNewVocabsPopUp}
+                                                                          setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
+                                                                          activateVocab={activateVocab}/>}/>
+            {/*}*/}
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
                     setUseForm={setUseForm}
