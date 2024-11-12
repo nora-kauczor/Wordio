@@ -1,0 +1,10 @@
+#display-page {
+    justify-content: space-evenly;
+    gap: 2.75vh;
+    font-size: 20px;
+}
+
+#display-page-text {
+    line-height: 28px;
+    margin: 10px 30px; padding: 0;
+}

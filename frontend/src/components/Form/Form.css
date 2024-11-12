@@ -4,6 +4,7 @@
     justify-content: space-around;
     gap: 10px;
     width: 70%;
+    max-width: 300px;
     height: auto;
 }
 
@@ -22,8 +23,8 @@ label {
 }
 
 input {
-    margin: 0;
-    padding: 3px;
+    margin-top: 2px;
+    padding: 7px;
     font-size: inherit;
     border-radius: 0.3rem;
 }

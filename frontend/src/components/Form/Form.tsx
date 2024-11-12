@@ -34,7 +34,8 @@ export default function Form(props: Readonly<Props>) {
             info: infoInput,
             language: props.language,
             createdBy: props.userId,
-            datesPerUser: props.vocabToEdit ? props.vocabToEdit.datesPerUser : undefined,
+            datesPerUser: props.vocabToEdit ? props.vocabToEdit.datesPerUser :
+                undefined,
         };
         if (props.vocabToEdit) {
             props.editVocab(vocab)
@@ -63,7 +64,8 @@ export default function Form(props: Readonly<Props>) {
     }
 
     return (<div id={"form"} className={"pop-up"}
-                 role={"dialog"} aria-labelledby={"form-title"} aria-modal={"true"}>
+                 role={"dialog"} aria-labelledby={"form-title"}
+                 aria-modal={"true"}>
         <button className={"close-button"}
                 onClick={() => props.setUseForm(false)}
                 aria-label={"Close form"}
@@ -75,6 +77,8 @@ export default function Form(props: Readonly<Props>) {
             <label htmlFor={"word-input"}>Your Vocab</label>
             <input name={"word"} id={"word-input"} value={wordInput}
                    onChange={handleChange}
+                   type={"text"}
+                   maxLength={20}
                    aria-required={"true"}
                    required
             />
@@ -82,17 +86,22 @@ export default function Form(props: Readonly<Props>) {
                 English</label>
             <input name={"translation"} id={"translation-input"}
                    value={translationInput} onChange={handleChange}
+                   type={"text"}
+                   maxLength={20}
                    aria-required={"true"}
                    required/>
             <label htmlFor={"info-input"}>Additional info, e.g.
                 "colloquial"</label>
             <input name={"info"} id={"info-input"} value={infoInput}
+                   type={"text"} maxLength={20}
                    onChange={handleChange}/>
         </div>
-        <button className={"form-button"} onClick={() => handleClick("submit")}>submit
+        <button className={"form-button"}
+                onClick={() => handleClick("submit")}>submit
         </button>
         {!props.vocabToEdit && <button className={"form-button"}
-            onClick={() => handleClick("submit-and-activate")}
+                                       onClick={() => handleClick(
+                                           "submit-and-activate")}
         >submit and activate
         </button>}
     </div>)

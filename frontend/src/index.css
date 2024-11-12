@@ -3,7 +3,10 @@
     --header-color: darkblue;
     --navbar-font-color: white;
     --navbar-color: darkblue;
+    --navbar-highlight-font-color: black;
+    --navbar-highlight-color: rgba(211, 211, 211, 0.98);
     --dropdown-color: white;
+    --calendar-color: rgba(255, 250, 240, 0.93);
 }
 
 body {
@@ -14,10 +17,6 @@ body {
     background-color: #D1E7F5;
 }
 
-h1, h2, h3 {
-    color: inherit;
-}
-
 button {
     border: none;
     border-radius: 5px;
@@ -26,11 +25,17 @@ button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    word-wrap: break-word;
 }
 
 .page {
     height: 100%;
     width: 100%;
+    min-width:350px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -44,10 +49,6 @@ button {
     padding: 1rem 0;
     width: 70%;
     font-size: 20px;
-    &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
 }
 
 .close-button {
@@ -56,6 +57,9 @@ button {
     cursor: pointer;
     padding: 0;
     margin: 0;
+    position: fixed;
+    top: 10px;
+    right: 15px;
 }
 
 .back-button {
@@ -111,6 +115,7 @@ button {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+
 }
 
 .card {
@@ -118,4 +123,5 @@ button {
     border: lightgray 3px solid;
     border-radius: 0.3rem;
     background-color: #FFF8DC;
+    color: black;
 }

@@ -101,28 +101,27 @@ export default function CalendarPage(props: Readonly<Props>) {
 
 
     return (<div id={"calendar-page"} className={"page"} role={"main"}>
+        <div style={{height: "40px"}}/>
         <div id={"button-and-header-container"}>
-            {month &&<button
+            {month && <button
                 className={"calendar-button"}
                 onClick={() => changeMonth("previous")}
                 onKeyDown={() => changeMonth("previous")}
                 aria-label={"Previous month"}>◀︎
             </button>}
             {month && <h2>{month.yearMonthName}</h2>}
-            {month &&<button className={"calendar-button"}
-                    onClick={() => changeMonth("next")}
-                    onKeyDown={() => changeMonth("next")}
-                             aria-label={"Next month"}>▶︎
+            {month && <button className={"calendar-button"}
+                              onClick={() => changeMonth("next")}
+                              onKeyDown={() => changeMonth("next")}
+                              aria-label={"Next month"}>▶︎
             </button>}
         </div>
         <article id={"weeks-wrapper"}>
-            {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek =>
-                <CalendarWeek
+            {month && month.vocabIdsOfMonth.map(vocabIdsOfWeek => <CalendarWeek
                 key={uid()}
                 vocabIdsOfWeek={vocabIdsOfWeek}
                 openDayPopUpAndPassItVocabs={openDayPopUpAndPassItVocabs}/>)}
         </article>
-        {/*// TODO overlay legt sich auch über das pop up selbst....*/}
         {vocabsOfDayPopUp.length > 0 && <div className={"overlay"}/>}
         {vocabsOfDayPopUp.length > 0 && <DayPopUp
             day={dayOfDayPopUp}
@@ -131,10 +130,12 @@ export default function CalendarPage(props: Readonly<Props>) {
             openForm={props.openForm}
             deactivateVocab={props.deactivateVocab}
             userId={props.userId}/>}
-        <button className={"back-button"} id={"calendar-back-button"} onClick={() => navigate("/")}
+        <button className={"back-button"} id={"calendar-back-button"}
+                onClick={() => navigate("/")}
                 onKeyDown={() => navigate("/")}
                 aria-label={"Go back to the main page"}>
-            ← Back
+            Go to homepage
         </button>
+        <div style={{height: "40px"}}/>
     </div>)
 }

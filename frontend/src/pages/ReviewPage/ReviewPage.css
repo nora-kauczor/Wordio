@@ -1,8 +1,9 @@
 #review-page {
-    gap: 40px;
+    gap: 30px;
     height: 70%;
     margin: 0;
 }
+
 
 #review-input-and-button-wrapper {
     width: 70vw;
@@ -21,6 +22,14 @@
     border: 2px gray solid;
     font-size: inherit;
     border-radius: 0.3rem;
+}
+
+.red {
+    color: red !important;
+}
+
+.green {
+    color:green !important;
 }
 
 .review-page-button {

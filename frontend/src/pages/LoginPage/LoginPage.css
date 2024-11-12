@@ -1,4 +1,18 @@
+#login-page{
+    height: 65vh;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 50px;
+}
+#login-page-text {
+    font-size: 18px;
+    width: 75%;
+    line-height: 30px;
+    margin: 0;
+    padding-left: 50px;
+}
+
 #login-button {
     padding: 10px;
-    font-size: 1.5rem
+    font-size: 1rem
 }

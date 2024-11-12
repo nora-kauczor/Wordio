@@ -1,7 +1,6 @@
 #calendar-day-wrapper {
     height: 90px;
     width: 50px;
-    display: flex;
 }
 
 #calendar-day {
@@ -10,10 +9,10 @@
     height: 100%;
     width: 100%;
     font-size: 0.75rem;
-    border: 1px solid gray;
+    border: 1px solid lightgray;
     border-radius: 0;
     color: black;
-    background-color: inherit;
+    background-color: var(--calendar-color);
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
@@ -41,7 +40,9 @@
     font-size: 1.5em;
 }
 
-#invisible-dot {color: #D1E7F5;}
+#invisible-dot {
+    color: var(--calendar-color);
+}
 
 #plus {
     font-size: 1em;

@@ -8,6 +8,7 @@ import PickLanguagePopUp
 
 type Props = {
     finishedReviewing: boolean
+    allVocabsActivated: boolean
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     language?: string
     vocabs: Vocab[]
@@ -15,6 +16,7 @@ type Props = {
     userId: string
     displayNewVocabsPopUp: boolean
     setDisplayNewVocabsPopUp: React.Dispatch<React.SetStateAction<boolean>>
+    activateVocab: (id: string) => void
 }
 
 export default function HomePage(props: Readonly<Props>) {
@@ -27,17 +29,19 @@ export default function HomePage(props: Readonly<Props>) {
                     scheduled
                     for today or you've already reviewed
                     all of it. <br/><br/>To start learning
-                    (more) words click below </p>}
+                    (more) words click below. </p>}
             {!props.finishedReviewing && props.language &&
-                <p className={"homepage-text"}>Nice to see you! <br/>Click below
+                <p className={"homepage-text"}>Nice to see you! <br/><br/>Click
+                    below
                     to
                     get
                     started with your daily vocab
-                    review</p>}
+                    review.</p>}
             {props.finishedReviewing && props.language && <button
                 className={"big-button"}
                 onClick={() => props.setDisplayNewVocabsPopUp(true)}
-                onKeyDown={(e) => e.key === 'Enter' && props.setDisplayNewVocabsPopUp(true)}
+                onKeyDown={(e) => e.key === 'Enter' &&
+                    props.setDisplayNewVocabsPopUp(true)}
                 aria-label={"Open new vocabulary popup"}
             >
                 New vocabulary</button>}
@@ -49,11 +53,15 @@ export default function HomePage(props: Readonly<Props>) {
             >Review
             </button>}
         </article>
-        {props.displayNewVocabsPopUp && props.vocabs && <div className={"overlay"}/>}
-        {props.displayNewVocabsPopUp && props && <NewVocabsPopUp userId={props.userId}
-                                               vocabs={props.vocabs}
-                                               setUseForm={props.setUseForm}
-                                               setDisplayNewVocabsPopUp={props.setDisplayNewVocabsPopUp}/>}
+        {props.displayNewVocabsPopUp && props.vocabs &&
+            <div className={"overlay"}/>}
+        {props.displayNewVocabsPopUp && props &&
+            <NewVocabsPopUp userId={props.userId}
+                            vocabs={props.vocabs}
+                            setUseForm={props.setUseForm}
+                            setDisplayNewVocabsPopUp={props.setDisplayNewVocabsPopUp}
+                            activateVocab={props.activateVocab}
+            allVocabsActivated={props.allVocabsActivated}/>}
         {!props.language && <div className={"overlay"}/>}
         {!props.language &&
             <PickLanguagePopUp setLanguage={props.setLanguage}/>}

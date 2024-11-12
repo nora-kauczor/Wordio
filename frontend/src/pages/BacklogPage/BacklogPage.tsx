@@ -1,7 +1,7 @@
 import './BacklogPage.css'
 import {Vocab} from "../../types/Vocab.ts";
 import VocabList from "../../components/VocabList/VocabList.tsx";
-import React, {useEffect} from "react";
+import React from "react";
 
 
 type Props = {
@@ -12,24 +12,25 @@ type Props = {
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
     userId: string
+    allVocabsActivated: boolean
 }
 
 export default function BacklogPage(props: Readonly<Props>) {
 
-    useEffect(() => {
-        props.setUseForm(false)
-    }, [props]);
-
-    if (props.vocabs.length < 1 || !Array.isArray(props.vocabs)) return <p
+    if (props.vocabs.length < 1 && !props.allVocabsActivated) return <p
         className={"loading-message"}>Loading...</p>
+    if (!Array.isArray(props.vocabs)) return <p
+        className={"loading-message"}>Loading...</p>
+    if(props.allVocabsActivated) return <p className={"loading-message"}>Backlog is empty</p>
 
     return (<div id={"backlog-page"} className={"page"} role={"main"}>
-        <VocabList vocabs={props.vocabs}
-                   calendarMode={false}
-                   activateVocab={props.activateVocab}
-                   deleteVocab={props.deleteVocab}
-                   openForm={props.openForm}
-                   userId={props.userId}/>
+        <div style={{height: "50px"}}/><VocabList vocabs={props.vocabs}
+                    calendarMode={false}
+                    activateVocab={props.activateVocab}
+                    deleteVocab={props.deleteVocab}
+                    openForm={props.openForm}
+                    userId={props.userId}/>
+        <div style={{height: "50px"}}/>
     </div>)
 
 }

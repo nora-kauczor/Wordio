@@ -1,7 +1,10 @@
-
+#homepage {
+    height: 65vh;
+    justify-content: flex-end;
+}
 #homepage-text-and-button {
     width: 70%;
-    height: 70%;
+    max-width: 300px;
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,4 +16,5 @@
 .homepage-text{
 line-height: 20px;
     padding-left: 15px;
+    align-self: center;
 }
