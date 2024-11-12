@@ -20,8 +20,8 @@ public class VocabController {
     private final VocabService vocabService;
 
     @GetMapping
-    public List<Vocab> getAllVocabsOfLanguageByUserName(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        return vocabService.getAllVocabsOfLanguageByUserName(language, user.getName());
+    public List<Vocab> getAllVocabsOfLanguage(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
+        return vocabService.getAllVocabsOfLanguage(language, user.getName());
     }
 
     @PostMapping

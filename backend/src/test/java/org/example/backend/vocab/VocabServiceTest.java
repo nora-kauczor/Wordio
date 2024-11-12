@@ -75,16 +75,16 @@ class VocabServiceTest {
     }
 
     @Test
-    void getAllVocabsOfLanguageByUserName_shouldThrowLanguageNotFoundException_whenCalledWithNonexistentLanguage() {
+    void getAllVocabsOfLanguage_shouldThrowLanguageNotFoundException_whenCalledWithNonexistentLanguage() {
         Vocab testVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, new HashMap<>(), "Wordio");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab));
         assertThrows(LanguageNotFoundException.class, () -> vocabService
-                .getAllVocabsOfLanguageByUserName("Esperanto", "jane-doe"));
+                .getAllVocabsOfLanguage("Esperanto", "jane-doe"));
     }
 
     @Test
-    void getAllVocabsOfLanguageByUserName_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws LanguageNotFoundException {
+    void getAllVocabsOfLanguage_shouldReturnAllVocabsOfLanguage_whenCalledWithExistentLanguage() throws LanguageNotFoundException {
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
         datesPerUser.put("jane-doe", List.of());
         Vocab testVocab = new Vocab("000", "la prueba", "test",
@@ -97,7 +97,7 @@ class VocabServiceTest {
                 "", Language.SPANISH, datesPerUser, "average-joe");
         when(mockVocabRepo.findAll()).thenReturn(List.of(testVocab, testVocab2, vocabDifferentLanguage, vocabByOtherUser));
         List<Vocab> expected = List.of(testVocab, testVocab2);
-        List<Vocab> actual = vocabService.getAllVocabsOfLanguageByUserName("Spanish", "jane-doe");
+        List<Vocab> actual = vocabService.getAllVocabsOfLanguage("Spanish", "jane-doe");
         assertEquals(expected, actual);
     }
 

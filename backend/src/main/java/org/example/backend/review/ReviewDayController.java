@@ -18,18 +18,6 @@ public class ReviewDayController {
 
     private final ReviewDayService reviewDayService;
 
-
-
-    @GetMapping("/test-id")
-    public List<Vocab> TESTmitID(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        return reviewDayService.getAllVocabsOfLanguageByUserId(language, user.getAttribute("sub"));
-    }
-
-    @GetMapping("/test-name")
-    public List<Vocab> TESTmitNAME(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
-        return reviewDayService.getAllVocabsOfLanguageByUserName(language, user.getName());
-    }
-
     @GetMapping
     public ReviewDay getReviewDay(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
         return reviewDayService.getReviewDay(language, user.getName(), ZonedDateTime.now().toLocalDate());

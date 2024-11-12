@@ -24,15 +24,6 @@ public class ReviewDayService {
     private final ReviewDayRepo reviewDayRepo;
     private final VocabService vocabService;
 
-    public List<Vocab> getAllVocabsOfLanguageByUserId(String languageString, String userId) throws LanguageNotFoundException {
-        System.out.println(userId);
-        return vocabService.getAllVocabsOfLanguageByUserId(languageString, userId);
-    }
-    public List<Vocab> getAllVocabsOfLanguageByUserName(String languageString, String userId) throws LanguageNotFoundException {
-        System.out.println(userId);
-        return vocabService.getAllVocabsOfLanguageByUserId(languageString, userId);
-    }
-
     public ReviewDay getReviewDay(String language, String userId, LocalDate day) {
         System.out.println("Debug: Language: " + language + ", UserId: " + userId);
         Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserId(day, userId));
@@ -52,10 +43,7 @@ public class ReviewDayService {
     }
 
     ReviewDay createReviewDay(String language, String userId, LocalDate day) throws LanguageNotFoundException, UserNotFoundException {
-        System.out.println("userId: " + userId);
-        List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguageByUserId(language, userId);
-        System.out.println("vocabService.getAllVocabsOfLanguageByUserId(language, userId): " + vocabService.getAllVocabsOfLanguageByUserId(language, userId));
-        System.out.println("vocabService.TEST(): " + vocabService.TEST());
+        List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguage(language, userId);
         if (allVocabsOfLanguage.isEmpty()) {
             return new ReviewDay(null, day, userId, new HashMap<>());
         }
