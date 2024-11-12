@@ -32,7 +32,6 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    console.log(vocabs)
     useEffect(() => {
         getUserId()
     }, []);
@@ -52,7 +51,8 @@ function App() {
     }, [language, userId]);
 
     useEffect(() => {
-        getVocabsToReview()
+        if (vocabs.length > 0) {
+        getVocabsToReview()}
     }, [vocabs]);
 
 
@@ -82,27 +82,58 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
+    function getVocabById(id: string): Vocab | void {
+        console.log(id)
+        if (vocabs.length < 1) {
+            console.error("Couldn't get Vocab by ID because vocabs was null.");
+            return
+        }
+        return vocabs.find(vocab => vocab.id === id)
+    }
+
+    // console.log(getVocabById("67306f9c3b9e9f5d965a4a7b"))
+
     function getVocabsToReview() {
         axios.get(`/api/review?language=${language}`)
             .then(response => {
-                console.log("response.data: ", response.data)
-                // const reviewDay: ReviewDay = response.data;
-                // if (!reviewDay.vocabIds){setVocabsToReview([])}
-                // const vocabIds: {
-                //     [vocabId: string]: boolean
-                // } = reviewDay.vocabIds;
-                // const idsOfNonReviewedVocabs = Object.entries(vocabIds)
-                //     .filter(([vocabId, isReviewed]) => !isReviewed)
-                //     .map(([vocabId]) => vocabId);
-                // const vocabsToReview: Vocab[] = vocabs
-                //     .filter(vocab => idsOfNonReviewedVocabs.some(
-                //         id => vocab.id === id))
-                // setVocabsToReview(vocabsToReview)
+                const idsOfNonReviewedVocabs = Object.entries(
+                    response.data.idsOfVocabsToReview)
+                    .filter(([id, value]) => value === false)
+                    .map(([id]) => id);
+
+                console.log(idsOfNonReviewedVocabs)
+                if (!vocabs) {
+                    console.error(
+                        "Couldn't get vocabs to review because vocabs was null.");
+                    return
+                }
+                // console.log(typeof idsOfNonReviewedVocabs)
+                // console.log(typeof vocabs)
+
+
+                console.log(getVocabById(idsOfNonReviewedVocabs[0]))
+
+                const vocabsToReview: Vocab[] = idsOfNonReviewedVocabs.map(
+                    vocab => {
+                        id => getVocabById(id)
+                    })
+
+                // const vocabsToReview: Vocab[] = vocabs.filter(vocab => {
+                //     if (!vocab.id) {
+                //         return false
+                //     } else {
+                //         idsOfNonReviewedVocabs.some(id => id == vocab.id)
+                //     }
+                // })
+                // console.log(vocabsToReview)
+                setVocabsToReview(vocabsToReview)
             })
             .catch(error => {
                 console.error(error)
             })
     }
+
+    // console.log(vocabsToReview)
 
     function removeVocabFromVocabsToReview(id: string): void {
         axios.put(`/api/review/${id}`)
