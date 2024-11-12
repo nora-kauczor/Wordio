@@ -17,7 +17,6 @@ import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import useLocalStorageState from "use-local-storage-state";
 import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
 import {toast, ToastContainer} from "react-toastify";
-import {ReviewDay} from "./types/ReviewDay.ts";
 
 function App() {
 
@@ -26,22 +25,18 @@ function App() {
     const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState<string>("language",
         {defaultValue: ""})
-    // const [vocabsToReview, setVocabsToReview] =
-    // useLocalStorageState<Vocab[]>( "vocabsToReview", {defaultValue: []})
-    const [vocabsToReview, setVocabsToReview] = useState<Vocab[]>([])
+    const [vocabsToReview, setVocabsToReview] =
+    useLocalStorageState<Vocab[]>( "vocabsToReview", {defaultValue: []})
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
-    console.log("running")
-    console.log(vocabs)
+
 
     useEffect(() => {
-        console.log("running getUserId()")
         getUserId()
     }, []);
 
     useEffect(() => {
-        console.log("running navigatio ")
         if (userId) {
             navigate("/")
         } else {
@@ -52,14 +47,12 @@ function App() {
     useEffect(() => {
 
         if (language && userId) {
-            console.log("running getAllVocabsOfLanguage()")
             getAllVocabsOfLanguage()
         }
     }, [language, userId]);
 
     useEffect(() => {
         if (vocabs.length > 0) {
-            console.log("running now getVocabsToReview()")
             getVocabsToReview()
         }
     }, [vocabs]);
@@ -69,7 +62,6 @@ function App() {
         if (language && userId) {
             axios.get(`/api/vocab?language=${language}`)
                 .then(response => {
-                    console.log("setting vocabs")
                     setVocabs(response.data)
                 })
                 .catch(error => console.error(error))
@@ -92,22 +84,17 @@ function App() {
     }
 
     function getVocabById(id: string): Vocab | void {
-        console.log(id)
-        console.log(vocabs)
         if (vocabs.length < 1) {
             console.error("Couldn't get Vocab by ID because vocabs was empty.");
-
         } else {
             return vocabs.find(vocab => vocab.id === id)
         }
     }
 
-    // console.log(vocabs[0])
 
     function getVocabsToReview() {
         axios.get(`/api/review?language=${language}`)
             .then(response => {
-                console.log(response.data)
                 const idsOfNonReviewedVocabs = Object.entries(
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
@@ -120,9 +107,6 @@ function App() {
                         id => {
                             return getVocabById(id)
                         })
-                    console.log(
-                        "log vocabsToReview from inside getVocabsToReview function: ",
-                        vocabsToReview)
                     setVocabsToReview(vocabsToReview)
                 }
             })
@@ -131,7 +115,6 @@ function App() {
             })
     }
 
-    console.log(vocabsToReview)
 
     function removeVocabFromVocabsToReview(id: string): void {
         axios.put(`/api/review/${id}`)
@@ -264,6 +247,8 @@ function App() {
         })
     }
 
+    if (vocabs.length < 1) {return <p className={"loading-message"}>Loading...</p>}
+
     return (<div id={"app"} role={"main"}>
         <ToastContainer autoClose={2000} hideProgressBar={true}
                         closeButton={false}/>
@@ -283,17 +268,11 @@ function App() {
                    />}/>
             <Route element={<ProtectedRoutes
                 userId={userId}/>}>
-                {/*{!vocabsToReviewUpdated && */}
-                {/*    <Route path={"/"}*/}
-                {/*                                  element={<p*/}
-                {/*                                      className={"loading-message"}>Loading...</p>}/>*/}
-                {/*}*/}
-                {/*{vocabsToReviewUpdated && */}
                 <Route path={"/"}
                        element={<HomePage
                            userId={userId}
                            vocabs={vocabs}
-                           // finishedReviewing={vocabsToReview.length < 1}
+                           finishedReviewing={vocabsToReview.length < 1}
                            allVocabsActivated={getInactiveVocabs().length < 1}
                            setUseForm={setUseForm}
                            language={language}
@@ -301,7 +280,6 @@ function App() {
                            displayNewVocabsPopUp={displayNewVocabsPopUp}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
                            activateVocab={activateVocab}/>}/>
-                {/*}*/}
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
                     setUseForm={setUseForm}

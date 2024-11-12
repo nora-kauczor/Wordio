@@ -44,29 +44,23 @@ public class ReviewDayService {
 
 
     ReviewDay createReviewDay(Language language, String userId, LocalDate day) throws LanguageNotFoundException, UserNotFoundException {
-            List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguage(language.getStringOfEnum(), userId);
-        System.out.println(language.getStringOfEnum());
+        List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguage(language.getStringOfEnum(), userId);
         if (allVocabsOfLanguage.isEmpty()) {
             return new ReviewDay(null, day, language, userId, new HashMap<>());
         }
-
         List<Vocab> activeVocabs = allVocabsOfLanguage.stream()
                 .filter(vocab -> vocab.getDatesPerUser().containsKey(userId))
                 .toList();
-
         if (activeVocabs.isEmpty()) {
             return new ReviewDay(null, day, language, userId, new HashMap<>());
         }
-
         List<Vocab> todaysVocabs = activeVocabs.stream()
                 .filter(vocab -> vocab.getDatesPerUser().get(userId).contains(day))
                 .toList();
-
         Map<String, Boolean> idsToReview = new HashMap<>();
         for (Vocab vocab : todaysVocabs) {
             idsToReview.put(vocab.getId(), false);
         }
-
         return new ReviewDay(null, day, language, userId, idsToReview);
     }
 
