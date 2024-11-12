@@ -1,17 +1,16 @@
 package org.example.backend.review;
 
-import lombok.AllArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.exception.UserNotFoundException;
-import org.example.backend.vocab.Language;
+
 import org.example.backend.vocab.Vocab;
-import org.example.backend.vocab.VocabRepo;
+
 import org.example.backend.vocab.VocabService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.time.LocalDate;
 import java.util.*;
@@ -25,9 +24,7 @@ public class ReviewDayService {
     private final VocabService vocabService;
 
     public ReviewDay getReviewDay(String language, String userId, LocalDate day) {
-        System.out.println("Debug: Language: " + language + ", UserId: " + userId);
         Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserId(day, userId));
-        System.out.println("optionalReviewDay: " + optionalReviewDay);
         return optionalReviewDay.orElseGet(() -> {
             ReviewDay newReviewDay = null;
             try {

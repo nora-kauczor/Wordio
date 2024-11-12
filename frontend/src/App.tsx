@@ -26,17 +26,22 @@ function App() {
     const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState<string>("language",
         {defaultValue: ""})
-    const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
-        "vocabsToReview", {defaultValue: []})
+    // const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
+    //     "vocabsToReview", {defaultValue: []})
+    const [vocabsToReview, setVocabsToReview] = useState<Vocab[]>([])
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
+    console.log("running")
+console.log(vocabs)
 
     useEffect(() => {
+        console.log("running getUserId()")
         getUserId()
     }, []);
 
     useEffect(() => {
+        console.log("running navigatio ")
         if (userId) {
             navigate("/")
         } else {
@@ -45,26 +50,29 @@ function App() {
     }, [userId]);
 
     useEffect(() => {
+
         if (language && userId) {
+            console.log("running getAllVocabsOfLanguage()")
             getAllVocabsOfLanguage()
         }
     }, [language, userId]);
 
     useEffect(() => {
         if (vocabs.length > 0) {
+            console.log("running now getVocabsToReview()")
         getVocabsToReview()}
     }, [vocabs]);
 
 
     function getAllVocabsOfLanguage() {
-        if (!language || !userId) {
-            return
+        if (language && userId) {
+            axios.get(`/api/vocab?language=${language}`)
+                .then(response => {
+                    console.log("setting vocabs")
+                    setVocabs(response.data)
+                })
+                .catch(error => console.error(error))
         }
-        axios.get(`/api/vocab?language=${language}`)
-            .then(response => {
-                setVocabs(response.data)
-            })
-            .catch(error => console.error(error))
     }
 
     function getUserId(): void {
@@ -84,39 +92,42 @@ function App() {
 
     function getVocabById(id: string): Vocab | void {
         console.log(id)
+console.log(vocabs)
         if (vocabs.length < 1) {
-            console.error("Couldn't get Vocab by ID because vocabs was null.");
-            return
+            console.error("Couldn't get Vocab by ID because vocabs was empty.");
+
+        } else {
+            return vocabs.find(vocab => vocab.id === id)
         }
-        return vocabs.find(vocab => vocab.id === id)
+
+
     }
 
-    // console.log(getVocabById("67306f9c3b9e9f5d965a4a7b"))
+
+    // console.log(vocabs[0])
 
     function getVocabsToReview() {
         axios.get(`/api/review?language=${language}`)
             .then(response => {
+
                 const idsOfNonReviewedVocabs = Object.entries(
                     response.data.idsOfVocabsToReview)
-                    .filter(([id, value]) => value === false)
-                    .map(([id]) => id);
+                    .filter(innerArray => innerArray[1] === false)
+                    .map(innerArray => innerArray[0]);
 
-                console.log(idsOfNonReviewedVocabs)
-                if (!vocabs) {
+
+                if (vocabs.length < 1) {
                     console.error(
-                        "Couldn't get vocabs to review because vocabs was null.");
-                    return
-                }
-                // console.log(typeof idsOfNonReviewedVocabs)
-                // console.log(typeof vocabs)
+                        "Couldn't get vocabs to review because vocabs was empty.");
 
+                } else {
 
-                console.log(getVocabById(idsOfNonReviewedVocabs[0]))
 
                 const vocabsToReview: Vocab[] = idsOfNonReviewedVocabs.map(
-                    vocab => {
-                        id => getVocabById(id)
-                    })
+                   id => {
+
+                       return getVocabById(id)
+                   })
 
                 // const vocabsToReview: Vocab[] = vocabs.filter(vocab => {
                 //     if (!vocab.id) {
@@ -127,6 +138,7 @@ function App() {
                 // })
                 // console.log(vocabsToReview)
                 setVocabsToReview(vocabsToReview)
+            }
             })
             .catch(error => {
                 console.error(error)

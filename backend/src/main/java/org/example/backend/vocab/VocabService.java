@@ -44,7 +44,6 @@ public class VocabService {
     }
 
     public List<Vocab> getAllVocabsOfLanguage(String languageString, String userName) throws LanguageNotFoundException {
-        System.out.println("userName from getAllVocabsOfLanguage: "+userName);
         Language language = getEnumByString(languageString);
         return vocabRepo.findAll().stream()
                 .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userName))
