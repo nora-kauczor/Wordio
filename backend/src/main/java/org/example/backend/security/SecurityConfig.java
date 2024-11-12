@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/vocab/auth/name").permitAll()
                         .requestMatchers("/api/vocab/**").authenticated()
                         .requestMatchers("/api/calendar").authenticated()
+                        .requestMatchers("api/review/**").permitAll() // TODO change
                         .anyRequest().permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(
                         SessionCreationPolicy.ALWAYS

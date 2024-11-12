@@ -10,6 +10,8 @@ import org.example.backend.vocab.VocabRepo;
 import org.example.backend.vocab.VocabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,8 +22,16 @@ import java.util.*;
 public class ReviewDayService {
 
     private final ReviewDayRepo reviewDayRepo;
-     VocabService vocabService;
+    private final VocabService vocabService;
 
+    public List<Vocab> getAllVocabsOfLanguageByUserId(String languageString, String userId) throws LanguageNotFoundException {
+        System.out.println(userId);
+        return vocabService.getAllVocabsOfLanguageByUserId(languageString, userId);
+    }
+    public List<Vocab> getAllVocabsOfLanguageByUserName(String languageString, String userId) throws LanguageNotFoundException {
+        System.out.println(userId);
+        return vocabService.getAllVocabsOfLanguageByUserId(languageString, userId);
+    }
 
     public ReviewDay getReviewDay(String language, String userId, LocalDate day) {
         System.out.println("Debug: Language: " + language + ", UserId: " + userId);

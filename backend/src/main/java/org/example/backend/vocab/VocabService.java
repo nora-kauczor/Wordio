@@ -43,9 +43,8 @@ public class VocabService {
         return vocabRepo.save(vocab);
     }
 
-
-
     public List<Vocab> getAllVocabsOfLanguageByUserName(String languageString, String userName) throws LanguageNotFoundException {
+        System.out.println("userName from getAllVocabsOfLanguageByUserName: "+userName);
         Language language = getEnumByString(languageString);
         return vocabRepo.findAll().stream()
                 .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userName))
@@ -58,7 +57,9 @@ public class VocabService {
 
 
     public List<Vocab> getAllVocabsOfLanguageByUserId(String languageString, String userId) throws LanguageNotFoundException {
+        System.out.println("userId from getAllVocabsOfLanguageByUserId: "+userId);
         Language language = getEnumByString(languageString);
+        System.out.println(language);
         return vocabRepo.findAll().stream()
                 .filter(vocab -> vocab.getCreatedBy().equals("Wordio") || vocab.getCreatedBy().equals(userId))
                 .filter(vocab -> vocab.getLanguage().equals(language))
