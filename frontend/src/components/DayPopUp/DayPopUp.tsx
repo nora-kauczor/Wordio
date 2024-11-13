@@ -6,10 +6,11 @@ import './DayPopUp.css'
 type Props = {
     day: string
     vocabsOfDay: Vocab[]
-    closeDayPopUp: () => void
-    deactivateVocab: (id: string) => void
-    openForm: (id: string) => void
     userId:string
+    closeDayPopUp: () => void
+    openForm: (id: string) => void
+    deactivateVocab: (id: string) => void
+    deleteVocab:(id: string) => void
 }
 
 export default function DayPopUp(props: Readonly<Props>) {
@@ -27,6 +28,7 @@ export default function DayPopUp(props: Readonly<Props>) {
         <VocabList vocabs={props.vocabsOfDay}
                    calendarMode={true}
                    deactivateVocab={props.deactivateVocab}
+                   deleteVocab={props.deleteVocab}
                    closeDayPopUp={props.closeDayPopUp}
                    openForm={props.openForm}
                    userId={props.userId}/>

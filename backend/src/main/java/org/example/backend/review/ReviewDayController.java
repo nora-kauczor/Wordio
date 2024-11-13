@@ -21,8 +21,8 @@ public class ReviewDayController {
         return reviewDayService.getReviewDay(language, user.getName(), ZonedDateTime.now().toLocalDate());
     }
 
-//    @PutMapping("/{vocabId}")
-//    public ReviewDay setVocabReviewed(@PathVariable String vocabId, @AuthenticationPrincipal OAuth2User user)  {
-//        return reviewDayService.setVocabReviewed(vocabId, user.getAttribute("sub"), ZonedDateTime.now().toLocalDate());
-//    }
+    @PutMapping("/{vocabId}")
+    public ReviewDay setVocabReviewed(@PathVariable String vocabId, @AuthenticationPrincipal OAuth2User user)  {
+        return reviewDayService.setVocabReviewed(vocabId, user.getAttribute("sub"), ZonedDateTime.now().toLocalDate());
+    }
 }

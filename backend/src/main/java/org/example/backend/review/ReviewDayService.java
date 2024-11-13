@@ -65,40 +65,11 @@ public class ReviewDayService {
     }
 
 
-//    ReviewDay createReviewDay(Language language, String userId, LocalDate day) throws LanguageNotFoundException, UserNotFoundException {
-//        List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguage(language.toString(), userId);
-//        System.out.println(allVocabsOfLanguage);
-//        // wenn es gar keine vokabeln der sprache gibt, gib einen review day mit leerer id-map zurück
-//        if (allVocabsOfLanguage.isEmpty()) {
-//            return new ReviewDay(null, day, language, userId, new HashMap<>());
-//        }
-//        List<Vocab> activeVocabsOfCurrentUser = allVocabsOfLanguage.stream()
-//                .filter(vocab -> vocab.getDatesPerUser().containsKey(userId))
-//                .toList();
-//        System.out.println("activeVocabsOfCurrentUser: "+ activeVocabsOfCurrentUser);
-//        // wenn keine vokabeln dieser sprache für diesen user aktiv sind, gib einen review day mit leerer id-map zurück
-//        if (activeVocabsOfCurrentUser.isEmpty()) {
-//            return new ReviewDay(null, day, language, userId, new HashMap<>());
-//        }
-//
-//        List<Vocab> todaysVocabs = activeVocabsOfCurrentUser.stream()
-//                .filter(vocab -> vocab.getDatesPerUser().get(userId).contains(day))
-//                .toList();
-//        System.out.println("todaysVocab: "+todaysVocabs);
-//        Map<String, Boolean> IdsOfVocabsToReview = new HashMap<>();
-//        for (Vocab todaysVocab : todaysVocabs) {
-//            String id = todaysVocab.getId();
-//            System.out.println(id);
-//            IdsOfVocabsToReview.put(id, false);
-//        }
-//        return new ReviewDay(null, day, language, userId, IdsOfVocabsToReview);
-//    }
-
-//    public ReviewDay setVocabReviewed(String vocabId, String userName, LocalDate day) {
-//        ReviewDay reviewDay = reviewDayRepo.getByDayAndUserId(day, userName);
-//        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
-//        idsOfVocabsToReview.put(vocabId, true);
-//        ReviewDay updatedReviewDay = new ReviewDay(reviewDay.id(), reviewDay.day(), userName, idsOfVocabsToReview);
-//        return reviewDayRepo.save(updatedReviewDay);
-//    }
+    public ReviewDay setVocabReviewed(String vocabId, String userName, LocalDate day) {
+        ReviewDay reviewDay = reviewDayRepo.getByDayAndUserIdAndLanguage(day, userName, Language.SPANISH);
+        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
+        idsOfVocabsToReview.put(vocabId, true);
+        ReviewDay updatedReviewDay = new ReviewDay(reviewDay.id(), reviewDay.day(), Language.SPANISH, userName, idsOfVocabsToReview);
+        return reviewDayRepo.save(updatedReviewDay);
+    }
 }

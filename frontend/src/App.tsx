@@ -25,13 +25,12 @@ function App() {
     const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState<string>("language",
         {defaultValue: ""})
-    const [vocabsToReview, setVocabsToReview] =
-    useLocalStorageState<Vocab[]>( "vocabsToReview", {defaultValue: []})
+    const [vocabsToReview, setVocabsToReview] = useState<Vocab[]>([])
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-
+    console.log(vocabsToReview)
     useEffect(() => {
         getUserId()
     }, []);
@@ -45,8 +44,8 @@ function App() {
     }, [userId]);
 
     useEffect(() => {
-
         if (language && userId) {
+
             getAllVocabsOfLanguage()
         }
     }, [language, userId]);
@@ -91,11 +90,10 @@ function App() {
         }
     }
 
-
     function getVocabsToReview() {
         axios.get(`/api/review?language=${language}`)
             .then(response => {
-                const idsOfNonReviewedVocabs = Object.entries(
+                const idsOfNonReviewedVocabs: string[] = Object.entries(
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
                     .map(innerArray => innerArray[0]);
@@ -103,18 +101,18 @@ function App() {
                     console.error(
                         "Couldn't get vocabs to review because vocabs was empty.");
                 } else {
-                    const vocabsToReview: Vocab[] = idsOfNonReviewedVocabs.map(
-                        id => {
+                    const vocabsToReview: (Vocab | void)[] = idsOfNonReviewedVocabs
+                        .map(id => {
                             return getVocabById(id)
                         })
-                    setVocabsToReview(vocabsToReview)
+                        .filter((vocab): vocab is Vocab => vocab!== undefined)
+                setVocabsToReview(vocabsToReview as Vocab[])
                 }
             })
             .catch(error => {
                 console.error(error)
             })
     }
-
 
     function removeVocabFromVocabsToReview(id: string): void {
         axios.put(`/api/review/${id}`)
@@ -247,7 +245,9 @@ function App() {
         })
     }
 
-    if (vocabs.length < 1) {return <p className={"loading-message"}>Loading...</p>}
+    if (userId && language && vocabs.length < 1) {
+        return <p className={"loading-message"}>Loading...</p>
+    }
 
     return (<div id={"app"} role={"main"}>
         <ToastContainer autoClose={2000} hideProgressBar={true}
@@ -255,7 +255,6 @@ function App() {
         <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
-
         {useForm && <div className={"overlay"}/>}
         {useForm && <Form userId={userId} language={language}
                           editVocab={editVocab} createVocab={createVocab}
@@ -286,7 +285,8 @@ function App() {
                     openForm={openForm}
                     vocabs={vocabs}
                     language={language}
-                    deactivateVocab={deactivateVocab}/>}/>
+                    deactivateVocab={deactivateVocab}
+                    deleteVocab={deleteVocab}/>}/>
                 <Route path={"/review"}
                        element={<ReviewPage
                            language={language}

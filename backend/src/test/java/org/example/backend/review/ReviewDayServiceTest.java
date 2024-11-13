@@ -56,20 +56,19 @@ class ReviewDayServiceTest {
     }
 
 
-//    @Test
-//    void setVocabReviewed() {
-//        LocalDate date = LocalDate.of(2025, 1, 1);
-//        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
-//        idsOfVocabsToReview.put("vocab id", false);
-//        ReviewDay oldReviewDate = new ReviewDay("123", date, Language.SPANISH,"user id", idsOfVocabsToReview);
-//        Map<String, Boolean> newIdsOfVocabsToReview = new HashMap<>();
-//        newIdsOfVocabsToReview.put("vocab id", true);
-//        ReviewDay newReviewDay = new ReviewDay("123", date,Language.SPANISH, "user id", newIdsOfVocabsToReview);
-//        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(oldReviewDate);
-//        when(mockReviewRepo.save(newReviewDay)).thenReturn(newReviewDay);
-//        ReviewDay actual = reviewService.setVocabReviewed("vocab id", "user id", date);
-//        System.out.println(actual.idsOfVocabsToReview());
-//        verify(mockReviewRepo).save(any(ReviewDay.class));
-//        assertTrue(actual.idsOfVocabsToReview().get("vocab id"));
-//    }
+    @Test
+    void setVocabReviewed() {
+        LocalDate date = LocalDate.of(2025, 1, 1);
+        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
+        idsOfVocabsToReview.put("vocab id", false);
+        ReviewDay oldReviewDate = new ReviewDay("123", date, Language.SPANISH,"user id", idsOfVocabsToReview);
+        Map<String, Boolean> newIdsOfVocabsToReview = new HashMap<>();
+        newIdsOfVocabsToReview.put("vocab id", true);
+        ReviewDay newReviewDay = new ReviewDay("123", date,Language.SPANISH, "user id", newIdsOfVocabsToReview);
+        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(oldReviewDate);
+        when(mockReviewRepo.save(newReviewDay)).thenReturn(newReviewDay);
+        ReviewDay actual = reviewService.setVocabReviewed("vocab id", "user id", date);
+        verify(mockReviewRepo).save(any(ReviewDay.class));
+        assertTrue(actual.idsOfVocabsToReview().get("vocab id"));
+    }
 }

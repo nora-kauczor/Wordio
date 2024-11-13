@@ -38,7 +38,6 @@ class ReviewDayControllerTest {
         reviewDayRepo.save(reviewDay);
     }
 
-
     @Test
     void getReviewDay() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/review?language=Spanish")
