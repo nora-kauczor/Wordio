@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class Vocab {
+
     @Id private String id;
     private String word;
     private String translation;
@@ -34,5 +36,8 @@ public class Vocab {
         }
         return reviewDates;
     }
+
+
+
 
 }

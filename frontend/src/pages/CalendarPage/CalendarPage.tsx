@@ -17,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 type Props = {
     vocabs: Vocab[]
     deactivateVocab: (id: string) => void
+    deleteVocab:(id: string) => void
     language: string
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
@@ -129,6 +130,7 @@ export default function CalendarPage(props: Readonly<Props>) {
             closeDayPopUp={closeDayPopUp}
             openForm={props.openForm}
             deactivateVocab={props.deactivateVocab}
+            deleteVocab={props.deleteVocab}
             userId={props.userId}/>}
         <button className={"back-button"} id={"calendar-back-button"}
                 onClick={() => navigate("/")}

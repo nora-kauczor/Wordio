@@ -23,13 +23,8 @@ function App() {
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userId, setUserId] = useState<string>("")
     const [language, setLanguage] = useLocalStorageState<string>("language",
-        {defaultValue: ""});
-    const [vocabsToReview, setVocabsToReview] = useLocalStorageState<Vocab[]>(
-        "vocabsToReview", {defaultValue: []})
-    // const [vocabsToReviewLoaded, setVocabsToReviewLoaded] = useState<boolean>(
-    //     false)
-    const [todaysVocabs, setTodaysVocabs] = useLocalStorageState<Vocab[]>(
-        "todaysVocabs", {defaultValue: []})
+        {defaultValue: ""})
+    const [vocabsToReview, setVocabsToReview] = useState<Vocab[]>([])
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
@@ -39,17 +34,6 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (language && userId) {
-            getAllVocabsOfLanguage()
-        }
-    }, [language, userId]);
-
-    useEffect(() => {
-        updateVocabsToReview()
-        // setVocabsToReviewLoaded(true)
-    }, [vocabs]);
-
-    useEffect(() => {
         if (userId) {
             navigate("/")
         } else {
@@ -57,16 +41,27 @@ function App() {
         }
     }, [userId]);
 
+    useEffect(() => {
+        if (language && userId) {
+            getAllVocabsOfLanguage()
+        }
+    }, [language, userId]);
+
+    useEffect(() => {
+        if (vocabs.length > 0) {
+            getVocabsToReview()
+        }
+    }, [vocabs]);
+
 
     function getAllVocabsOfLanguage() {
-        if (!language || !userId) {
-            return
+        if (language && userId) {
+            axios.get(`/api/vocab?language=${language}`)
+                .then(response => {
+                    setVocabs(response.data)
+                })
+                .catch(error => console.error(error))
         }
-        axios.get(`/api/vocab?language=${language}`)
-            .then(response => {
-                setVocabs(response.data)
-            })
-            .catch(error => console.error(error))
     }
 
     function getUserId(): void {
@@ -84,54 +79,47 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    function updateVocabsToReview(): void {
-        const oldTodaysVocabs: Vocab[] = todaysVocabs
-        const updatedTodaysVocabs: Vocab[] = getTodaysVocabs()
-        const newVocabs: Vocab[] = updatedTodaysVocabs
-            .filter(vocabOfOldOnes => !oldTodaysVocabs
-                .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-                    vocabOfOldOnes.id))
-        const deactivatedVocabs: Vocab[] = oldTodaysVocabs
-            .filter(vocabOfOldOnes => !updatedTodaysVocabs
-                .some(vocabOfUpdatedOnes => vocabOfUpdatedOnes.id ===
-                    vocabOfOldOnes.id))
-        let vocabsToReviewWithoutDeactivatedOnes: Vocab[] = []
-        if (!vocabsToReview) {
-            setVocabsToReview([])
-            return
+    function getVocabById(id: string): Vocab | void {
+        if (vocabs.length < 1) {
+            console.error("Couldn't get Vocab by ID because vocabs was empty.");
+        } else {
+            return vocabs.find(vocab => vocab.id === id)
         }
-        if (vocabsToReview.length > 0) {
-            vocabsToReviewWithoutDeactivatedOnes =
-                vocabsToReview.filter(vocabToReview => !deactivatedVocabs
-                    .some(deactivatedVocab => deactivatedVocab.id ===
-                        vocabToReview.id))
-        }
-        setVocabsToReview(
-            [...vocabsToReviewWithoutDeactivatedOnes, ...newVocabs])
-        setTodaysVocabs(updatedTodaysVocabs)
     }
 
-    function getTodaysVocabs(): Vocab[] {
-        const date: Date = new Date()
-        const year: number = date.getFullYear()
-        const month: string = String(date.getMonth() + 1).padStart(2, '0')
-        const day: string = String(date.getDate()).padStart(2, '0')
-        const today: string = `${year}-${month}-${day}`
-        const userIdNumber: number = parseInt(userId)
-        return vocabs.filter(vocab => {
-            if (!vocab.datesPerUser) {
-                return false
-            }
-            if (!vocab.datesPerUser[userIdNumber]) {
-                return false
-            }
-            return vocab.datesPerUser[userIdNumber].includes(today)
-        })
+    function getVocabsToReview() {
+        axios.get(`/api/review?language=${language}`)
+            .then(response => {
+                const idsOfNonReviewedVocabs: string[] = Object.entries(
+                    response.data.idsOfVocabsToReview)
+                    .filter(innerArray => innerArray[1] === false)
+                    .map(innerArray => innerArray[0]);
+                if (vocabs.length < 1) {
+                    console.error(
+                        "Couldn't get vocabs to review because vocabs was empty.");
+                } else {
+                    const vocabsToReview: (Vocab | void)[] = idsOfNonReviewedVocabs
+                        .map(id => {
+                            return getVocabById(id)
+                        })
+                        .filter((vocab): vocab is Vocab => vocab!== undefined)
+                setVocabsToReview(vocabsToReview as Vocab[])
+                }
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 
-    function removeVocabFromVocabsToReview(id: string | null): void {
-        setVocabsToReview(
-            vocabsToReview.filter((vocab: Vocab) => vocab.id !== id))
+    function removeVocabFromVocabsToReview(id: string): void {
+        axios.put(`/api/review/${id}`)
+            .then(() => {
+                console.log(`Vocab ${id} was marked as reviewed for today.`)
+                getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 
     function activateVocab(id: string): void {
@@ -254,13 +242,16 @@ function App() {
         })
     }
 
+    if (userId && language && vocabs.length < 1) {
+        return <p className={"loading-message"}>Loading...</p>
+    }
+
     return (<div id={"app"} role={"main"}>
         <ToastContainer autoClose={2000} hideProgressBar={true}
                         closeButton={false}/>
         <Header userId={userId} logout={logout}
                 language={language}
                 setLanguage={setLanguage}/>
-
         {useForm && <div className={"overlay"}/>}
         {useForm && <Form userId={userId} language={language}
                           editVocab={editVocab} createVocab={createVocab}
@@ -273,41 +264,33 @@ function App() {
                    />}/>
             <Route element={<ProtectedRoutes
                 userId={userId}/>}>
-                {/*{!vocabsToReviewLoaded && */}
-                {/*    <Route path={"/"}*/}
-                {/*                                 element={<p*/}
-                {/*                                     className={"loading-message"}>Loading...</p>}/>*/}
-                {/*}*/}
-                {/*{vocabsToReviewLoaded && vocabsToReview &&*/}
-                    <Route path={"/"}
-                                                                  element={
-                                                                      <HomePage
-                                                                          userId={userId}
-                                                                          vocabs={vocabs}
-                                                                          finishedReviewing={ vocabsToReview && vocabsToReview.length <
-                                                                              1}
-                                                                          allVocabsActivated={getInactiveVocabs().length <
-                                                                              1}
-                                                                          setUseForm={setUseForm}
-                                                                          language={language}
-                                                                          setLanguage={setLanguage}
-                                                                          displayNewVocabsPopUp={displayNewVocabsPopUp}
-                                                                          setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
-                                                                          activateVocab={activateVocab}/>}/>
-            {/*}*/}
+                <Route path={"/"}
+                       element={<HomePage
+                           userId={userId}
+                           vocabs={vocabs}
+                           finishedReviewing={vocabsToReview.length < 1}
+                           allVocabsActivated={getInactiveVocabs().length < 1}
+                           setUseForm={setUseForm}
+                           language={language}
+                           setLanguage={setLanguage}
+                           displayNewVocabsPopUp={displayNewVocabsPopUp}
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
+                           activateVocab={activateVocab}/>}/>
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
                     setUseForm={setUseForm}
                     openForm={openForm}
                     vocabs={vocabs}
                     language={language}
-                    deactivateVocab={deactivateVocab}/>}/>
+                    deactivateVocab={deactivateVocab}
+                    deleteVocab={deleteVocab}/>}/>
                 <Route path={"/review"}
                        element={<ReviewPage
                            language={language}
                            removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsToReview={vocabsToReview}
-                           changeReviewDates={changeReviewDates}/>}/>
+                           changeReviewDates={changeReviewDates}
+                       />}/>
                 <Route path={"/backlog"}
                        element={<BacklogPage
                            vocabs={getInactiveVocabs()}

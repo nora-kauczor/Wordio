@@ -12,9 +12,10 @@ import {toast, ToastContainer} from "react-toastify";
 
 type Props = {
     vocabsToReview: Vocab[]
-    removeVocabFromVocabsToReview: (id: string | null) => void
+    removeVocabFromVocabsToReview: (id: string) => void
     changeReviewDates: (id: string | null) => void
     language: string
+
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
@@ -82,17 +83,19 @@ export default function ReviewPage(props: Readonly<Props>) {
             }
             props.removeVocabFromVocabsToReview(currentVocab.id)
         } else {
-            props.changeReviewDates(currentVocab.id)
             setInputColor("red")
             setDisplayAnswer(true)
             toast.error("Oops! Don't worry, you'll make it next time! 💪")
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
                 props.removeVocabFromVocabsToReview(currentVocab.id);
+
             }, 2200);
         }
 
     }
+
+
 
     // TODO button mit enter auslösen (evtl in desktop ansicht testen)
     // TODO uswr input nicht leeren wenn kein klick passiert (passiert eimmer
