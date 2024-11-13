@@ -19,13 +19,6 @@ export default function NavBar(props: Readonly<Props>) {
         }
     };
     return (<ul id={"navbar"}>
-        {/*<li onClick={() => navigate('/')}*/}
-        {/*    onKeyDown={(event) => handleKeyDown(event, '/')}*/}
-        {/*    className={`navbar-button ${path === '/' && !props.useForm ?*/}
-        {/*        'highlighted' : ''}`}*/}
-        {/*    aria-label={"Go to Homepage"}*/}
-        {/*><p className={"navbar-button-text"}>Home</p>*/}
-        {/*</li>*/}
         <li onClick={() => navigate('/backlog')}
             onKeyDown={(event) => handleKeyDown(event, '/backlog')}
             className={`navbar-button ${path === '/backlog' && !props.useForm ?

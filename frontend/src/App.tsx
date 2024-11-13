@@ -19,7 +19,6 @@ import DisplayPage from "./pages/DisplayPage/DisplayPage.tsx";
 import {toast, ToastContainer} from "react-toastify";
 
 function App() {
-
     const [vocabs, setVocabs] = useState<Vocab[]>([])
     const [useForm, setUseForm] = useState<boolean>(false)
     const [userId, setUserId] = useState<string>("")
@@ -30,7 +29,6 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    console.log(vocabsToReview)
     useEffect(() => {
         getUserId()
     }, []);
@@ -45,7 +43,6 @@ function App() {
 
     useEffect(() => {
         if (language && userId) {
-
             getAllVocabsOfLanguage()
         }
     }, [language, userId]);
