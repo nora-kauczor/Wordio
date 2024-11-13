@@ -3,7 +3,6 @@ package org.example.backend.review;
 import lombok.RequiredArgsConstructor;
 
 import org.example.backend.exception.LanguageNotFoundException;
-import org.example.backend.exception.UserNotFoundException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class ReviewDayController {
     private final ReviewDayService reviewDayService;
 
     @GetMapping
-    public ReviewDay getReviewDay(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException, UserNotFoundException {
+    public ReviewDay getReviewDay(@RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
         return reviewDayService.getReviewDay(language, user.getName(), ZonedDateTime.now().toLocalDate());
     }
 

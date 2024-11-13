@@ -3,7 +3,6 @@ package org.example.backend.review;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exception.LanguageNotFoundException;
-import org.example.backend.exception.UserNotFoundException;
 
 import org.example.backend.vocab.Language;
 import org.example.backend.vocab.Vocab;
@@ -26,17 +25,18 @@ public class ReviewDayService {
 
     public ReviewDay getReviewDay(String languageString, String userId, LocalDate day) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
-        Optional<ReviewDay> optionalReviewDay = reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language);
+        Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language));
+        System.out.println(optionalReviewDay);
         return optionalReviewDay.orElseGet(() -> {
                     try {
                         ReviewDay newReviewDay = createReviewDay(language, userId, day);
                         return reviewDayRepo.save(newReviewDay);
-                    } catch (LanguageNotFoundException | UserNotFoundException exception) {
-                        throw new RuntimeException("Couldn't create ReviewDay because User or Language was not found.", exception);
+                    } catch (LanguageNotFoundException languageNotFoundException) {
+                        throw new RuntimeException("Couldn't create ReviewDay because Language was not found.", languageNotFoundException);
                     }
     });}
 
-    public ReviewDay createReviewDay(Language language, String userId, LocalDate day) throws LanguageNotFoundException, UserNotFoundException {
+    public ReviewDay createReviewDay(Language language, String userId, LocalDate day) throws LanguageNotFoundException {
         List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguage(language.getStringOfEnum(), userId);
         if (allVocabsOfLanguage.isEmpty()) {
             return new ReviewDay(null, day, language, userId, new HashMap<>());
@@ -59,7 +59,7 @@ public class ReviewDayService {
 
 
     public ReviewDay setVocabReviewed(String vocabId, String userName, LocalDate day) {
-        Optional<ReviewDay> reviewDay = reviewDayRepo.getByDayAndUserIdAndLanguage(day, userName, Language.SPANISH);
+        Optional<ReviewDay> reviewDay = Optional.of(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userName, Language.SPANISH));
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put(vocabId, true);
         ReviewDay updatedReviewDay = new ReviewDay(reviewDay.get().id(), reviewDay.get().day(), Language.SPANISH, userName, idsOfVocabsToReview);
