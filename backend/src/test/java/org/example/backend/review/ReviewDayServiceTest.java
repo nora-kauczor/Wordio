@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,22 +23,32 @@ class ReviewDayServiceTest {
     private final ReviewDayService reviewService = new ReviewDayService(mockReviewRepo, mockVocabService);
 
     @Test
-    void getReviewDay_shouldReturnReviewDayOfCurrentDate_ifItExists_whenCalled() throws LanguageNotFoundException {
+    void getReviewDay_shouldReturnReviewDayOfCurrentDate_ifItExists_whenCalled() throws LanguageNotFoundException, UserNotFoundException {
         LocalDate date = LocalDate.of(2025, 1, 1);
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab id", false);
         ReviewDay reviewDay = new ReviewDay("000", date, Language.SPANISH, "user id", idsOfVocabsToReview);
         mockReviewRepo.save(reviewDay);
-        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(reviewDay);
+        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(Optional.of(reviewDay));
         assertEquals(reviewDay, reviewService.getReviewDay("Spanish", "user id", date));
     }
 
     @Test
-    void getReviewDay_shouldReturnNewReviewDayOfCurrentDate_ifNonExistedBefore_whenCalled() throws LanguageNotFoundException {
+    void getReviewDay_shouldReturnNewReviewDayOfCurrentDate_ifNonExistedBefore_whenCalled() throws LanguageNotFoundException, UserNotFoundException {
         LocalDate date = LocalDate.of(2025, 1, 1);
         when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(null);
         reviewService.getReviewDay("Spanish", "user id", date);
         verify(mockReviewRepo).save(any(ReviewDay.class));
+    }
+
+    @Test
+    void getReviewDay_shouldThrowIllegalStateException_() throws LanguageNotFoundException, UserNotFoundException {
+        LocalDate date = LocalDate.of(2025, 1, 1);
+        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(null);
+        reviewService.getReviewDay("Spanish", "user id", date);
+        verify(mockReviewRepo).save(any(ReviewDay.class));
+        assertThrows(LanguageNotFoundException.class, () ->
+                reviewService.getReviewDay("Spanish", "user id", date));
     }
 
     @Test
@@ -65,7 +76,7 @@ class ReviewDayServiceTest {
         Map<String, Boolean> newIdsOfVocabsToReview = new HashMap<>();
         newIdsOfVocabsToReview.put("vocab id", true);
         ReviewDay newReviewDay = new ReviewDay("123", date,Language.SPANISH, "user id", newIdsOfVocabsToReview);
-        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(oldReviewDate);
+        when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH)).thenReturn(Optional.of(oldReviewDate));
         when(mockReviewRepo.save(newReviewDay)).thenReturn(newReviewDay);
         ReviewDay actual = reviewService.setVocabReviewed("vocab id", "user id", date);
         verify(mockReviewRepo).save(any(ReviewDay.class));
