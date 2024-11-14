@@ -26,7 +26,6 @@ public class ReviewDayService {
     public ReviewDay getReviewDay(String languageString, String userId, LocalDate day) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
         Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language));
-        System.out.println(optionalReviewDay);
         return optionalReviewDay.orElseGet(() -> {
                     try {
                         ReviewDay newReviewDay = createReviewDay(language, userId, day);
@@ -58,11 +57,11 @@ public class ReviewDayService {
     }
 
 
-    public ReviewDay setVocabReviewed(String vocabId, String userName, LocalDate day) {
-        Optional<ReviewDay> reviewDay = Optional.of(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userName, Language.SPANISH));
-        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
-        idsOfVocabsToReview.put(vocabId, true);
-        ReviewDay updatedReviewDay = new ReviewDay(reviewDay.get().id(), reviewDay.get().day(), Language.SPANISH, userName, idsOfVocabsToReview);
+    public ReviewDay setVocabReviewed(String vocabId, String userId, LocalDate day) {
+        Optional<ReviewDay> oldReviewDay = Optional.of(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, Language.SPANISH));
+        Map<String, Boolean> newIdsOfVocabsToReview = oldReviewDay.get().idsOfVocabsToReview();
+        newIdsOfVocabsToReview.put(vocabId, true);
+        ReviewDay updatedReviewDay = new ReviewDay(oldReviewDay.get().id(), oldReviewDay.get().day(), Language.SPANISH, userId, newIdsOfVocabsToReview);
         return reviewDayRepo.save(updatedReviewDay);
     }
 }

@@ -23,6 +23,6 @@ public class ReviewDayController {
 
     @PutMapping("/{vocabId}")
     public ReviewDay setVocabReviewed(@PathVariable String vocabId, @AuthenticationPrincipal OAuth2User user)  {
-        return reviewDayService.setVocabReviewed(vocabId, user.getAttribute("sub"), ZonedDateTime.now().toLocalDate());
+        return reviewDayService.setVocabReviewed(vocabId, user.getName(), ZonedDateTime.now().toLocalDate());
     }
 }
