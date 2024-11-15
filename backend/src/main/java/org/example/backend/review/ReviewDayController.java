@@ -22,7 +22,8 @@ public class ReviewDayController {
     }
 
     @PutMapping("/{vocabId}")
-    public ReviewDay setVocabReviewed(@PathVariable String vocabId, @AuthenticationPrincipal OAuth2User user)  {
-        return reviewDayService.setVocabReviewed(vocabId, user.getName(), ZonedDateTime.now().toLocalDate());
+    public ReviewDay setVocabReviewed(@PathVariable String vocabId, @RequestParam String language, @AuthenticationPrincipal OAuth2User user) throws LanguageNotFoundException {
+        return reviewDayService.setVocabReviewed(vocabId, language, user.getName(), ZonedDateTime.now().toLocalDate());
     }
+
 }

@@ -28,7 +28,8 @@ function App() {
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
-
+    console.log("vocabs[4], el libro: ", vocabs[4])
+console.log("vocabsToReview: ", vocabsToReview)
     useEffect(() => {
         getUserId()
     }, []);
@@ -88,12 +89,15 @@ function App() {
     }
 
     function getVocabsToReview() {
+        console.log("getVocabsToReview was called.")
+        // wird erst gecalled, nachdem vocabs schon geändert ist, also
         axios.get(`/api/review?language=${language}`)
             .then(response => {
                 const idsOfNonReviewedVocabs: string[] = Object.entries(
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
                     .map(innerArray => innerArray[0]);
+                console.log("idsOfNonReviewedVocabs: ", idsOfNonReviewedVocabs)
                 if (vocabs.length < 1) {
                     console.error(
                         "Couldn't get vocabs to review because vocabs was empty.");

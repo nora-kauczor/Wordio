@@ -20,7 +20,6 @@ import static org.example.backend.vocab.Vocab.generateDates;
 public class VocabService {
     private final VocabRepo vocabRepo;
 
-
     public Vocab changeReviewDates(String id, String userName) throws IdNotFoundException {
         Vocab vocab = vocabRepo.findById(id).orElseThrow(() -> new IdNotFoundException("ID not found."));
         LocalDate firstDayOfOldReviewDates = vocab.getDatesPerUser().get(userName).getFirst();
