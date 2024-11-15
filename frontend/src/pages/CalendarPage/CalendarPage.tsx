@@ -37,21 +37,36 @@ export default function CalendarPage(props: Readonly<Props>) {
         if (!props.language) {
             return
         }
-        getMonth()
+        if (isVocabIdsOfMonthEmpty(month.vocabIdsOfMonth)) {
+            getCurrentMonth()
+        } else {
+            updateDisplayedMonth()
+        }
     }, [props.language, props.vocabs]);
 
     useEffect(() => {
         updateDayPopUp()
     }, [month]);
 
-    function getMonth() {
+    function isVocabIdsOfMonthEmpty(vocabIdsOfMonth: VocabIdsOfDate[][]): boolean {
+        return vocabIdsOfMonth.every(innerArray => !innerArray || innerArray.length === 0);
+    }
+
+    function getCurrentMonth(): void {
         const today = new Date();
         const year = today.getFullYear().toString();
         const month = (today.getMonth() + 1).toString();
-        axios.get(
-            `/api/calendar?year=${year}&month=${month}&language=${props.language}`)
-            .then(response => setMonth(response.data))
-            .catch(error => console.error(error))
+        getMonth(month, year)
+    }
+
+    function updateDisplayedMonth(): void {
+        if (isVocabIdsOfMonthEmpty(month.vocabIdsOfMonth)) {
+            return
+        }
+        const someDate: string = month?.vocabIdsOfMonth[2][2].date
+        const displayedYear = someDate.substring(0, 4)
+        const displayedMonth = someDate.substring(5, 7)
+        getMonth(displayedMonth, displayedYear)
     }
 
     function changeMonth(clickedButton: string): void {
@@ -75,10 +90,13 @@ export default function CalendarPage(props: Readonly<Props>) {
             newYear = currentMonthNumber < 12 ? currentYearNumber :
                 (currentYearNumber + 1)
         }
+        getMonth(newMonth.toString(), newYear.toString())
+    }
+
+    function getMonth(month: string, year: string): void {
         axios.get(
-            `/api/calendar?year=${newYear.toString()}&month=${newMonth.toString()}&language=${props.language}`)
+            `/api/calendar?year=${year}&month=${month}&language=${props.language}`)
             .then(response => setMonth(response.data))
-            .then(response => console.log(response))
             .catch(error => console.error(error))
     }
 
