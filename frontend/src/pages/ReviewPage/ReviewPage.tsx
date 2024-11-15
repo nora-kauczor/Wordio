@@ -8,11 +8,12 @@ import {
     getInputWithoutExtraSpaces
 } from "./utils/getInputWithoutExtraSpaces.ts";
 import {getRightAnswers} from "./utils/getRightAnswer.ts";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
     vocabsToReview: Vocab[]
-    removeVocabFromVocabsToReview: (id: string) => void
+    removeVocabFromVocabsToReview: (id: string | null) => void
     changeReviewDates: (id: string | null) => void
     language: string
 
@@ -85,26 +86,17 @@ export default function ReviewPage(props: Readonly<Props>) {
         } else {
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error("Oops! Don't worry, you'll make it next time! 💪")
+            toast.error("Oops! Don't worry, you'll make it next time! 💪", {icon:false})
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
                 props.removeVocabFromVocabsToReview(currentVocab.id);
-
             }, 2200);
         }
 
     }
 
-
-
-    // TODO button mit enter auslösen (evtl in desktop ansicht testen)
-    // TODO uswr input nicht leeren wenn kein klick passiert (passiert eimmer
-    // wieder refresh beim reinhovern)
-
     return (<div id={"review-page"} className={"page"} role={"main"}>
-        <div style={{height: "10px"}}/>
-        <ToastContainer autoClose={2000} hideProgressBar={true} icon={false}
-                        closeButton={false}/>
+        <div style={{height: "30px"}}/>
         {showFireworks && <Confetti/>}
         <CardContainer displayedVocab={currentVocab}
                        displayWord={displayAnswer}/>
