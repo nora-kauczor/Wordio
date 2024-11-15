@@ -28,8 +28,7 @@ function App() {
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
-    // console.log("vocabs[4], el libro: ", vocabs[4])
-console.log("vocabsToReview: ", vocabsToReview)
+
     useEffect(() => {
         getUserId()
     }, []);
@@ -59,6 +58,7 @@ console.log("vocabsToReview: ", vocabsToReview)
             axios.get(`/api/vocab?language=${language}`)
                 .then(response => {
                     setVocabs(response.data)
+                    console.log("Successfully updated vocabs state.")
                 })
                 .catch(error => console.error(error))
         }
@@ -81,22 +81,19 @@ console.log("vocabsToReview: ", vocabsToReview)
 
     function getVocabById(id: string): Vocab | void {
         if (vocabs.length < 1) {
-            console.error("Couldn't get Vocab by ID because vocabs was empty.");
+            console.error("Couldn't get vocab by ID because vocabs was empty.");
         } else {
             return vocabs.find(vocab => vocab.id === id)
         }
     }
 
     function getVocabsToReview() {
-        console.log("getVocabsToReview was called.")
-        // wird erst gecalled, nachdem vocabs schon geändert ist, also
         axios.get(`/api/review?language=${language}`)
             .then(response => {
                 const idsOfNonReviewedVocabs: string[] = Object.entries(
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
                     .map(innerArray => innerArray[0]);
-                console.log("idsOfNonReviewedVocabs: ", idsOfNonReviewedVocabs)
                 if (vocabs.length < 1) {
                     console.error(
                         "Couldn't get vocabs to review because vocabs was empty.");
@@ -105,8 +102,9 @@ console.log("vocabsToReview: ", vocabsToReview)
                         .map(id => {
                             return getVocabById(id)
                         })
-                        .filter((vocab): vocab is Vocab => vocab!== undefined)
-                setVocabsToReview(vocabsToReview as Vocab[])
+                        .filter((vocab): vocab is Vocab => vocab !== undefined)
+                    setVocabsToReview(vocabsToReview as Vocab[])
+                    console.log("Successfully updated vocabsToReview state.")
                 }
             })
             .catch(error => {
@@ -114,10 +112,13 @@ console.log("vocabsToReview: ", vocabsToReview)
             })
     }
 
-    function removeVocabFromVocabsToReview(id: string): void {
+    function removeVocabFromVocabsToReview(id: string | null): void {
+        if (!id) {
+            return
+        }
         axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
-                console.log(`Vocab ${id} was marked as reviewed for today.`)
+                console.log(`Vocab with ID ${id} was marked as reviewed for today.`)
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -128,7 +129,7 @@ console.log("vocabsToReview: ", vocabsToReview)
     function activateVocab(id: string): void {
         axios.put(`api/vocab/activate/${id}`)
             .then(() => {
-                console.log(`Vocab ${id} successfully activated.`)
+                console.log(`Successfully activated vocab with ID ${id}.`)
                 toast.success("Vocab successfully activated.")
                 getAllVocabsOfLanguage()
             })
@@ -141,7 +142,7 @@ console.log("vocabsToReview: ", vocabsToReview)
     function deactivateVocab(id: string): void {
         axios.put(`api/vocab/deactivate/${id}`)
             .then(() => {
-                console.log(`Vocab ${id} successfully deactivated.`)
+                console.log(`Successfully deactivated vocab with ID ${id}.`)
                 toast.success("Vocab successfully deactivated.")
                 getAllVocabsOfLanguage()
             })
@@ -152,9 +153,13 @@ console.log("vocabsToReview: ", vocabsToReview)
     }
 
     function changeReviewDates(id: string | null): void {
+        if (!id) {
+            return
+        }
         axios.put(`api/vocab/change-dates/${id}`)
             .then(() => {
-                console.log(`Vocab ${id}'s review dates successfully updated.`)
+                console.log(
+                    `Successfully updated review dates of vocab with ID ${id}.`)
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -166,7 +171,7 @@ console.log("vocabsToReview: ", vocabsToReview)
     function deleteVocab(id: string): void {
         axios.delete(`api/vocab/${id}`)
             .then(() => {
-                console.log(`Vocab ${id} successfully deleted.`)
+                console.log(`Successfully deleted vocab with ID ${id}.`)
                 toast.success("Vocab successfully deleted")
                 getAllVocabsOfLanguage()
             })
@@ -210,7 +215,8 @@ console.log("vocabsToReview: ", vocabsToReview)
         setUseForm(false)
         axios.put(`api/vocab/`, editedVocab)
             .then(() => {
-                console.log(`Vocab ${editedVocab.id} successfully edited.`)
+                console.log(
+                    `Successfully edited of vocab with ID ${editedVocab.id}.`)
                 toast.success("Vocab successfully edited")
                 getAllVocabsOfLanguage()
             })

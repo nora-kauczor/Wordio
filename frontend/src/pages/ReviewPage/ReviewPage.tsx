@@ -8,12 +8,12 @@ import {
     getInputWithoutExtraSpaces
 } from "./utils/getInputWithoutExtraSpaces.ts";
 import {getRightAnswers} from "./utils/getRightAnswer.ts";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
     vocabsToReview: Vocab[]
-    removeVocabFromVocabsToReview: (id: string) => void
+    removeVocabFromVocabsToReview: (id: string | null) => void
     changeReviewDates: (id: string | null) => void
     language: string
 
@@ -90,14 +90,13 @@ export default function ReviewPage(props: Readonly<Props>) {
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
                 props.removeVocabFromVocabsToReview(currentVocab.id);
-
             }, 2200);
         }
 
     }
 
     return (<div id={"review-page"} className={"page"} role={"main"}>
-        <div style={{height: "10px"}}/>
+        <div style={{height: "30px"}}/>
         {showFireworks && <Confetti/>}
         <CardContainer displayedVocab={currentVocab}
                        displayWord={displayAnswer}/>
