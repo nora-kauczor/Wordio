@@ -1,6 +1,8 @@
 package org.example.backend.review;
 
 import org.example.backend.vocab.Language;
+import org.example.backend.vocab.Vocab;
+import org.example.backend.vocab.VocabRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
@@ -29,9 +32,17 @@ class ReviewDayControllerTest {
     @Autowired
     private ReviewDayRepo reviewDayRepo;
 
+    @Autowired
+    private VocabRepo vocabRepo;
+
     @BeforeEach
     void setUp() {
         LocalDate date = ZonedDateTime.now().toLocalDate();
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("user id", List.of(date));
+        Vocab testVocab = new Vocab("vocab-id", "la prueba",
+                "test", "", Language.SPANISH, datesPerUser, "Wordio");
+        vocabRepo.save(testVocab);
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab-id", false);
         ReviewDay reviewDay = new ReviewDay("000", date, Language.SPANISH, "user id", idsOfVocabsToReview);
@@ -55,7 +66,7 @@ class ReviewDayControllerTest {
 
     @Test
     void setVocabReviewed() throws Exception {
-                mvc.perform(MockMvcRequestBuilders.put("/api/review/vocab-id")
+                mvc.perform(MockMvcRequestBuilders.put("/api/review/vocab-id?language=Spanish")
                         .with(oauth2Login().attributes(attributes -> {
                             attributes.put("sub", "user id");
                         })))
