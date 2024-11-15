@@ -86,7 +86,7 @@ export default function ReviewPage(props: Readonly<Props>) {
         } else {
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error("Oops! Don't worry, you'll make it next time! 💪")
+            toast.error("Oops! Don't worry, you'll make it next time! 💪", {icon:false})
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
                 props.removeVocabFromVocabsToReview(currentVocab.id);
@@ -96,16 +96,8 @@ export default function ReviewPage(props: Readonly<Props>) {
 
     }
 
-
-
-    // TODO button mit enter auslösen (evtl in desktop ansicht testen)
-    // TODO uswr input nicht leeren wenn kein klick passiert (passiert eimmer
-    // wieder refresh beim reinhovern)
-
     return (<div id={"review-page"} className={"page"} role={"main"}>
         <div style={{height: "10px"}}/>
-        <ToastContainer autoClose={2000} hideProgressBar={true} icon={false}
-                        closeButton={false}/>
         {showFireworks && <Confetti/>}
         <CardContainer displayedVocab={currentVocab}
                        displayWord={displayAnswer}/>

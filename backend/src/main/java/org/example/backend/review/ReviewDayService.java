@@ -39,7 +39,6 @@ public class ReviewDayService {
                 throw new RuntimeException("Couldn't create ReviewDay because Language was not found.", languageNotFoundException);
             }
         });
-        System.out.println("reviewDay: "+reviewDay);
         return reviewDayRepo.save(reviewDay);
     }
 
@@ -54,7 +53,6 @@ public class ReviewDayService {
         if (activeVocabs.isEmpty()) {
             return new ReviewDay(reviewDayId, day, language, userId, new HashMap<>());
         }
-        System.out.println("activeVocabs: "+activeVocabs);
         List<Vocab> todaysVocabs = activeVocabs.stream()
                 .filter(vocab -> vocab.getDatesPerUser().get(userId).contains(day))
                 .toList();
@@ -62,7 +60,6 @@ public class ReviewDayService {
         for (Vocab vocab : todaysVocabs) {
             idsToReview.put(vocab.getId(), false);
         }
-        System.out.println("idsToReview: "+idsToReview);
         return new ReviewDay(reviewDayId, day, language, userId, idsToReview);
     }
 
@@ -95,5 +92,4 @@ public class ReviewDayService {
         ReviewDay updatedReviewDay = new ReviewDay(oldReviewDay.get().id(), oldReviewDay.get().day(), language, userId, newIdsOfVocabsToReview);
         return reviewDayRepo.save(updatedReviewDay);
     }
-
 }
