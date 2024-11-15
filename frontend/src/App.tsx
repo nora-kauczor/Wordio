@@ -125,10 +125,13 @@ function App() {
     }
 
     function activateVocab(id: string): void {
+        if (toast.isActive(`activate-vocab-${id}`)) {
+            return;
+        }
         axios.put(`api/vocab/activate/${id}`)
             .then(() => {
                 console.log(`Successfully activated vocab with ID ${id}.`)
-                toast.success("Vocab successfully activated.")
+                toast.success("Vocab successfully activated.", { toastId: `activate-vocab-${id}` })
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -138,10 +141,13 @@ function App() {
     }
 
     function deactivateVocab(id: string): void {
+        if (toast.isActive(`deactivate-vocab-${id}`)) {
+            return;
+        }
         axios.put(`api/vocab/deactivate/${id}`)
             .then(() => {
                 console.log(`Successfully deactivated vocab with ID ${id}.`)
-                toast.success("Vocab successfully deactivated.")
+                toast.success("Vocab successfully deactivated.", { toastId: `deactivate-vocab-${id}` })
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -167,10 +173,13 @@ function App() {
     }
 
     function deleteVocab(id: string): void {
+        if (toast.isActive(`delete-vocab-${id}`)) {
+            return;
+        }
         axios.delete(`api/vocab/${id}`)
             .then(() => {
                 console.log(`Successfully deleted vocab with ID ${id}.`)
-                toast.success("Vocab successfully deleted")
+                toast.success("Vocab successfully deleted", { toastId: `delete-vocab-${id}` })
                 getAllVocabsOfLanguage()
             })
             .catch(error => {

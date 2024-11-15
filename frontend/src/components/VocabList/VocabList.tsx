@@ -18,7 +18,6 @@ export default function VocabList(props: Readonly<Props>) {
     const navigate = useNavigate()
 
     function handleClickActivate(id: string | null): void {
-        //  TODO falls gerade toast gezeigt wird, return
         if (!id || !props.activateVocab) {
             return
         }
@@ -27,7 +26,6 @@ export default function VocabList(props: Readonly<Props>) {
     }
 
     function handleClickDeactivate(id: string | null): void {
-        //  TODO falls gerade toast gezeigt wird, return
         if (!id || !props.deactivateVocab) {
             return
         }
@@ -45,7 +43,6 @@ export default function VocabList(props: Readonly<Props>) {
     }
 
     function handleClickDelete(id: string | null) {
-        //  TODO falls gerade toast gezeigt wird, return
         if (!id || !props.deleteVocab) {
             return
         }
