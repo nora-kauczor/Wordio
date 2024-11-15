@@ -17,11 +17,11 @@ import {useNavigate} from "react-router-dom";
 type Props = {
     vocabs: Vocab[]
     deactivateVocab: (id: string) => void
-    deleteVocab:(id: string) => void
+    deleteVocab: (id: string) => void
     language: string
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userId:string
+    userId: string
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -38,13 +38,11 @@ export default function CalendarPage(props: Readonly<Props>) {
             return
         }
         getMonth()
-    }, [props.language]);
+    }, [props.language, props.vocabs]);
 
-
-    if (!month.yearMonthName) {
-        return <p className={"loading-message"}>Loading...</p>
-    }
-
+    useEffect(() => {
+        updateDayPopUp()
+    }, [month]);
 
     function getMonth() {
         const today = new Date();
@@ -89,10 +87,42 @@ export default function CalendarPage(props: Readonly<Props>) {
             return
         }
         setDayOfDayPopUp(vocabIdsOfDate.date)
-        const ids: string[] | null = vocabIdsOfDate.vocabIds;
-        const vocabs: Vocab[] = props.vocabs.filter(
-            vocab => vocab.id && ids?.includes(vocab.id))
+        const vocabs: Vocab[] = getVocabsByIds(vocabIdsOfDate.vocabIds)
         setVocabsOfDayPopUp(vocabs)
+    }
+
+    function updateDayPopUp(): void {
+        const ids: string[] | undefined = getIdsByDate(dayOfDayPopUp);
+        if (!ids) {
+            closeDayPopUp();
+            return
+        }
+        const vocabs: Vocab[] = getVocabsByIds(ids)
+        setVocabsOfDayPopUp(vocabs)
+    }
+
+    function getIdsByDate(date: string): string[] | undefined {
+        if (!month.vocabIdsOfMonth) {
+            return
+        }
+        for (let y: number = 0; y < 5; y++) {
+            let weekWithoutNull = [];
+            if (!month.vocabIdsOfMonth[y]) {
+                continue
+            } else {
+                weekWithoutNull =
+                    month.vocabIdsOfMonth[y].filter(day => day != null)
+            }
+            for (let z: number = 0; z < 8; z++) {
+                if (weekWithoutNull[z]?.date === date) {
+                    return weekWithoutNull[z]?.vocabIds
+                }
+            }
+        }
+    }
+
+    function getVocabsByIds(ids: string[]): Vocab[] {
+        return props.vocabs.filter(vocab => vocab.id && ids?.includes(vocab.id))
     }
 
     function closeDayPopUp(): void {
@@ -100,6 +130,9 @@ export default function CalendarPage(props: Readonly<Props>) {
         setDayOfDayPopUp("")
     }
 
+    if (!month.yearMonthName) {
+        return <p className={"loading-message"}>Loading...</p>
+    }
 
     return (<div id={"calendar-page"} className={"page"} role={"main"}>
         <div style={{height: "40px"}}/>

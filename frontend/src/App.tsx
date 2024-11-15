@@ -58,7 +58,6 @@ function App() {
             axios.get(`/api/vocab?language=${language}`)
                 .then(response => {
                     setVocabs(response.data)
-                    console.log("Successfully updated vocabs state.")
                 })
                 .catch(error => console.error(error))
         }
@@ -104,7 +103,6 @@ function App() {
                         })
                         .filter((vocab): vocab is Vocab => vocab !== undefined)
                     setVocabsToReview(vocabsToReview as Vocab[])
-                    console.log("Successfully updated vocabsToReview state.")
                 }
             })
             .catch(error => {
