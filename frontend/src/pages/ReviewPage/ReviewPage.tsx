@@ -9,6 +9,7 @@ import {
 } from "./utils/getInputWithoutExtraSpaces.ts";
 import {getRightAnswers} from "./utils/getRightAnswer.ts";
 import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
     vocabsToReview: Vocab[]

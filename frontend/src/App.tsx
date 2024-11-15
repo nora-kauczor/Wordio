@@ -28,7 +28,7 @@ function App() {
     const [vocabToEdit, setVocabToEdit] = useState<Vocab | undefined>(undefined)
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
-    console.log("vocabs[4], el libro: ", vocabs[4])
+    // console.log("vocabs[4], el libro: ", vocabs[4])
 console.log("vocabsToReview: ", vocabsToReview)
     useEffect(() => {
         getUserId()
@@ -53,7 +53,6 @@ console.log("vocabsToReview: ", vocabsToReview)
             getVocabsToReview()
         }
     }, [vocabs]);
-
 
     function getAllVocabsOfLanguage() {
         if (language && userId) {
@@ -116,7 +115,7 @@ console.log("vocabsToReview: ", vocabsToReview)
     }
 
     function removeVocabFromVocabsToReview(id: string): void {
-        axios.put(`/api/review/${id}`)
+        axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
                 console.log(`Vocab ${id} was marked as reviewed for today.`)
                 getAllVocabsOfLanguage()

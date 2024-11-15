@@ -10,5 +10,8 @@ export default defineConfig({
         target: "http://localhost:8080"
       }
     }
-  }
+  },
+  optimizeDeps: {
+    include: ['react-toastify'],
+  },
 })
