@@ -1,9 +1,9 @@
 package org.example.backend.review;
 
+import org.example.backend.calendar.CalendarService;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.vocab.Language;
 import org.example.backend.vocab.Vocab;
-import org.example.backend.vocab.VocabService;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -17,8 +17,8 @@ import static org.mockito.Mockito.*;
 
 class ReviewDayServiceTest {
     private final ReviewDayRepo mockReviewRepo = mock(ReviewDayRepo.class);
-    private final VocabService mockVocabService = mock(VocabService.class);
-    private final ReviewDayService reviewService = new ReviewDayService(mockReviewRepo, mockVocabService);
+    private final CalendarService mockCalendarService = mock(CalendarService.class);
+    private final ReviewDayService reviewService = new ReviewDayService(mockReviewRepo,  mockCalendarService);
 
     @Test
     void getReviewDay_shouldReturnReviewDayOfCurrentDate_ifItExists_whenCalled() throws LanguageNotFoundException {
@@ -33,8 +33,8 @@ class ReviewDayServiceTest {
                 "000", date, Language.SPANISH, "user id", idsOfVocabsToReview);
         when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH))
                 .thenReturn(expected);
-        when(mockVocabService.getAllVocabsOfLanguage("Spanish", "user id"))
-                .thenReturn(List.of(testVocab));
+        when(mockCalendarService.getVocabIdsOfDateAsList(date,Language.SPANISH, "user id"))
+                .thenReturn(List.of("000"));
         when(mockReviewRepo.save(expected)).thenReturn(expected);
         ReviewDay actual = reviewService.getReviewDay("Spanish", "user id", date);
         assertEquals(expected, actual);
@@ -55,42 +55,17 @@ class ReviewDayServiceTest {
                 reviewService.getReviewDay("Esperanto", "user id", date));
     }
 
-//    @Test
-//    void createReviewDay_shouldCreateANewReviewDay_whenCalledWithAReviewDayId() throws LanguageNotFoundException {
-//        LocalDate date = LocalDate.of(2025, 1, 1);
-//        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-//        datesPerUser.put("user id", List.of(date));
-//        Vocab testVocab1 = new Vocab("vocab id", "la prueba",
-//                "test", "", Language.SPANISH, datesPerUser, "Wordio");
-//        Vocab testVocab2 = new Vocab("vocab id 2", "la prueba",
-//                "test", "", Language.SPANISH, new HashMap<>(), "Wordio");
-//        Map<String, Boolean> oldIdsOfVocabsToReview = new HashMap<>();
-//        oldIdsOfVocabsToReview.put("vocab id", false);
-//        oldIdsOfVocabsToReview.put("vocab id 2", false);
-//        ReviewDay oldReviewDay = new ReviewDay("123", date,Language.SPANISH, "user id", oldIdsOfVocabsToReview);
-//        when(mockVocabService.getAllVocabsOfLanguage("Spanish", "user id")).thenReturn(List.of(testVocab1, testVocab2));
-//        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
-//        idsOfVocabsToReview.put("vocab id", false);
-//        ReviewDay expected = new ReviewDay(null, date,Language.SPANISH, "user id", idsOfVocabsToReview);
-//        ReviewDay actual = reviewService.createReviewDay(Language.SPANISH,"user id", date);
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    void getIdsOfTodaysVocabs(){
+        LocalDate date = LocalDate.of(2025, 1, 1);
+        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
+        datesPerUser.put("user id", List.of(date));
+        Vocab testVocab1 = new Vocab("vocab id", "la prueba",
+                "test", "", Language.SPANISH, datesPerUser, "Wordio");
+        Vocab testVocab2 = new Vocab("vocab id 2", "la prueba",
+                "test", "", Language.SPANISH, new HashMap<>(), "Wordio");
 
-//    @Test
-//    void createReviewDay_shouldCreateANewReviewDay_whenCalledWithoutAReviewDayId() throws LanguageNotFoundException {
-//        LocalDate date = LocalDate.of(2025, 1, 1);
-//        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-//        datesPerUser.put("user id", List.of(date));
-//        Vocab testVocab = new Vocab("vocab id", "la prueba",
-//                "test", "", Language.SPANISH, datesPerUser, "Wordio");
-//        when(mockVocabService.getAllVocabsOfLanguage("Spanish", "user id")).thenReturn(List.of(testVocab));
-//        Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
-//        idsOfVocabsToReview.put("vocab id", false);
-//        ReviewDay expected = new ReviewDay(null, date,Language.SPANISH, "user id", idsOfVocabsToReview);
-//        ReviewDay actual = reviewService.createReviewDay( Language.SPANISH,"user id", date);
-//        assertEquals(expected, actual);
-//    }
-
+    }
 
     @Test
     void setVocabReviewed_shouldSetBooleanToTrue_whenCalledWithIdOfVocab() throws LanguageNotFoundException {

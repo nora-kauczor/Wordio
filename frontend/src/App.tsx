@@ -120,9 +120,9 @@ function App() {
         axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
                 console.log(`Vocab with ID ${id} was marked as reviewed for today.`)
-                setTimeout(() => {
+                // setTimeout(() => {
                     getVocabsToReview()
-                }, 10000);
+                // }, 10000);
             })
             .catch(error => {
                 console.error(error)

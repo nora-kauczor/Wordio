@@ -2,19 +2,17 @@ package org.example.backend.review;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.calendar.CalendarService;
 import org.example.backend.exception.LanguageNotFoundException;
 
 import org.example.backend.vocab.Language;
-import org.example.backend.vocab.Vocab;
-
-import org.example.backend.vocab.VocabService;
 
 import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 
 @RequiredArgsConstructor
@@ -22,61 +20,39 @@ import java.util.stream.Collectors;
 public class ReviewDayService {
 
     private final ReviewDayRepo reviewDayRepo;
-    private final VocabService vocabService;
+    private final CalendarService calendarService;
 
     public ReviewDay getReviewDay(String languageString, String userId, LocalDate day) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
-        Map<String, Boolean> idsOfTodaysVocabs = new HashMap<>();
-        try {
-            idsOfTodaysVocabs = getIdsOfTodaysVocabs(language, userId, day);
-        } catch (
-                LanguageNotFoundException languageNotFoundException) {
-            throw new RuntimeException("Couldn't create ReviewDay because Language was not found.", languageNotFoundException);
-        }
+        List<String> idList = calendarService.getVocabIdsOfDateAsList(day, language, userId);
         Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language));
-        Map<String, Boolean> finalIdsOfTodaysVocabs = idsOfTodaysVocabs;
-        Map<String, Boolean> finalIdsOfTodaysVocabs1 = idsOfTodaysVocabs;
         ReviewDay reviewDay = optionalReviewDay.map(oldReviewDay -> {
                     List<String> idsOfReviewedVocabs = oldReviewDay.idsOfVocabsToReview().entrySet().stream()
                             .filter(Map.Entry::getValue)
                             .map(Map.Entry::getKey)
                             .toList();
-                    Map<String, Boolean> idsOfNonReviewedVocabs = finalIdsOfTodaysVocabs.entrySet()
-                            .stream().filter(pair -> !idsOfReviewedVocabs.contains(pair.getKey()))
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    Map<String, Boolean> idMap = new HashMap<>();
+                    for (String id : idList) {
+                        if (idsOfReviewedVocabs.contains(id))
+                        {idMap.put(id, true);} else {
+                            idMap.put(id, false);
+                        }
+                    }
                     ReviewDay newReviewDay = new ReviewDay(oldReviewDay.id(), oldReviewDay.day(),
-                            oldReviewDay.language(), oldReviewDay.userId(), idsOfNonReviewedVocabs);
+                            oldReviewDay.language(), oldReviewDay.userId(), idMap);
                     return reviewDayRepo.save(newReviewDay);
                 })
                 .orElseGet(() -> {
-                        ReviewDay newReviewDay = new ReviewDay(null, day,
-                                language, userId, finalIdsOfTodaysVocabs1);
-                        return reviewDayRepo.save(newReviewDay);
+                    Map<String, Boolean> idMap = new HashMap<>();
+                    for (String id : idList) {
+                        idMap.put(id, false);
+                    }
+                    ReviewDay newReviewDay = new ReviewDay(null, day,
+                            language, userId, idMap);
+                    return reviewDayRepo.save(newReviewDay);
                 });
         return reviewDayRepo.save(reviewDay);
     }
-
-    public Map<String, Boolean> getIdsOfTodaysVocabs(Language language, String userId, LocalDate day) throws LanguageNotFoundException {
-        List<Vocab> allVocabsOfLanguage = vocabService.getAllVocabsOfLanguage(language.getStringOfEnum(), userId);
-        if (allVocabsOfLanguage.isEmpty()) {
-            return new HashMap<>();
-        }
-        List<Vocab> activeVocabs = allVocabsOfLanguage.stream()
-                .filter(vocab -> vocab.getDatesPerUser().containsKey(userId))
-                .toList();
-        if (activeVocabs.isEmpty()) {
-            return new HashMap<>();
-        }
-        List<Vocab> todaysVocabs = activeVocabs.stream()
-                .filter(vocab -> vocab.getDatesPerUser().get(userId).contains(day))
-                .toList();
-        Map<String, Boolean> idsToReview = new HashMap<>();
-        for (Vocab vocab : todaysVocabs) {
-            idsToReview.put(vocab.getId(), false);
-        }
-        return idsToReview;
-    }
-
 
     public ReviewDay setVocabReviewed(String vocabId, String languageString, String userId, LocalDate day) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
