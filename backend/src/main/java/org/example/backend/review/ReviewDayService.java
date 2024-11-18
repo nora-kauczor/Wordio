@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -27,18 +28,30 @@ public class ReviewDayService {
         Language language = Language.getEnumByString(languageString);
         Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language));
         ReviewDay reviewDay = optionalReviewDay.map(oldReviewDay -> {
+            // falls es schon einen review day gibt:
+            List<String> idsOfReviewedVocabs= oldReviewDay.idsOfVocabsToReview().entrySet().stream()
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey)
+                    .toList();
+//            String reviewDayId = oldReviewDay.id();
             try {
-                return createReviewDay(oldReviewDay.id(), language, userId, day);
+                ReviewDay newReviewDay = createReviewDay(oldReviewDay.id(), language, userId, day);
+               return newReviewDay.idsOfVocabsToReview().entrySet()
+                        .stream().filter(pair -> !idsOfReviewedVocabs.contains(pair.getKey()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             } catch (LanguageNotFoundException languageNotFoundException) {
                 throw new RuntimeException("Couldn't create ReviewDay because Language was not found.", languageNotFoundException);
             }
-        }).orElseGet(() -> {
+        })
+                // falls es nch keinen review day gibt:
+                .orElseGet(() -> {
             try {
                 return createReviewDay(language, userId, day);
             } catch (LanguageNotFoundException languageNotFoundException) {
                 throw new RuntimeException("Couldn't create ReviewDay because Language was not found.", languageNotFoundException);
             }
         });
+        assert reviewDay != null;
         return reviewDayRepo.save(reviewDay);
     }
 
@@ -90,6 +103,7 @@ public class ReviewDayService {
         Map<String, Boolean> newIdsOfVocabsToReview = oldReviewDay.get().idsOfVocabsToReview();
         newIdsOfVocabsToReview.put(vocabId, true);
         ReviewDay updatedReviewDay = new ReviewDay(oldReviewDay.get().id(), oldReviewDay.get().day(), language, userId, newIdsOfVocabsToReview);
+//        reviewDayRepo.deleteById(oldReviewDay.get().id());
         return reviewDayRepo.save(updatedReviewDay);
     }
 }
