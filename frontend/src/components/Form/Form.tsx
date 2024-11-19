@@ -17,6 +17,7 @@ export default function Form(props: Readonly<Props>) {
     const [wordInput, setWordInput] = useState<string>("")
     const [translationInput, setTranslationInput] = useState<string>("")
     const [infoInput, setInfoInput] = useState<string>("")
+
     useEffect(() => {
         if (!props.vocabToEdit) {
             return
@@ -33,9 +34,6 @@ export default function Form(props: Readonly<Props>) {
             translation: translationInput,
             info: infoInput,
             language: props.language,
-            createdBy: props.userId,
-            datesPerUser: props.vocabToEdit ? props.vocabToEdit.datesPerUser :
-                undefined,
         };
         if (props.vocabToEdit) {
             props.editVocab(vocab)

@@ -35,7 +35,8 @@ public class VocabController {
     }
 
     @PutMapping
-    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
+    public Vocab editVocab(@RequestBody VocabDTOEdit editedVocab, @AuthenticationPrincipal OAuth2User user) throws IdNotFoundException, VocabIsNotEditableException {
+        System.out.println(editedVocab);
         return vocabService.editVocab(editedVocab, user.getName());
     }
 

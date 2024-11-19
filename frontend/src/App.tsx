@@ -221,10 +221,10 @@ function App() {
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
-        axios.put(`api/vocab/`, editedVocab)
+        axios.put(`api/vocab`, editedVocab)
             .then(() => {
                 console.log(
-                    `Successfully edited of vocab with ID ${editedVocab.id}.`)
+                    `Successfully edited vocab with ID ${editedVocab.id}.`)
                 toast.success("Vocab successfully edited")
                 getAllVocabsOfLanguage()
             })
@@ -239,7 +239,7 @@ function App() {
             setDisplayNewVocabsPopUp(false)
         }
         setUseForm(true)
-        if (!id) {
+        if (id) {
             const vocab = vocabs.find(vocab => vocab.id === id)
             setVocabToEdit(vocab)
         }
