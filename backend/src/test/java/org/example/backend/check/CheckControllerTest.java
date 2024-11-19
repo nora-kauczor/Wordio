@@ -33,7 +33,13 @@ class CheckControllerTest {
     void setUp() {
         Vocab testVocab = new Vocab("vocab-id", "beau/belle", "beautiful",
                 "", Language.FRENCH, new HashMap<>(), "Wordio");
+        Vocab testVocab2 = new Vocab("vocab-id2", "la liberté", "liberty",
+                "", Language.FRENCH, new HashMap<>(), "Wordio");
+        Vocab testVocab3 = new Vocab("vocab-id3", "rojo/-a", "red",
+                "", Language.FRENCH, new HashMap<>(), "Wordio");
         vocabRepo.save(testVocab);
+        vocabRepo.save(testVocab2);
+        vocabRepo.save(testVocab3);
     }
 
     @Test
@@ -56,5 +62,50 @@ class CheckControllerTest {
                         })))
                 .andExpect(status().isOk())
                 .andExpect(content().string("false"));
+    }
+
+    @Test
+    void isUserAnswerCorrect_ShouldReturnTrue_whenCalledWithIdOfLaLiberteAndUserAnswerLaliberte() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/check/vocab-id2")
+                        .param("answer", "la liberté")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
+                        })))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void isUserAnswerCorrect_ShouldReturnTrue_whenCalledWithIdOfLaLiberteAndUserAnswerliberte() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/check/vocab-id2")
+                        .param("answer", "liberté")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
+                        })))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void isUserAnswerCorrect_ShouldReturnTrue_whenCalledWithIdOfRojoAAndUserAnswerRojo() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/check/vocab-id3")
+                        .param("answer", "rojo")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
+                        })))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+
+    @Test
+    void isUserAnswerCorrect_ShouldReturnTrue_whenCalledWithIdOfRojoAAndUserAnswerRoja() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/check/vocab-id3")
+                        .param("answer", "roja")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "jane-doe");
+                        })))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 }

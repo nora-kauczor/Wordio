@@ -17,5 +17,4 @@ public class CheckController {
         return checkService.isUserAnswerCorrect(vocabId, answer);
     }
 
-
 }
