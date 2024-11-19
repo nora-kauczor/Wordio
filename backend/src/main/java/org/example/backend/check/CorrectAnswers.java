@@ -13,11 +13,15 @@ public class CorrectAnswers {
         String rightSideOfSlash = getRightSideOfSlash(word);
         String rightSideOfSlashWithoutArticle = getWordWithoutArticle(word, language);
         String leftSideOfSlashWithEndingOfRightSide = getLeftSideOfSlashWithEndingOfRightSide(word);
-        String wordWithoutBrackets = getWordWithoutBrackets(word);
-        String wordWithoutBracketsAndWithoutContent = getWordWithoutBracketsAndWithoutBracketsContent(word);
         String wordWithoutArticle = getWordWithoutArticle(word, language);
-        String wordWithoutArticleWithoutBrackets = getWordWithoutBrackets(wordWithoutArticle);
-        String wordWithoutArticleWithoutBracketsIncludingContent = getWordWithoutBracketsAndWithoutBracketsContent(wordWithoutArticle);
+        // without brackets but with brackets' content
+        String wordWithoutBrackets = getWordWithoutBrackets(word);
+        String wordWithoutArticleWithoutBrackets = getWordWithoutArticle(wordWithoutBrackets, language);
+        String wordWithoutBracketsRunTwice = getWordWithoutBrackets(wordWithoutBrackets);
+        // without brackets and without brackets' content
+        String wordWithoutBracketsAndWithoutContent = getWordWithoutBracketsAndWithoutBracketsContent(word);
+        String wordWithoutArticleWithoutBracketsAndWithoutContent = getWordWithoutArticle(wordWithoutBracketsAndWithoutContent, language);
+        String wordWithoutBracketsAndWithoutContentRunTwice = getWordWithoutBracketsAndWithoutBracketsContent(wordWithoutBracketsAndWithoutContent);
         return List.of(
                 word,
                 leftSideOfSlash,
@@ -25,11 +29,15 @@ public class CorrectAnswers {
                 rightSideOfSlash,
                 rightSideOfSlashWithoutArticle,
                 leftSideOfSlashWithEndingOfRightSide,
-                wordWithoutBrackets,
-                wordWithoutBracketsAndWithoutContent,
+                //
                 wordWithoutArticle,
+                wordWithoutBrackets,
                 wordWithoutArticleWithoutBrackets,
-                wordWithoutArticleWithoutBracketsIncludingContent);
+                wordWithoutBracketsRunTwice,
+                wordWithoutBracketsAndWithoutContent,
+                wordWithoutArticleWithoutBracketsAndWithoutContent,
+                wordWithoutBracketsAndWithoutContentRunTwice
+        );
     }
 
     public static String getLeftSideOfSlash(String word) {
@@ -92,6 +100,10 @@ public class CorrectAnswers {
             boolean spaceBehindArticle = substringBehindArticle.equals(" ");
             if (articleIsAtBeginning && spaceBehindArticle) {
                 wordWithoutArticle = word.substring(articleLength + 1);
+            }
+            boolean bracketBehindArticle = substringBehindArticle.equals("(");
+            if (articleIsAtBeginning && bracketBehindArticle) {
+                wordWithoutArticle = word.substring(articleLength + 4);
             }
         }
         return wordWithoutArticle;

@@ -10,6 +10,7 @@ import {
 import {getRightAnswers} from "./utils/getRightAnswer.ts";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
 type Props = {
     vocabsToReview: Vocab[]
@@ -50,17 +51,20 @@ export default function ReviewPage(props: Readonly<Props>) {
         }
     }
 
-    function checkAnswer() {
-        if (!currentVocab) {
+    function checkAnswer(id: string, userInput: string): boolean {
+        let isAnswerCorrect = false;
+        axios.get(`/api/check/${id}?answer=${userInput}`)
+            .then(response => isAnswerCorrect = response.data)
+            .catch(error => console.error(error))
+        return isAnswerCorrect;
+    }
+
+    function handleClickShowAnswer() {
+        if (!currentVocab || !currentVocab.id) {
             return
         }
-        const rightAnswers: string[] = getRightAnswers(currentVocab.word,
-            props.language)
-        const rightAnswersLowerCase = rightAnswers.map(
-            answer => answer.toLowerCase())
-        const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
-            userInput)
-        if (rightAnswersLowerCase.includes(inputWithoutExtraSpaces)) {
+        const answerCorrect:boolean = checkAnswer(currentVocab?.id, userInput);
+        if (answerCorrect) {
             setDisplayAnswer(true)
             setShowFireworks(true)
             setInputColor("green")
@@ -82,7 +86,8 @@ export default function ReviewPage(props: Readonly<Props>) {
         } else {
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error("Oops! Don't worry, you'll make it next time! 💪", {icon:false})
+            toast.error("Oops! Don't worry, you'll make it next time! 💪",
+                {icon: false})
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
             }, 2200);
@@ -111,7 +116,7 @@ export default function ReviewPage(props: Readonly<Props>) {
             />
             {!displayAnswer && !showBackButton &&
                 <button className={"review-page-button big-button"}
-                        onClick={checkAnswer}
+                        onClick={handleClickShowAnswer}
                         aria-label={"Submit your answer"}>show answer
                 </button>}
             {displayAnswer && !showBackButton &&
