@@ -16,6 +16,14 @@
     align-items: center;
 }
 
+.with-select {
+    gap: 1rem;
+}
+
+.without-select {
+    gap: 10rem;
+}
+
 #app-name {
     font-family: Arima, serif;
     font-size: 30px;

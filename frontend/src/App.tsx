@@ -117,8 +117,9 @@ function App() {
         }
         axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
-                console.log(`Vocab with ID ${id} was marked as reviewed for today.`)
-                    getVocabsToReview()
+                console.log(
+                    `Vocab with ID ${id} was marked as reviewed for today.`)
+                getVocabsToReview()
             })
             .catch(error => {
                 console.error(error)
@@ -132,7 +133,8 @@ function App() {
         axios.put(`api/vocab/activate/${id}`)
             .then(() => {
                 console.log(`Successfully activated vocab with ID ${id}.`)
-                toast.success("Vocab successfully activated.", { toastId: `activate-vocab-${id}` })
+                toast.success("Vocab successfully activated.",
+                    {toastId: `activate-vocab-${id}`})
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -148,7 +150,8 @@ function App() {
         axios.put(`api/vocab/deactivate/${id}`)
             .then(() => {
                 console.log(`Successfully deactivated vocab with ID ${id}.`)
-                toast.success("Vocab successfully deactivated.", { toastId: `deactivate-vocab-${id}` })
+                toast.success("Vocab successfully deactivated.",
+                    {toastId: `deactivate-vocab-${id}`})
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -180,7 +183,8 @@ function App() {
         axios.delete(`api/vocab/${id}`)
             .then(() => {
                 console.log(`Successfully deleted vocab with ID ${id}.`)
-                toast.success("Vocab successfully deleted", { toastId: `delete-vocab-${id}` })
+                toast.success("Vocab successfully deleted",
+                    {toastId: `delete-vocab-${id}`})
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -234,7 +238,7 @@ function App() {
             })
     }
 
-    function editAndActivateVocab(editedVocab: Vocab): void{
+    function editAndActivateVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
         axios.put(`api/vocab`, editedVocab)
@@ -251,6 +255,7 @@ function App() {
                 toast.error("Couldn't edit vocab")
             })
     }
+
     function openForm(id: string | undefined) {
         if (displayNewVocabsPopUp) {
             setDisplayNewVocabsPopUp(false)
@@ -275,6 +280,7 @@ function App() {
             }
         })
     }
+
 
     if (userId && language && vocabs.length < 1) {
         return <p className={"loading-message"}>Loading...</p>

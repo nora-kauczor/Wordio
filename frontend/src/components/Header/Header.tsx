@@ -1,5 +1,5 @@
 import './Header.css'
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 type Props = {
@@ -10,20 +10,25 @@ type Props = {
 }
 
 export default function Header(props: Readonly<Props>) {
-    // const [onReviewOrDisplayPage, setOnReviewOrDisplayPage] = useState(false)
+    const [onReviewOrDisplayPage, setOnReviewOrDisplayPage] = useState(false)
     const navigate = useNavigate()
-    // const location = useLocation();
-    // useEffect(() => {
-    //     if (location.pathname === "/review" || location.pathname === "/display"){
-    //         setOnReviewOrDisplayPage(true)
-    //     }
-    // }, []);
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.pathname === "/review" || location.pathname.substring(0,8) === "/display"
+        ) {
+            setOnReviewOrDisplayPage(true)
+        } else {
+            setOnReviewOrDisplayPage(false)
+        }
+    }, [navigate]);
 
     function handleChange(event: React.ChangeEvent<HTMLSelectElement>){
         props.setLanguage(event.target.value)
     }
 
-    return (<div id={"header"}>
+    return (<div id={"header"}
+                 className={onReviewOrDisplayPage ? "without-select" : "with-select"}>
         <button
             onClick={() => navigate("/")}
             id={"app-name"}
@@ -31,9 +36,8 @@ export default function Header(props: Readonly<Props>) {
             Wordio
         </button>
         {props.userId && props.language &&
-            // !onReviewOrDisplayPage &&
-            (
-            <div>
+            !onReviewOrDisplayPage &&
+            (<div>
                 <label htmlFor={"select-language"} className={"visually-hidden"}>
                     Select your language
                 </label>
