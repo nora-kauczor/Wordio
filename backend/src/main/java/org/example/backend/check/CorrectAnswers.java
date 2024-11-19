@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CorrectAnswers {
 
-    public List<String> getCorrectAnswers(String word, Language language) {
+    public static List<String> getCorrectAnswers(String word, Language language) {
         String leftSideOfSlash = getLeftSideOfSlash(word);
         String leftSideOfSlashWithoutArticle = getWordWithoutArticle(leftSideOfSlash, language);
         String rightSideOfSlash = getRightSideOfSlash(word);

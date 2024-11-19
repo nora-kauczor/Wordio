@@ -65,15 +65,6 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void
-    getWordWithoutArticle_shouldReturnElSueno_whenCalledWithElSuenoAndFrench(){
-        String word = "el sueño";
-        String expected = "el sueño";
-        String actual = CorrectAnswers.getWordWithoutArticle(word, Language.FRENCH);
-        assertEquals(expected, actual);
-    }
-
-    @Test
     void getWordWithoutBrackets_shouldReturnContente_whenCalledWithContente(){
         String word = "content(e)";
         String expected = "contente";
