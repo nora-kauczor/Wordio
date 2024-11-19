@@ -70,9 +70,6 @@ public class VocabService {
     }
 
     public Vocab editVocab(VocabDTOEdit vocabDTO, String userName) throws IdNotFoundException, VocabIsNotEditableException {
-        System.out.println("editVocab was called in VocabService");
-        System.out.println("VocabDTO: "+vocabDTO);
-        System.out.println("userName: "+userName);
         Vocab vocab = vocabRepo.findById(vocabDTO.id()).orElseThrow(() -> new IdNotFoundException("ID not found."));
         if (!vocab.getCreatedBy().equals(userName)) {
             throw new VocabIsNotEditableException("Method not allowed.");
