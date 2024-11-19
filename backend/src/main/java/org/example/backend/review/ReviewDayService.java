@@ -22,10 +22,11 @@ public class ReviewDayService {
     private final ReviewDayRepo reviewDayRepo;
     private final CalendarService calendarService;
 
-    public ReviewDay getReviewDay(String languageString, String userId, LocalDate day) throws LanguageNotFoundException {
+    public ReviewDay getReviewDay(String languageString, String userId, LocalDate date) throws LanguageNotFoundException {
+        if (date.getDayOfMonth() == 1){clearReviewDayRepo();}
         Language language = Language.getEnumByString(languageString);
-        List<String> idList = calendarService.getVocabIdsOfDateAsList(day, language, userId);
-        Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language));
+        List<String> idList = calendarService.getVocabIdsOfDateAsList (date, language, userId);
+        Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage (date, userId, language));
         ReviewDay reviewDay = optionalReviewDay.map(oldReviewDay -> {
                     List<String> idsOfReviewedVocabs = oldReviewDay.idsOfVocabsToReview().entrySet().stream()
                             .filter(Map.Entry::getValue)
@@ -47,21 +48,23 @@ public class ReviewDayService {
                     for (String id : idList) {
                         idMap.put(id, false);
                     }
-                    ReviewDay newReviewDay = new ReviewDay(null, day,
+                    ReviewDay newReviewDay = new ReviewDay(null, date,
                             language, userId, idMap);
                     return reviewDayRepo.save(newReviewDay);
                 });
         return reviewDayRepo.save(reviewDay);
     }
 
-    public ReviewDay setVocabReviewed(String vocabId, String languageString, String userId, LocalDate day) throws LanguageNotFoundException {
+    public ReviewDay setVocabReviewed(String vocabId, String languageString, String userId, LocalDate date) throws LanguageNotFoundException {
         Language language = Language.getEnumByString(languageString);
-        Optional<ReviewDay> oldReviewDay = Optional.of(reviewDayRepo.getByDayAndUserIdAndLanguage(day, userId, language));
+        Optional<ReviewDay> oldReviewDay = Optional.of(reviewDayRepo.getByDayAndUserIdAndLanguage (date, userId, language));
         Map<String, Boolean> newIdsOfVocabsToReview = oldReviewDay.get().idsOfVocabsToReview();
         newIdsOfVocabsToReview.put(vocabId, true);
         ReviewDay updatedReviewDay = new ReviewDay(oldReviewDay.get().id(), oldReviewDay.get().day(), language, userId, newIdsOfVocabsToReview);
         return reviewDayRepo.save(updatedReviewDay);
     }
 
-    // TODO methode die einmal im monat oder öfter die alten review day objekte löscht, woher gecallt?
+    public void clearReviewDayRepo(){
+        reviewDayRepo.deleteAll();
+    }
 }
