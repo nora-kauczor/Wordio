@@ -1,5 +1,6 @@
 import './Header.css'
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 type Props = {
     userId: string
@@ -9,7 +10,15 @@ type Props = {
 }
 
 export default function Header(props: Readonly<Props>) {
-const navigate = useNavigate()
+    // const [onReviewOrDisplayPage, setOnReviewOrDisplayPage] = useState(false)
+    const navigate = useNavigate()
+    // const location = useLocation();
+    // useEffect(() => {
+    //     if (location.pathname === "/review" || location.pathname === "/display"){
+    //         setOnReviewOrDisplayPage(true)
+    //     }
+    // }, []);
+
     function handleChange(event: React.ChangeEvent<HTMLSelectElement>){
         props.setLanguage(event.target.value)
     }
@@ -21,7 +30,9 @@ const navigate = useNavigate()
             aria-live={"polite"}>
             Wordio
         </button>
-        {props.userId && props.language && (
+        {props.userId && props.language &&
+            // !onReviewOrDisplayPage &&
+            (
             <div>
                 <label htmlFor={"select-language"} className={"visually-hidden"}>
                     Select your language
@@ -33,7 +44,6 @@ const navigate = useNavigate()
         </select>
             </div>
             )}
-
         {props.userId && <button id={"logout-button"}
                                    onClick={props.logout}
                                    aria-label={"Log out"}

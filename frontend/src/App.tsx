@@ -29,6 +29,8 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
+    console.log(vocabsToReview)
+
     useEffect(() => {
         getUserId()
     }, []);
@@ -58,7 +60,6 @@ function App() {
             axios.get(`/api/vocab?language=${language}`)
                 .then(response => {
                     setVocabs(response.data)
-                    console.log("Successfully updated vocabs state.")
                 })
                 .catch(error => console.error(error))
         }
@@ -94,6 +95,7 @@ function App() {
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
                     .map(innerArray => innerArray[0]);
+                console.log(response.data)
                 if (vocabs.length < 1) {
                     console.error(
                         "Couldn't get vocabs to review because vocabs was empty.");
@@ -104,7 +106,6 @@ function App() {
                         })
                         .filter((vocab): vocab is Vocab => vocab !== undefined)
                     setVocabsToReview(vocabsToReview as Vocab[])
-                    console.log("Successfully updated vocabsToReview state.")
                 }
             })
             .catch(error => {
@@ -119,7 +120,9 @@ function App() {
         axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
                 console.log(`Vocab with ID ${id} was marked as reviewed for today.`)
-                getAllVocabsOfLanguage()
+                // setTimeout(() => {
+                    getVocabsToReview()
+                // }, 10000);
             })
             .catch(error => {
                 console.error(error)
@@ -127,10 +130,13 @@ function App() {
     }
 
     function activateVocab(id: string): void {
+        if (toast.isActive(`activate-vocab-${id}`)) {
+            return;
+        }
         axios.put(`api/vocab/activate/${id}`)
             .then(() => {
                 console.log(`Successfully activated vocab with ID ${id}.`)
-                toast.success("Vocab successfully activated.")
+                toast.success("Vocab successfully activated.", { toastId: `activate-vocab-${id}` })
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -140,10 +146,13 @@ function App() {
     }
 
     function deactivateVocab(id: string): void {
+        if (toast.isActive(`deactivate-vocab-${id}`)) {
+            return;
+        }
         axios.put(`api/vocab/deactivate/${id}`)
             .then(() => {
                 console.log(`Successfully deactivated vocab with ID ${id}.`)
-                toast.success("Vocab successfully deactivated.")
+                toast.success("Vocab successfully deactivated.", { toastId: `deactivate-vocab-${id}` })
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -169,10 +178,13 @@ function App() {
     }
 
     function deleteVocab(id: string): void {
+        if (toast.isActive(`delete-vocab-${id}`)) {
+            return;
+        }
         axios.delete(`api/vocab/${id}`)
             .then(() => {
                 console.log(`Successfully deleted vocab with ID ${id}.`)
-                toast.success("Vocab successfully deleted")
+                toast.success("Vocab successfully deleted", { toastId: `delete-vocab-${id}` })
                 getAllVocabsOfLanguage()
             })
             .catch(error => {

@@ -11,4 +11,6 @@ import java.time.LocalDate;
 public interface ReviewDayRepo extends MongoRepository<ReviewDay, String> {
 
     ReviewDay getByDayAndUserIdAndLanguage(LocalDate day, String userId, Language language);
+
+
 }

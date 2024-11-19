@@ -49,7 +49,6 @@ export default function VocabList(props: Readonly<Props>) {
         props.deleteVocab(id)
     }
 
-
     return (<ul id={"vocab-list"} role={"list"}>
         {props.vocabs.map(vocab => <li key={vocab.id}
                                        className={`list-item card ${props.calendarMode ?

@@ -16,7 +16,6 @@ type Props = {
     removeVocabFromVocabsToReview: (id: string | null) => void
     changeReviewDates: (id: string | null) => void
     language: string
-
 }
 
 export default function ReviewPage(props: Readonly<Props>) {
@@ -50,9 +49,6 @@ export default function ReviewPage(props: Readonly<Props>) {
             setDisplayAnswer(false)
         }
     }
-
-    if (!currentVocab && !showBackButton) return <p
-        className={"loading-message"}>Loading...</p>
 
     function checkAnswer() {
         if (!currentVocab) {
@@ -89,11 +85,13 @@ export default function ReviewPage(props: Readonly<Props>) {
             toast.error("Oops! Don't worry, you'll make it next time! 💪", {icon:false})
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
-                props.removeVocabFromVocabsToReview(currentVocab.id);
             }, 2200);
         }
 
     }
+
+    if (!currentVocab && !showBackButton) return <p
+        className={"loading-message"}>Loading...</p>
 
     return (<div id={"review-page"} className={"page"} role={"main"}>
         <div style={{height: "30px"}}/>
@@ -111,7 +109,6 @@ export default function ReviewPage(props: Readonly<Props>) {
                    placeholder={"Type your answer here"}
                    disabled={displayAnswer}
             />
-
             {!displayAnswer && !showBackButton &&
                 <button className={"review-page-button big-button"}
                         onClick={checkAnswer}

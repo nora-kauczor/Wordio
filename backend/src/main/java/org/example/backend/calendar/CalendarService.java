@@ -46,14 +46,18 @@ public class CalendarService {
     }
 
     public VocabIdsOfDate getVocabIdsOfDate(LocalDate date, Language language, String userName) {
+        List<String> ids = getVocabIdsOfDateAsList(date, language, userName);
+        return new VocabIdsOfDate(date, ids);
+    }
+
+    public List<String> getVocabIdsOfDateAsList(LocalDate date, Language language, String userName) {
         List<Vocab> allVocabs = vocabRepo.findAll();
         List<Vocab> vocabsOfDate = allVocabs.stream()
                 .filter(vocab -> vocab.getLanguage().equals(language))
                 .filter(vocab -> vocab.getDatesPerUser() != null && vocab.getDatesPerUser().containsKey(userName))
                 .filter(vocab -> vocab.getDatesPerUser().get(userName).stream()
-                          .anyMatch(reviewDate -> reviewDate.equals(date))).toList();
-        List<String> ids = vocabsOfDate.stream().map(Vocab::getId).toList();
-        return new VocabIdsOfDate(date, ids);
+                        .anyMatch(reviewDate -> reviewDate.equals(date))).toList();
+        return vocabsOfDate.stream().map(Vocab::getId).toList();
     }
 
    private VocabIdsOfDate[][] createEmptyCalendar() {
