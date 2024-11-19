@@ -72,6 +72,11 @@ export default function VocabList(props: Readonly<Props>) {
         setFilteredVocabs(matchingVocabs)
     }
 
+    function reset(){
+        setSearchTerm("")
+        setFilteredVocabs(props.vocabs)
+    }
+
 
     return (<div id={"vocab-list"}>
 
@@ -80,11 +85,12 @@ export default function VocabList(props: Readonly<Props>) {
                    className={"visually-hidden"}>Type here to search
                 vocabs</label>
             <input id={"search-field"}
-                // defaultValue={"Search vocabs"}
                    value={searchTerm}
                    onChange={handleChangeInput}/>
             <button id={"reset-button"}
-                    onClick={() => setSearchTerm("")}>Reset
+                    onClick={reset}
+                    onKeyDown={reset}
+            >Reset
             </button>
         </div>
         <ul id={"list"} role={"list"}>
@@ -141,8 +147,7 @@ export default function VocabList(props: Readonly<Props>) {
                             if (e.key === 'Enter' || e.key ===
                                 ' ') handleClickDelete(vocab.id);
                         }}
-                        aria-label={`Delete ${vocab.word}`}
-                    >
+                        aria-label={`Delete ${vocab.word}`}>
                         delete
                     </button>}
                 </div>
