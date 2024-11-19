@@ -16,9 +16,9 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getLeftSideOfSlash_shouldReturnNull_whenCalledWithLaLiberte() {
+    void getLeftSideOfSlash_shouldReturnLaLiberte_whenCalledWithLaLiberte() {
         String word = "la liberté";
-        String expected = null;
+        String expected = "la liberté";
         String actual = CorrectAnswers.getLeftSideOfSlash(word);
         assertEquals(expected, actual);
     }
@@ -32,9 +32,9 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getRightSideOfSlash_shouldReturnNull_whenCalledWithLaLiberte() {
+    void getRightSideOfSlash_shouldReturnLaLiberte_whenCalledWithLaLiberte() {
         String word = "la liberté";
-        String expected = null;
+        String expected = "la liberté";
         String actual = CorrectAnswers.getRightSideOfSlash(word);
         assertEquals(expected, actual);
     }
@@ -48,9 +48,9 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getLeftSideOfSlashWithEndingOfRightSide_shouldReturnNull_whenCalledWithBeauBelle() {
+    void getLeftSideOfSlashWithEndingOfRightSide_shouldReturnBeauBelle_whenCalledWithBeauBelle() {
         String word = "beau/belle";
-        String expected = null;
+        String expected = "beau/belle";
         String actual = CorrectAnswers.getLeftSideOfSlashWithEndingOfRightSide(word);
         assertEquals(expected, actual);
     }
@@ -66,9 +66,9 @@ class CorrectAnswersTest {
 
     @Test
     void
-    getWordWithoutArticle_shouldReturnNull_whenCalledWithElSuenoAndFrench(){
+    getWordWithoutArticle_shouldReturnElSueno_whenCalledWithElSuenoAndFrench(){
         String word = "el sueño";
-        String expected = null;
+        String expected = "el sueño";
         String actual = CorrectAnswers.getWordWithoutArticle(word, Language.FRENCH);
         assertEquals(expected, actual);
     }
@@ -82,9 +82,9 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getWordWithoutBrackets_shouldReturnNull_whenCalledWithLaLiberte(){
+    void getWordWithoutBrackets_shouldReturnLaLiberte_whenCalledWithLaLiberte(){
         String word = "la liberté";
-        String expected = null;
+        String expected = "la liberté";
         String actual = CorrectAnswers.getWordWithoutBrackets(word);
         assertEquals(expected, actual);
     }
@@ -98,9 +98,9 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnNull_whenCalledWithLaLiberte(){
+    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnLaLiberte_whenCalledWithLaLiberte(){
         String word = "la liberté";
-        String expected = null;
+        String expected = "la liberté";
         String actual = CorrectAnswers.getWordWithoutBracketsAndWithoutBracketsContent(word);
         assertEquals(expected, actual);
     }

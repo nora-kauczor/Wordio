@@ -3,41 +3,40 @@ package org.example.backend.check;
 import org.example.backend.vocab.Language;
 
 import java.util.List;
-import java.util.Objects;
 
 
 public class CorrectAnswers {
 
-//    public List<String> getCorrectAnswers(String word, Language language) {
-//        String leftSideOfSlash = getLeftSideOfSlash(word);
-//        String leftSideOfSlashWithoutArticle = getWordWithoutArticle(leftSideOfSlash, language);
-//        String rightSideOfSlash = getRightSideOfSlash(word);
-//        String rightSideOfSlashWithoutArticle = getWordWithoutArticle(word, language);
-//        String leftSideOfSlashWithEndingOfRightSide = getLeftSideOfSlashWithEndingOfRightSide(word);
-//        /*
-//
-//        String wordWithoutBrackets =
-//        String wordWithoutBracketsIncludingContent,
-//        String wordWithoutArticle =
-//        String wordWithoutArticleWithoutBrackets,
-//        String wordWithoutArticleWithoutBracketsIncludingContent,
-//
-//       */
-//        List<String> correctAnswers = List.of(
-//                word,
-//                leftSideOfSlash,
-//                leftSideOfSlashWithoutArticle,
-//                rightSideOfSlash,
-//                rightSideOfSlashWithoutArticle,
-//                leftSideOfSlashWithEndingOfRightSide);
-//        correctAnswers.stream().filter(Objects::nonNull).toList();
-//    }
+    public List<String> getCorrectAnswers(String word, Language language) {
+        String leftSideOfSlash = getLeftSideOfSlash(word);
+        String leftSideOfSlashWithoutArticle = getWordWithoutArticle(leftSideOfSlash, language);
+        String rightSideOfSlash = getRightSideOfSlash(word);
+        String rightSideOfSlashWithoutArticle = getWordWithoutArticle(word, language);
+        String leftSideOfSlashWithEndingOfRightSide = getLeftSideOfSlashWithEndingOfRightSide(word);
+        String wordWithoutBrackets = getWordWithoutBrackets(word);
+        String wordWithoutBracketsAndWithoutContent = getWordWithoutBracketsAndWithoutBracketsContent(word);
+        String wordWithoutArticle = getWordWithoutArticle(word, language);
+        String wordWithoutArticleWithoutBrackets = getWordWithoutBrackets(wordWithoutArticle);
+        String wordWithoutArticleWithoutBracketsIncludingContent = getWordWithoutBracketsAndWithoutBracketsContent(wordWithoutArticle);
+        return List.of(
+                word,
+                leftSideOfSlash,
+                leftSideOfSlashWithoutArticle,
+                rightSideOfSlash,
+                rightSideOfSlashWithoutArticle,
+                leftSideOfSlashWithEndingOfRightSide,
+                wordWithoutBrackets,
+                wordWithoutBracketsAndWithoutContent,
+                wordWithoutArticle,
+                wordWithoutArticleWithoutBrackets,
+                wordWithoutArticleWithoutBracketsIncludingContent);
+    }
 
     public static String getLeftSideOfSlash(String word) {
         char slash = '/';
         boolean wordHasSlash = word.indexOf(slash) != -1;
         if (!wordHasSlash) {
-            return null;
+            return word;
         }
         int indexOfSlash = word.indexOf(slash);
         return word.substring(0, indexOfSlash);
@@ -47,7 +46,7 @@ public class CorrectAnswers {
         char slash = '/';
         boolean wordHasSlash = word.indexOf(slash) != -1;
         if (!wordHasSlash) {
-            return null;
+            return word;
         }
         int indexOfSlash = word.indexOf(slash);
         return word.substring(indexOfSlash + 1);
@@ -57,13 +56,13 @@ public class CorrectAnswers {
         char slash = '/';
         boolean wordHasSlash = word.indexOf(slash) != -1;
         if (!wordHasSlash) {
-            return null;
+            return word;
         }
         int indexOfSlash = word.indexOf(slash);
         char minus = '-';
         boolean wordHasMinus = word.indexOf(minus) != -1;
         if (!wordHasMinus) {
-            return null;
+            return word;
         }
         String ending = word.substring(indexOfSlash + 2);
         String leftSideWithoutLastLetter = word.substring(0, indexOfSlash - 1);
@@ -83,9 +82,9 @@ public class CorrectAnswers {
         }
         boolean wordStartsWithArticlesLetters = articles.stream().anyMatch(word::contains);
         if (!wordStartsWithArticlesLetters) {
-            return null;
+            return word;
         }
-        String wordWithoutArticle = null;
+        String wordWithoutArticle = word;
         for (String article : articles) {
             boolean articleIsAtBeginning = word.indexOf(article) == 0;
             int articleLength = article.length();
@@ -103,7 +102,7 @@ public class CorrectAnswers {
         char closingBracket = ')';
         boolean wordHasBrackets = word.indexOf(openingBracket) != -1;
         if (!wordHasBrackets) {
-            return null;
+            return word;
         }
         int indexOfOpeningBracket = word.indexOf(openingBracket);
         int indexOfClosingBracket = word.indexOf(closingBracket);
@@ -118,7 +117,7 @@ public class CorrectAnswers {
         char closingBracket = ')';
         boolean wordHasBrackets = word.indexOf(openingBracket) != -1;
         if (!wordHasBrackets) {
-            return null;
+            return word;
         }
         int indexOfOpeningBracket = word.indexOf(openingBracket);
         int indexOfClosingBracket = word.indexOf(closingBracket);
