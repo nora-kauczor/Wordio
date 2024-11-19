@@ -3,17 +3,19 @@ package org.example.backend.check;
 import org.example.backend.vocab.Language;
 
 import java.util.List;
-
+import java.util.Objects;
 
 
 public class CorrectAnswers {
 
-//    public List<String> getCorrectAnswers(String word) {
+//    public List<String> getCorrectAnswers(String word, Language language) {
+//        String leftSideOfSlash = getLeftSideOfSlash(word);
+//        String leftSideOfSlashWithoutArticle = getWordWithoutArticle(leftSideOfSlash, language);
+//        String rightSideOfSlash = getRightSideOfSlash(word);
+//        String rightSideOfSlashWithoutArticle = getWordWithoutArticle(word, language);
+//        String leftSideOfSlashWithEndingOfRightSide = getLeftSideOfSlashWithEndingOfRightSide(word);
 //        /*
-//        String leftSideOfSlash
-//        String leftSideOfSlashWithoutArticle
-//        String rightSideOfSlash
-//        String rightSideOfSlashWithoutArticle
+//
 //        String wordWithoutBrackets =
 //        String wordWithoutBracketsIncludingContent,
 //        String wordWithoutArticle =
@@ -21,6 +23,14 @@ public class CorrectAnswers {
 //        String wordWithoutArticleWithoutBracketsIncludingContent,
 //
 //       */
+//        List<String> correctAnswers = List.of(
+//                word,
+//                leftSideOfSlash,
+//                leftSideOfSlashWithoutArticle,
+//                rightSideOfSlash,
+//                rightSideOfSlashWithoutArticle,
+//                leftSideOfSlashWithEndingOfRightSide);
+//        correctAnswers.stream().filter(Objects::nonNull).toList();
 //    }
 
     public static String getLeftSideOfSlash(String word) {
@@ -88,11 +98,34 @@ public class CorrectAnswers {
         return wordWithoutArticle;
     }
 
-//    public static String getWordWithoutBrackets(String word) {
-//    }
+    public static String getWordWithoutBrackets(String word) {
+        char openingBracket = '(';
+        char closingBracket = ')';
+        boolean wordHasBrackets = word.indexOf(openingBracket) != -1;
+        if (!wordHasBrackets) {
+            return null;
+        }
+        int indexOfOpeningBracket = word.indexOf(openingBracket);
+        int indexOfClosingBracket = word.indexOf(closingBracket);
+        String substringBeforeBrackets = word.substring(0, indexOfOpeningBracket);
+        String substringBetweenBrackets = word.substring(indexOfOpeningBracket + 1, indexOfClosingBracket);
+        String subStringAfterBrackets = word.substring(indexOfClosingBracket + 1);
+        return substringBeforeBrackets + substringBetweenBrackets + subStringAfterBrackets;
+    }
 
-//    public String static getWordWithoutBracketsAndWithoutBracketsContent(String word) {
-//    }
+    public static String getWordWithoutBracketsAndWithoutBracketsContent(String word) {
+        char openingBracket = '(';
+        char closingBracket = ')';
+        boolean wordHasBrackets = word.indexOf(openingBracket) != -1;
+        if (!wordHasBrackets) {
+            return null;
+        }
+        int indexOfOpeningBracket = word.indexOf(openingBracket);
+        int indexOfClosingBracket = word.indexOf(closingBracket);
+        String substringBeforeBrackets = word.substring(0, indexOfOpeningBracket);
+        String subStringAfterBrackets = word.substring(indexOfClosingBracket + 1);
+        return substringBeforeBrackets + subStringAfterBrackets;
+    }
 
 
 }

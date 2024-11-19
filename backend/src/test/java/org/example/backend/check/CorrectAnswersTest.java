@@ -73,4 +73,36 @@ class CorrectAnswersTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void getWordWithoutBrackets_shouldReturnContente_whenCalledWithContente(){
+        String word = "content(e)";
+        String expected = "contente";
+        String actual = CorrectAnswers.getWordWithoutBrackets(word);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getWordWithoutBrackets_shouldReturnNull_whenCalledWithLaLiberte(){
+        String word = "la liberté";
+        String expected = null;
+        String actual = CorrectAnswers.getWordWithoutBrackets(word);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnContent_whenCalledWithContente(){
+        String word = "content(e)";
+        String expected = "content";
+        String actual = CorrectAnswers.getWordWithoutBracketsAndWithoutBracketsContent(word);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnNull_whenCalledWithLaLiberte(){
+        String word = "la liberté";
+        String expected = null;
+        String actual = CorrectAnswers.getWordWithoutBracketsAndWithoutBracketsContent(word);
+        assertEquals(expected, actual);
+    }
+
 }
