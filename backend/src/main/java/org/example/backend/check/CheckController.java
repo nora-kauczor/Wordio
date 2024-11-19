@@ -17,10 +17,10 @@ public class CheckController {
     private final CheckService checkService;
 
 
-    @GetMapping("/{vocabId}")
-    public boolean isUserAnswerCorrect(@PathVariable String vocabId, @RequestParam String userAnswer) throws LanguageNotFoundException {
-        return checkService.isUserAnswerCorrect(vocabId, userAnswer);
-    }
+//    @GetMapping("/{vocabId}")
+//    public boolean isUserAnswerCorrect(@PathVariable String vocabId, @RequestParam String userAnswer) throws LanguageNotFoundException {
+//        return checkService.isUserAnswerCorrect(vocabId, userAnswer);
+//    }
 
 
 }
