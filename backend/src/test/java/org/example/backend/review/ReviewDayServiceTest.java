@@ -3,7 +3,6 @@ package org.example.backend.review;
 import org.example.backend.calendar.CalendarService;
 import org.example.backend.exception.LanguageNotFoundException;
 import org.example.backend.vocab.Language;
-import org.example.backend.vocab.Vocab;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -25,13 +24,14 @@ class ReviewDayServiceTest {
         LocalDate date = LocalDate.of(2025, 1, 1);
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab id", false);
+        idsOfVocabsToReview.put("vocab id 2", true);
         ReviewDay expected = new ReviewDay(
                 "000", date, Language.SPANISH, "user id", idsOfVocabsToReview);
         when(mockReviewRepo.getByDayAndUserIdAndLanguage(date, "user id", Language.SPANISH))
                 .thenReturn(expected);
         when(mockCalendarService.getVocabIdsOfDateAsList(date,Language.SPANISH, "user id"))
-                .thenReturn(List.of("000"));
-        when(mockReviewRepo.save(any(ReviewDay.class))).thenReturn(expected);
+                .thenReturn(List.of("vocab id", "vocab id 2"));
+        when(mockReviewRepo.save(expected)).thenReturn(expected);
         ReviewDay actual = reviewService.getReviewDay("Spanish", "user id", date);
         assertEquals(expected, actual);
     }
