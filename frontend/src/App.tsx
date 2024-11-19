@@ -29,7 +29,6 @@ function App() {
     const [displayNewVocabsPopUp, setDisplayNewVocabsPopUp] = useState(false)
     const navigate = useNavigate()
 
-    console.log(vocabsToReview)
 
     useEffect(() => {
         getUserId()
@@ -95,7 +94,6 @@ function App() {
                     response.data.idsOfVocabsToReview)
                     .filter(innerArray => innerArray[1] === false)
                     .map(innerArray => innerArray[0]);
-                console.log(response.data)
                 if (vocabs.length < 1) {
                     console.error(
                         "Couldn't get vocabs to review because vocabs was empty.");
@@ -120,9 +118,7 @@ function App() {
         axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
                 console.log(`Vocab with ID ${id} was marked as reviewed for today.`)
-                // setTimeout(() => {
                     getVocabsToReview()
-                // }, 10000);
             })
             .catch(error => {
                 console.error(error)

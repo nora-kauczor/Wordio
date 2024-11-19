@@ -4,12 +4,9 @@ import CardContainer from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
 import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
-import {
-    getInputWithoutExtraSpaces
-} from "./utils/getInputWithoutExtraSpaces.ts";
-import {getRightAnswers} from "./utils/getRightAnswer.ts";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
 type Props = {
     vocabsToReview: Vocab[]
@@ -50,17 +47,27 @@ export default function ReviewPage(props: Readonly<Props>) {
         }
     }
 
-    function checkAnswer() {
-        if (!currentVocab) {
+    async function checkAnswer(id: string, userInput: string): Promise<boolean | undefined> {
+        const inputWithCodedSpaces = userInput.replace(/ /g, "%20")
+        try
+        {
+            const response = await axios.get(
+                `/api/check/${id}?answer=${inputWithCodedSpaces}`)
+            return response.data;
+        } catch (error) {
+            console.error(error)
+            return undefined;
+        }
+    }
+
+    async function handleClickShowAnswer() {
+        if (!currentVocab || !currentVocab.id) {
             return
         }
-        const rightAnswers: string[] = getRightAnswers(currentVocab.word,
-            props.language)
-        const rightAnswersLowerCase = rightAnswers.map(
-            answer => answer.toLowerCase())
-        const inputWithoutExtraSpaces: string = getInputWithoutExtraSpaces(
-            userInput)
-        if (rightAnswersLowerCase.includes(inputWithoutExtraSpaces)) {
+        const answerCorrect: boolean | undefined = await checkAnswer(
+            currentVocab?.id, userInput);
+        if (answerCorrect === undefined) {return}
+        if (answerCorrect) {
             setDisplayAnswer(true)
             setShowFireworks(true)
             setInputColor("green")
@@ -82,7 +89,8 @@ export default function ReviewPage(props: Readonly<Props>) {
         } else {
             setInputColor("red")
             setDisplayAnswer(true)
-            toast.error("Oops! Don't worry, you'll make it next time! 💪", {icon:false})
+            toast.error("Oops! Don't worry, you'll make it next time! 💪",
+                {icon: false})
             setTimeout(() => {
                 props.changeReviewDates(currentVocab.id);
             }, 2200);
@@ -111,7 +119,7 @@ export default function ReviewPage(props: Readonly<Props>) {
             />
             {!displayAnswer && !showBackButton &&
                 <button className={"review-page-button big-button"}
-                        onClick={checkAnswer}
+                        onClick={handleClickShowAnswer}
                         aria-label={"Submit your answer"}>show answer
                 </button>}
             {displayAnswer && !showBackButton &&
