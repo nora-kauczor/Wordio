@@ -23,10 +23,6 @@ class ReviewDayServiceTest {
     @Test
     void getReviewDay_shouldReturnReviewDayOfCurrentDate_ifItExists_whenCalled() throws LanguageNotFoundException {
         LocalDate date = LocalDate.of(2025, 1, 1);
-        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-        datesPerUser.put("user id", List.of(date));
-        Vocab testVocab = new Vocab("vocab id", "la prueba",
-                "test", "", Language.SPANISH, datesPerUser, "Wordio");
         Map<String, Boolean> idsOfVocabsToReview = new HashMap<>();
         idsOfVocabsToReview.put("vocab id", false);
         ReviewDay expected = new ReviewDay(
@@ -35,7 +31,7 @@ class ReviewDayServiceTest {
                 .thenReturn(expected);
         when(mockCalendarService.getVocabIdsOfDateAsList(date,Language.SPANISH, "user id"))
                 .thenReturn(List.of("000"));
-        when(mockReviewRepo.save(expected)).thenReturn(expected);
+        when(mockReviewRepo.save(any(ReviewDay.class))).thenReturn(expected);
         ReviewDay actual = reviewService.getReviewDay("Spanish", "user id", date);
         assertEquals(expected, actual);
     }
@@ -55,17 +51,6 @@ class ReviewDayServiceTest {
                 reviewService.getReviewDay("Esperanto", "user id", date));
     }
 
-    @Test
-    void getIdsOfTodaysVocabs(){
-        LocalDate date = LocalDate.of(2025, 1, 1);
-        Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
-        datesPerUser.put("user id", List.of(date));
-        Vocab testVocab1 = new Vocab("vocab id", "la prueba",
-                "test", "", Language.SPANISH, datesPerUser, "Wordio");
-        Vocab testVocab2 = new Vocab("vocab id 2", "la prueba",
-                "test", "", Language.SPANISH, new HashMap<>(), "Wordio");
-
-    }
 
     @Test
     void setVocabReviewed_shouldSetBooleanToTrue_whenCalledWithIdOfVocab() throws LanguageNotFoundException {

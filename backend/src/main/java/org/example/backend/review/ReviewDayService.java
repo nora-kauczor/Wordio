@@ -62,4 +62,6 @@ public class ReviewDayService {
         ReviewDay updatedReviewDay = new ReviewDay(oldReviewDay.get().id(), oldReviewDay.get().day(), language, userId, newIdsOfVocabsToReview);
         return reviewDayRepo.save(updatedReviewDay);
     }
+
+    // TODO methode die einmal im monat oder öfter die alten review day objekte löscht, woher gecallt?
 }
