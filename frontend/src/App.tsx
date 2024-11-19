@@ -234,6 +234,23 @@ function App() {
             })
     }
 
+    function editAndActivateVocab(editedVocab: Vocab): void{
+        setVocabToEdit(undefined)
+        setUseForm(false)
+        axios.put(`api/vocab`, editedVocab)
+            .then(() => {
+                console.log(
+                    `Successfully edited vocab with ID ${editedVocab.id}.`)
+                toast.success("Vocab successfully edited")
+                if (editedVocab.id) {
+                    activateVocab(editedVocab.id)
+                }
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't edit vocab")
+            })
+    }
     function openForm(id: string | undefined) {
         if (displayNewVocabsPopUp) {
             setDisplayNewVocabsPopUp(false)
@@ -271,7 +288,9 @@ function App() {
                 setLanguage={setLanguage}/>
         {useForm && <div className={"overlay"}/>}
         {useForm && <Form userId={userId} language={language}
-                          editVocab={editVocab} createVocab={createVocab}
+                          editVocab={editVocab}
+                          editAndActivateVocab={editAndActivateVocab}
+                          createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
                           vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
         {userId && <NavBar useForm={useForm} setUseForm={setUseForm}/>}

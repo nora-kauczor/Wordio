@@ -8,6 +8,7 @@ type Props = {
     createVocab: (vocab: Vocab) => void
     createAndActivateVocab: (vocab: Vocab) => void
     editVocab: (vocab: Vocab) => void
+    editAndActivateVocab: (vocab: Vocab) => void
     userId: string
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -36,7 +37,11 @@ export default function Form(props: Readonly<Props>) {
             language: props.language,
         };
         if (props.vocabToEdit) {
-            props.editVocab(vocab)
+            if (clickedButton === "submit") {
+                props.editVocab(vocab)
+            } else {
+                props.editAndActivateVocab(vocab)
+            }
         } else {
             if (clickedButton === "submit") {
                 props.createVocab(vocab)
@@ -97,10 +102,10 @@ export default function Form(props: Readonly<Props>) {
         <button className={"form-button"}
                 onClick={() => handleClick("submit")}>submit
         </button>
-        {!props.vocabToEdit && <button className={"form-button"}
+        <button className={"form-button"}
                                        onClick={() => handleClick(
                                            "submit-and-activate")}
         >submit and activate
-        </button>}
+        </button>
     </div>)
 }
