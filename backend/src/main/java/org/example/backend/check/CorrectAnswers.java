@@ -14,14 +14,12 @@ public class CorrectAnswers {
         String rightSideOfSlashWithoutArticle = getWordWithoutArticle(word, language);
         String leftSideOfSlashWithEndingOfRightSide = getLeftSideOfSlashWithEndingOfRightSide(word);
         String wordWithoutArticle = getWordWithoutArticle(word, language);
-        // without brackets but with brackets' content
         String wordWithoutBrackets = getWordWithoutBrackets(word);
-        String wordWithoutArticleWithoutBrackets = getWordWithoutArticle(wordWithoutBrackets, language);
         String wordWithoutBracketsRunTwice = getWordWithoutBrackets(wordWithoutBrackets);
-        // without brackets and without brackets' content
+        String wordWithoutBracketsRunTwiceWithoutArticle = getWordWithoutArticle(wordWithoutBracketsRunTwice, language);
         String wordWithoutBracketsAndWithoutContent = getWordWithoutBracketsAndWithoutBracketsContent(word);
-        String wordWithoutArticleWithoutBracketsAndWithoutContent = getWordWithoutArticle(wordWithoutBracketsAndWithoutContent, language);
         String wordWithoutBracketsAndWithoutContentRunTwice = getWordWithoutBracketsAndWithoutBracketsContent(wordWithoutBracketsAndWithoutContent);
+        String wordWithoutBracketsAndWithoutContentRunTwiceWithoutArticle = getWordWithoutArticle(wordWithoutBracketsAndWithoutContentRunTwice, language);
         return List.of(
                 word,
                 leftSideOfSlash,
@@ -29,13 +27,10 @@ public class CorrectAnswers {
                 rightSideOfSlash,
                 rightSideOfSlashWithoutArticle,
                 leftSideOfSlashWithEndingOfRightSide,
-                //
                 wordWithoutArticle,
-                wordWithoutBrackets,
-                wordWithoutArticleWithoutBrackets,
+                wordWithoutBracketsRunTwiceWithoutArticle,
                 wordWithoutBracketsRunTwice,
-                wordWithoutBracketsAndWithoutContent,
-                wordWithoutArticleWithoutBracketsAndWithoutContent,
+                wordWithoutBracketsAndWithoutContentRunTwiceWithoutArticle,
                 wordWithoutBracketsAndWithoutContentRunTwice
         );
     }

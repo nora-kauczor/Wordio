@@ -9,13 +9,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CorrectAnswersTest {
 
-//    @Test
-//    void getCorrectAnswers_shouldReturnListOfCorrectAnswers_whenCalledWithWordAndLanguage(){
-//        String word = "un(e) professeur(e)";
-//        Language language = Language.FRENCH;
-//        String expected = List.of(word, word, word, word, word, word,
-//              "professeur(e)",   )
-//    }
+    @Test
+    void getCorrectAnswers_shouldReturnListOfCorrectAnswers_whenCalledWithWordAndLanguage() {
+        String word = "un(e) professeur(e)";
+        Language language = Language.FRENCH;
+        List<String> expected = List.of(word, word, "professeur(e)", word, "professeur(e)", word,
+                "professeur(e)",
+                "professeure",
+                "une professeure",
+                "professeur",
+                "un professeur");
+        List<String> actual = CorrectAnswers.getCorrectAnswers(word, language);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getCorrectAnswers_shouldReturnListOfCorrectAnswers_whenCalledWithWordAndLanguage2() {
+        String word = "une table";
+        Language language = Language.FRENCH;
+        List<String> expected = List.of(word, word, "table", word, "table", word,
+                "table", "table",
+                word, "table", word);
+        List<String> actual = CorrectAnswers.getCorrectAnswers(word, language);
+        assertEquals(expected, actual);
+    }
 
     @Test
     void getLeftSideOfSlash_shouldReturnBeau_whenCalledWithBeauBelle() {
@@ -67,7 +84,7 @@ class CorrectAnswersTest {
 
     @Test
     void
-    getWordWithoutArticle_shouldReturnSueno_whenCalledWithElSuenoAndSpanish(){
+    getWordWithoutArticle_shouldReturnSueno_whenCalledWithElSuenoAndSpanish() {
         String word = "el sueño";
         String expected = "sueño";
         String actual = CorrectAnswers.getWordWithoutArticle(word, Language.SPANISH);
@@ -77,7 +94,7 @@ class CorrectAnswersTest {
 
     @Test
     void
-    getWordWithoutArticle_shouldReturnProfesseure_whenCalledWithUneProfesseure(){
+    getWordWithoutArticle_shouldReturnProfesseure_whenCalledWithUneProfesseure() {
         String word = "un(e) professeur(e)";
         String expected = "professeur(e)";
         String actual = CorrectAnswers.getWordWithoutArticle(word, Language.SPANISH);
@@ -85,7 +102,7 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getWordWithoutBrackets_shouldReturnContente_whenCalledWithContente(){
+    void getWordWithoutBrackets_shouldReturnContente_whenCalledWithContente() {
         String word = "content(e)";
         String expected = "contente";
         String actual = CorrectAnswers.getWordWithoutBrackets(word);
@@ -93,7 +110,7 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getWordWithoutBrackets_shouldReturnLaLiberte_whenCalledWithLaLiberte(){
+    void getWordWithoutBrackets_shouldReturnLaLiberte_whenCalledWithLaLiberte() {
         String word = "la liberté";
         String expected = "la liberté";
         String actual = CorrectAnswers.getWordWithoutBrackets(word);
@@ -101,7 +118,7 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnContent_whenCalledWithContente(){
+    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnContent_whenCalledWithContente() {
         String word = "content(e)";
         String expected = "content";
         String actual = CorrectAnswers.getWordWithoutBracketsAndWithoutBracketsContent(word);
@@ -109,7 +126,7 @@ class CorrectAnswersTest {
     }
 
     @Test
-    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnLaLiberte_whenCalledWithLaLiberte(){
+    void getWordWithoutBracketsAndWithoutBracketsContent_shouldReturnLaLiberte_whenCalledWithLaLiberte() {
         String word = "la liberté";
         String expected = "la liberté";
         String actual = CorrectAnswers.getWordWithoutBracketsAndWithoutBracketsContent(word);

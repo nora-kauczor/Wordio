@@ -4,10 +4,6 @@ import CardContainer from "../../components/CardContainer/CardContainer.tsx";
 import {Vocab} from "../../types/Vocab.ts";
 import {useNavigate} from "react-router-dom";
 import Confetti from 'react-confetti';
-import {
-    getInputWithoutExtraSpaces
-} from "./utils/getInputWithoutExtraSpaces.ts";
-import {getRightAnswers} from "./utils/getRightAnswer.ts";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
@@ -51,19 +47,26 @@ export default function ReviewPage(props: Readonly<Props>) {
         }
     }
 
-    function checkAnswer(id: string, userInput: string): boolean {
-        let isAnswerCorrect = false;
-        axios.get(`/api/check/${id}?answer=${userInput}`)
-            .then(response => isAnswerCorrect = response.data)
-            .catch(error => console.error(error))
-        return isAnswerCorrect;
+    async function checkAnswer(id: string, userInput: string): Promise<boolean | undefined> {
+        const inputWithCodedSpaces = userInput.replace(/ /g, "%20")
+        try
+        {
+            const response = await axios.get(
+                `/api/check/${id}?answer=${inputWithCodedSpaces}`)
+            return response.data;
+        } catch (error) {
+            console.error(error)
+            return undefined;
+        }
     }
 
-    function handleClickShowAnswer() {
+    async function handleClickShowAnswer() {
         if (!currentVocab || !currentVocab.id) {
             return
         }
-        const answerCorrect:boolean = checkAnswer(currentVocab?.id, userInput);
+        const answerCorrect: boolean | undefined = await checkAnswer(
+            currentVocab?.id, userInput);
+        if (answerCorrect === undefined) {return}
         if (answerCorrect) {
             setDisplayAnswer(true)
             setShowFireworks(true)
