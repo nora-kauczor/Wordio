@@ -143,11 +143,11 @@ class VocabServiceTest {
 
 
     @Test
-    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, VocabIsNotEditableException, LanguageNotFoundException {
+    void editVocab_shouldReturnEditedVocab_whenCalledWithVocabDTOEdit() throws IdNotFoundException, VocabIsNotEditableException {
         Vocab oldVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, new HashMap<>(), "jane-doe");
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", new HashMap<>(), "jane-doe");
+                "added infotext", "Spanish");
         Vocab expected = new Vocab("000", "la prueba", "test",
                 "added infotext", Language.SPANISH, new HashMap<>(), "jane-doe");
         when(mockVocabRepo.findById("000")).thenReturn(Optional.of(oldVocab));
@@ -160,7 +160,7 @@ class VocabServiceTest {
     @Test
     void editVocab_shouldThrowIdNotFoundException_whenCalledWithVocabWithNonexistentId() {
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", new HashMap<>(), "jane-doe");
+                "added infotext", "Spanish");
         assertThrows(IdNotFoundException.class, () -> vocabService.editVocab(vocabDTO, "jane-doe"));
         verify(mockVocabRepo).findById("000");
     }
@@ -170,7 +170,7 @@ class VocabServiceTest {
         Vocab oldVocab = new Vocab("000", "la prueba", "test",
                 "", Language.SPANISH, new HashMap<>(), "Wordio");
         VocabDTOEdit vocabDTO = new VocabDTOEdit("000", "la prueba", "test",
-                "added infotext", "Spanish", new HashMap<>(), "jane-doe");
+                "added infotext", "Spanish");
         when(mockVocabRepo.findById(vocabDTO.id())).thenReturn(Optional.of(oldVocab));
         assertThrows(VocabIsNotEditableException.class, () -> vocabService.editVocab(vocabDTO, "jane-doe"));
     }

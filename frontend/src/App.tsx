@@ -117,8 +117,9 @@ function App() {
         }
         axios.put(`/api/review/${id}?language=${language}`)
             .then(() => {
-                console.log(`Vocab with ID ${id} was marked as reviewed for today.`)
-                    getVocabsToReview()
+                console.log(
+                    `Vocab with ID ${id} was marked as reviewed for today.`)
+                getVocabsToReview()
             })
             .catch(error => {
                 console.error(error)
@@ -132,7 +133,8 @@ function App() {
         axios.put(`api/vocab/activate/${id}`)
             .then(() => {
                 console.log(`Successfully activated vocab with ID ${id}.`)
-                toast.success("Vocab successfully activated.", { toastId: `activate-vocab-${id}` })
+                toast.success("Vocab successfully activated.",
+                    {toastId: `activate-vocab-${id}`})
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -148,7 +150,8 @@ function App() {
         axios.put(`api/vocab/deactivate/${id}`)
             .then(() => {
                 console.log(`Successfully deactivated vocab with ID ${id}.`)
-                toast.success("Vocab successfully deactivated.", { toastId: `deactivate-vocab-${id}` })
+                toast.success("Vocab successfully deactivated.",
+                    {toastId: `deactivate-vocab-${id}`})
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -180,7 +183,8 @@ function App() {
         axios.delete(`api/vocab/${id}`)
             .then(() => {
                 console.log(`Successfully deleted vocab with ID ${id}.`)
-                toast.success("Vocab successfully deleted", { toastId: `delete-vocab-${id}` })
+                toast.success("Vocab successfully deleted",
+                    {toastId: `delete-vocab-${id}`})
                 getAllVocabsOfLanguage()
             })
             .catch(error => {
@@ -221,12 +225,30 @@ function App() {
     function editVocab(editedVocab: Vocab): void {
         setVocabToEdit(undefined)
         setUseForm(false)
-        axios.put(`api/vocab/`, editedVocab)
+        axios.put(`api/vocab`, editedVocab)
             .then(() => {
                 console.log(
-                    `Successfully edited of vocab with ID ${editedVocab.id}.`)
+                    `Successfully edited vocab with ID ${editedVocab.id}.`)
                 toast.success("Vocab successfully edited")
                 getAllVocabsOfLanguage()
+            })
+            .catch(error => {
+                console.error(error)
+                toast.error("Couldn't edit vocab")
+            })
+    }
+
+    function editAndActivateVocab(editedVocab: Vocab): void {
+        setVocabToEdit(undefined)
+        setUseForm(false)
+        axios.put(`api/vocab`, editedVocab)
+            .then(() => {
+                console.log(
+                    `Successfully edited vocab with ID ${editedVocab.id}.`)
+                toast.success("Vocab successfully edited")
+                if (editedVocab.id) {
+                    activateVocab(editedVocab.id)
+                }
             })
             .catch(error => {
                 console.error(error)
@@ -239,7 +261,7 @@ function App() {
             setDisplayNewVocabsPopUp(false)
         }
         setUseForm(true)
-        if (!id) {
+        if (id) {
             const vocab = vocabs.find(vocab => vocab.id === id)
             setVocabToEdit(vocab)
         }
@@ -259,6 +281,7 @@ function App() {
         })
     }
 
+
     if (userId && language && vocabs.length < 1) {
         return <p className={"loading-message"}>Loading...</p>
     }
@@ -271,7 +294,9 @@ function App() {
                 setLanguage={setLanguage}/>
         {useForm && <div className={"overlay"}/>}
         {useForm && <Form userId={userId} language={language}
-                          editVocab={editVocab} createVocab={createVocab}
+                          editVocab={editVocab}
+                          editAndActivateVocab={editAndActivateVocab}
+                          createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
                           vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
         {userId && <NavBar useForm={useForm} setUseForm={setUseForm}/>}
