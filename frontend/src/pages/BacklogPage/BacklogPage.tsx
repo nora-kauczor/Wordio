@@ -24,13 +24,14 @@ export default function BacklogPage(props: Readonly<Props>) {
     if(props.allVocabsActivated) return <p className={"loading-message"}>Backlog is empty</p>
 
     return (<div id={"backlog-page"} className={"page"} role={"main"}>
-        <div style={{height: "50px"}}/><VocabList vocabs={props.vocabs}
+        <div style={{height: "50px"}}/>
+        <VocabList vocabs={props.vocabs}
                     calendarMode={false}
                     activateVocab={props.activateVocab}
                     deleteVocab={props.deleteVocab}
                     openForm={props.openForm}
                     userId={props.userId}/>
-        <div style={{height: "50px"}}/>
+        <div style={{height: "10px"}}/>
     </div>)
 
 }

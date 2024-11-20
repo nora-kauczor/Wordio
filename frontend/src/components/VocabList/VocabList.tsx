@@ -1,7 +1,7 @@
 import {Vocab} from "../../types/Vocab.ts";
 import './VocabList.css'
 import 'react-toastify/dist/ReactToastify.css';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import VocabListItem from "../VocabListItem/VocabListItem.tsx";
 
 type Props = {
@@ -18,6 +18,11 @@ type Props = {
 export default function VocabList(props: Readonly<Props>) {
     const [searchTerm, setSearchTerm] = useState("")
     const [filteredVocabs, setFilteredVocabs] = useState(props.vocabs)
+    useEffect(() => {
+        if (searchTerm) {
+            filterVocabs(searchTerm)
+        } else {setFilteredVocabs(props.vocabs)}
+    }, [props.vocabs]);
 
     function handleChangeInput(event: React.ChangeEvent<HTMLInputElement>) {
         const input: string = event.target.value;
@@ -26,6 +31,10 @@ export default function VocabList(props: Readonly<Props>) {
             setFilteredVocabs(props.vocabs);
             return
         }
+        filterVocabs(input)
+    }
+
+    function filterVocabs(input: string): void {
         const matchingVocabs = []
         for (let i: number = 0; i < props.vocabs.length; i++) {
             const translation: string = props.vocabs[i].translation
@@ -57,7 +66,6 @@ export default function VocabList(props: Readonly<Props>) {
         setSearchTerm("")
         setFilteredVocabs(props.vocabs)
     }
-
 
     return (<div id={"vocab-list"}>
         <div id={"search-section"}>
