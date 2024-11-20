@@ -1,0 +1,94 @@
+#list-item{
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap; !* Für eine einzelne Zeile *!*/
+    /*word-wrap: break-word; !* Für Zeilenumbruch bei langen Texten *!*/
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
+    /*z-index: 1001;*/
+}
+
+.list-item-calendar-mode {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 200px;
+    min-width: 100px;
+}
+
+/*TODO schrift größer in backlog mode?*/
+
+.list-item-backlog-mode {
+    display: flex;
+    margin: 10px;
+    padding: 25px 20px 20px 20px;
+    width: 320px;
+    height: 110px;
+    min-width: 260px;
+}
+
+#text-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 15px 0 0;
+    height: 100%;
+    width: 100%;
+    line-height: 25px;
+    text-overflow: ellipsis;
+}
+
+#translation-and-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    text-overflow: ellipsis;
+}
+
+/*TODO evtl für zu lange wörter im day pop up:*/
+/*    !*width: 200px;    *!*/
+/*    !*    white-space: nowrap;   *!*/
+/*overflow: hidden;*/
+/*text-overflow: ellipsis;*/
+
+#vocab-word, #vocab-translation {
+    margin: 0;
+    padding: 0;
+}
+
+#vocab-info {
+    font-style: italic;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}
+
+/*.ellipsis-text {*/
+/*    width: 200px;            !* Setze eine feste Breite *!*/
+/*    white-space: nowrap;     !* Verhindert Zeilenumbrüche *!*/
+/*    overflow: hidden;        !* Verhindert, dass der Text über das Element hinaus geht *!*/
+/*    text-overflow: ellipsis; !* Fügt "..." hinzu, wenn der Text abgeschnitten wird *!*/
+/*}*/
+
+#list-item-button-wrapper {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    right: 2px;
+    justify-content: space-evenly;
+}
+
+.list-item-button {
+    height: 25%;
+}
+
+.de_activate-button-non-editable-vocab {
+    padding: 15px 5px;
+}

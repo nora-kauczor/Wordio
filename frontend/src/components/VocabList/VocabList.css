@@ -7,104 +7,47 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 20px;
+    overflow: auto;
 }
 
+#input-and-button-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+}
 
-#git swlist {
+#search-field {
+    margin: 0;
+}
+
+#list {
+    width: 100%;
     list-style: none;
     font: inherit;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    /*TODO in day pop up ist rand rechts breiter*/
     gap: 0;
-    flex-wrap: wrap;
-    overflow-y: auto;
+    overflow: auto;
 }
 
-.list-item-calendar-mode {
-    display: flex;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 200px;
-    min-width: 100px;
+.list-calendar-mode {
+    flex-direction: column;
 }
 
-.list-item-backlog-mode {
-    display: flex;
-    margin: 10px;
-    padding: 25px 20px 20px 20px;
+.list-backlog-mode {
     width: 320px;
-    height: 110px;
     min-width: 260px;
+    margin: 10px;
+    flex-wrap: wrap; // TODO funktioniert nicht
 }
 
-#text-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 0;
-    padding: 10px 15px 0 0;
-    height: 100%;
-    width: 100%;
-    line-height: 25px;
-}
-
-#translation-and-info-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    }
 
 
-/*TODO evtl für zu lange wörter im day pop up:*/
-/*    !*width: 200px;    *!*/
-/*    !*    white-space: nowrap;   *!*/
-/*overflow: hidden;*/
-/*text-overflow: ellipsis;*/
-
-    #vocab-word, #vocab-translation {
-        margin: 0;
-        padding: 0;
-    }
-
-    #vocab-info {
-        font-style: italic;
-        font-size: 13px;
-        margin: 0;
-        padding: 0;
-    }
-
-    /*.ellipsis-text {*/
-/*    width: 200px;            !* Setze eine feste Breite *!*/
-/*    white-space: nowrap;     !* Verhindert Zeilenumbrüche *!*/
-/*    overflow: hidden;        !* Verhindert, dass der Text über das Element hinaus geht *!*/
-/*    text-overflow: ellipsis; !* Fügt "..." hinzu, wenn der Text abgeschnitten wird *!*/
-/*}*/
-
-#vocab-list-button-wrapper {
-    margin: 0;
-    padding: 0;
-    /*height: 100%;*/
-    /*width: 30%;*/
-    display: flex;
-    flex-direction: column;
-    right: 2px;
-    justify-content: space-evenly;
-}
-
-.vocab-list-button {
-    height: 25%;
-}
-
-.de_activate-button-non-editable-vocab {
-    padding: 15px 5px;
-}
 
