@@ -26,18 +26,31 @@ export default function VocabList(props: Readonly<Props>) {
             setFilteredVocabs(props.vocabs);
             return
         }
-        const inputLength: number = input.length
-        const matchingVocabs: Vocab[] = props.vocabs.filter(vocab => {
-            const indexOfSpace: number = vocab.word.indexOf(" ")
-            if (vocab.word.substring(0, inputLength).toLowerCase() ===
-                input.toLowerCase() || vocab.word.substring(indexOfSpace + 1,
-                    indexOfSpace + 1 + inputLength)
-                    .toLowerCase() === input.toLowerCase()) {
-                return true
+        const matchingVocabs = []
+        for (let i: number = 0; i < props.vocabs.length; i++) {
+            const translation: string = props.vocabs[i].translation
+            if (doesAnySubstringMatch(translation, input)) {
+                matchingVocabs.push(props.vocabs[i])
             }
-
-        })
+        }
         setFilteredVocabs(matchingVocabs)
+    }
+
+    function doesAnySubstringMatch(translation: string,
+                                   input: string): boolean {
+        const firstIndeces: number[] = [];
+        for (let z: number = 0; z < translation.length; z++) {
+            if (translation.charAt(z) === input.charAt(0)) {
+                firstIndeces.push(z);
+            }
+        }
+        if (firstIndeces.length < 1) {
+            return false
+        }
+        const filteredIndeces: number[] = firstIndeces.filter(
+            index => translation.substring(index, index + input.length) ===
+                input)
+        return filteredIndeces.length >= 1;
     }
 
     function reset() {
@@ -47,18 +60,19 @@ export default function VocabList(props: Readonly<Props>) {
 
 
     return (<div id={"vocab-list"}>
-        <div id={"input-and-button-wrapper"}>
-            <label htmlFor={"search-field"}
-                   className={"visually-hidden"}>Type here to search
-                vocabs</label>
-            <input id={"input"}
-                   value={searchTerm}
-                   onChange={handleChangeInput}/>
-            <button id={"reset-button"}
-                    onClick={reset}
-                    onKeyDown={reset}
-            >Reset
-            </button>
+        <div id={"search-section"}>
+            <label htmlFor={"search-field"}>Search vocabulary by
+                translation</label>
+            <div id={"search-section-input-and-button"}>
+                <input id={"input"}
+                       value={searchTerm}
+                       onChange={handleChangeInput}/>
+                <button id={"reset-button"}
+                        onClick={reset}
+                        onKeyDown={reset}
+                >Reset
+                </button>
+            </div>
         </div>
         <ul id={"list"} role={"list"}
             className={`${props.calendarMode ? "list-calendar-mode" :

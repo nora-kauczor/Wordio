@@ -16,9 +16,10 @@
 .list-item-backlog-mode {
     margin: 10px;
     padding: 25px 20px 20px 20px;
-    width: 320px;
+    width: 250px;
     height: 110px;
     min-width: 260px;
+    font-size: 20px;
 }
 
 #text-wrapper {

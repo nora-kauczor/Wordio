@@ -9,20 +9,31 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
+
+    overflow-y: auto;
 }
 
-#input-and-button-wrapper {
+#search-section {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    align-content: center;
     width: 100%;
+    max-width: 300px;
     gap: 10px;
     padding: 0;
-    margin: 0 25px 0 0;
-    border-radius: 0.5rem;
+    margin: 0 25px 0 20px;
+}
+
+#search-section-input-and-button{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 95%;
 }
 
 #input {
-    margin: 0 0 0 10px;
+    margin: 0 0 0 3px;
     width: 100%;
     border-radius: 0.5rem;
 }
@@ -37,7 +48,6 @@
     font: inherit;
     margin: 0;
     padding: 0;
-    /*padding: 40px 0 0 0;*/
     display: flex;
     justify-content: center;
     gap: 0;
