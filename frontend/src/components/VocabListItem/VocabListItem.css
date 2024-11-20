@@ -1,25 +1,19 @@
 #list-item{
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
-    /*white-space: nowrap; !* Für eine einzelne Zeile *!*/
-    /*word-wrap: break-word; !* Für Zeilenumbruch bei langen Texten *!*/
-    /*max-width: 100%;*/
-    /*max-height: 100%;*/
-    /*z-index: 1001;*/
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .list-item-calendar-mode {
-    display: flex;
+    max-width: 200px;
     margin-bottom: 10px;
     padding: 10px;
     width: 200px;
     min-width: 100px;
 }
 
-/*TODO schrift größer in backlog mode?*/
-
 .list-item-backlog-mode {
-    display: flex;
     margin: 10px;
     padding: 25px 20px 20px 20px;
     width: 320px;
@@ -34,9 +28,17 @@
     margin: 0;
     padding: 0 15px 0 0;
     height: 100%;
-    width: 100%;
     line-height: 25px;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.text-wrapper-backlog-mode{
+    width: 100%;
+}
+.text-wrapper-calendar-mode{
+    width: 100px;
 }
 
 #translation-and-info-wrapper {
@@ -47,15 +49,11 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    width: 100%;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    /*overflow: hidden;*/
 }
 
-/*TODO evtl für zu lange wörter im day pop up:*/
-/*    !*width: 200px;    *!*/
-/*    !*    white-space: nowrap;   *!*/
-/*overflow: hidden;*/
-/*text-overflow: ellipsis;*/
 
 #vocab-word, #vocab-translation {
     margin: 0;
@@ -69,12 +67,6 @@
     padding: 0;
 }
 
-/*.ellipsis-text {*/
-/*    width: 200px;            !* Setze eine feste Breite *!*/
-/*    white-space: nowrap;     !* Verhindert Zeilenumbrüche *!*/
-/*    overflow: hidden;        !* Verhindert, dass der Text über das Element hinaus geht *!*/
-/*    text-overflow: ellipsis; !* Fügt "..." hinzu, wenn der Text abgeschnitten wird *!*/
-/*}*/
 
 #list-item-button-wrapper {
     margin: 0;

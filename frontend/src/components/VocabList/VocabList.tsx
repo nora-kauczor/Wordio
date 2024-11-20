@@ -51,7 +51,7 @@ export default function VocabList(props: Readonly<Props>) {
             <label htmlFor={"search-field"}
                    className={"visually-hidden"}>Type here to search
                 vocabs</label>
-            <input id={"search-field"}
+            <input id={"input"}
                    value={searchTerm}
                    onChange={handleChangeInput}/>
             <button id={"reset-button"}
