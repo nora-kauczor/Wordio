@@ -23,13 +23,6 @@ export default function CalendarDay(props: Readonly<Props>) {
                                              onClick={() => props.vocabIdsOfDate &&
                                                  props.openDayPopUpAndPassItVocabs(
                                                      props.vocabIdsOfDate)}
-                                             onKeyDown={(e) => {
-                                                 if (e.key === 'Enter' ||
-                                                     e.key === ' ') {
-                                                     props.openDayPopUpAndPassItVocabs(
-                                                         props.vocabIdsOfDate!);
-                                                 }
-                                             }}
                                              aria-label={`Open details for ${displayDate}`}
                                              aria-disabled={!props.vocabIdsOfDate}>
                 <p id={"calendar-date"}> {displayDate}</p>

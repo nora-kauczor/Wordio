@@ -67,10 +67,6 @@ export default function VocabListItem(props: Readonly<Props>) {
                 {props.vocab.createdBy === props.userId && props.vocab.id &&
                     <button className={"list-item-button"}
                             onClick={() => handleClickEdit(props.vocab.id)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key ===
-                                    ' ') handleClickEdit(props.vocab.id);
-                            }}
                             aria-label={`Edit ${props.vocab.word}`}
                     >edit</button>}
 
@@ -81,16 +77,6 @@ export default function VocabListItem(props: Readonly<Props>) {
                     onClick={() => props.vocab.id && (props.calendarMode ?
                         handleClickDeactivate(props.vocab.id) :
                         handleClickActivate(props.vocab.id))}
-                    onKeyDown={(e) => {
-                        if (props.vocab.id &&
-                            (e.key === 'Enter' || e.key === ' ')) {
-                            if (props.calendarMode) {
-                                handleClickDeactivate(props.vocab.id);
-                            } else {
-                                handleClickActivate(props.vocab.id);
-                            }
-                        }
-                    }}
                     aria-label={props.calendarMode ?
                         `Deactivate ${props.vocab.word}` :
                         `Activate ${props.vocab.word}`}>
@@ -101,10 +87,6 @@ export default function VocabListItem(props: Readonly<Props>) {
                     <button
                         className={"vocab-list-button"}
                         onClick={() => handleClickDelete(props.vocab.id)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key ===
-                                ' ') handleClickDelete(props.vocab.id);
-                        }}
                         aria-label={`Delete ${props.vocab.word}`}>
                         delete
                     </button>}

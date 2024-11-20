@@ -118,14 +118,16 @@ export default function ReviewPage(props: Readonly<Props>) {
                    disabled={displayAnswer}
             />
             {!displayAnswer && !showBackButton &&
-                <button className={"review-page-button big-button"}
+                <button type={"button"}
+                    className={"review-page-button big-button"}
                         onClick={handleClickShowAnswer}
                         aria-label={"Submit your answer"}>show answer
                 </button>}
             {displayAnswer && !showBackButton &&
-                <button className={"review-page-button big-button"}
+                <button
+                    className={"review-page-button big-button"}
                         onClick={getNextVocab}>next</button>}
-            {showBackButton && <button className={"back-button"}
+            {showBackButton && <button className={"home-button"}
                                        onClick={() => navigate(
                                            "/")}>Back</button>}
         </div>

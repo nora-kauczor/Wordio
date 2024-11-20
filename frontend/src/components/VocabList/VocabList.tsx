@@ -77,7 +77,6 @@ export default function VocabList(props: Readonly<Props>) {
                        onChange={handleChangeInput}/>
                 <button id={"reset-button"}
                         onClick={reset}
-                        onKeyDown={reset}
                 >Reset
                 </button>
             </div>

@@ -32,6 +32,7 @@ function App() {
 
     useEffect(() => {
         getUserId()
+        setDisplayNewVocabsPopUp(false)
     }, []);
 
     useEffect(() => {
@@ -320,6 +321,7 @@ function App() {
                            activateVocab={activateVocab}/>}/>
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
+                    setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
                     setUseForm={setUseForm}
                     openForm={openForm}
                     vocabs={vocabs}
@@ -329,12 +331,13 @@ function App() {
                 <Route path={"/review"}
                        element={<ReviewPage
                            language={language}
-                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsToReview={vocabsToReview}
+                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            changeReviewDates={changeReviewDates}
                        />}/>
                 <Route path={"/backlog"}
                        element={<BacklogPage
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
                            vocabs={getInactiveVocabs()}
                            allVocabsActivated={getInactiveVocabs().length < 1}
                            deleteVocab={deleteVocab}
@@ -348,7 +351,6 @@ function App() {
                        element={<DisplayPage
                            vocabs={vocabs}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
-
                        />}/>
             </Route>
         </Routes>

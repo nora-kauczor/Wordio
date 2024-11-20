@@ -20,7 +20,6 @@ export default function NavBar(props: Readonly<Props>) {
     };
     return (<ul id={"navbar"}>
         <li onClick={() => navigate('/backlog')}
-            onKeyDown={(event) => handleKeyDown(event, '/backlog')}
             className={`navbar-button ${path === '/backlog' && !props.useForm ?
                 'highlighted' : ''}`}
             aria-label={"Go to Backlog"}
@@ -28,7 +27,6 @@ export default function NavBar(props: Readonly<Props>) {
         </li>
         <li
             onClick={() => props.setUseForm(true)}
-            onKeyDown={(event) => handleKeyDown(event, '')}
             className={`navbar-button ${props.useForm ? 'highlighted' : ''}`}
             aria-label={"Create a new item"}
         ><p className={"navbar-button-text"}>Create</p>
@@ -36,9 +34,6 @@ export default function NavBar(props: Readonly<Props>) {
         <li
             onClick={() => {
                 navigate('/calendar')
-            }}
-            onKeyDown={(event) => {
-                handleKeyDown(event, '/calendar')
             }}
             className={`navbar-button ${path === '/calendar' && !props.useForm ?
                 'highlighted' : ''}`}
