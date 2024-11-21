@@ -68,6 +68,7 @@ export default function VocabList(props: Readonly<Props>) {
     }
 
     return (<div id={"vocab-list"}>
+
         <div id={"search-section"}>
             <label htmlFor={"search-field"}>Search vocabulary by
                 translation</label>
@@ -81,6 +82,7 @@ export default function VocabList(props: Readonly<Props>) {
                 </button>
             </div>
         </div>
+
         <ul id={"list"} role={"list"}
             className={`${props.calendarMode ? "list-calendar-mode" :
                 "list-backlog-mode"}`}>

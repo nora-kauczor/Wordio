@@ -78,7 +78,7 @@ export default function Form(props: Readonly<Props>) {
                 aria-label={"Close form"}
         >✕
         </button>
-        <h2 className={"popup-header"}>{props.vocabToEdit ? 'Edit your vocab' :
+        <h2 className={"popup-header"} id={"form-header"}>{props.vocabToEdit ? 'Edit your vocab' :
             'Create your vocab'}</h2>
         <div id={"input-and-label-wrapper"}>
             <label htmlFor={"word-input"}>Your Vocab</label>
