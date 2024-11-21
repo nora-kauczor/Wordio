@@ -1,7 +1,6 @@
 #list-item {
     display: flex;
     justify-content: space-between;
-    max-height: 100%;
 }
 
 .list-item-calendar-mode {
@@ -12,7 +11,8 @@
 
 .list-item-backlog-mode {
     margin: 10px;
-    padding: 30px 20px 20px 20px;
+    padding: 20px;
+    width: 15rem;
 }
 
 #text-wrapper {
@@ -23,17 +23,16 @@
     margin: 0;
     padding: 0 20px 0 0;
     height: 100%;
-    width: 50%;
     line-height: 25px;
     word-wrap: break-word;
 }
 
 .text-wrapper-backlog-mode {
-    width: 200px;
+    width: 8rem;
 }
 
 .text-wrapper-calendar-mode {
-    width: 100px;
+    width: 50%;
 }
 
 #translation-and-info-wrapper {
@@ -74,4 +73,5 @@
 
 .de_activate-button-non-editable-vocab {
     padding: 15px 5px;
+    margin: 0;
 }

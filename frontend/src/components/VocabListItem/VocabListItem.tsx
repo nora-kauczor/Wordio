@@ -76,7 +76,7 @@ export default function VocabListItem(props: Readonly<Props>) {
                     >edit</button>}
                 <button
                     className={props.vocab.createdBy === props.userId ?
-                        "vocab-list-button" :
+                        "list-item-button" :
                         "de_activate-button-non-editable-vocab"}
                     onClick={() => props.vocab.id && (props.calendarMode ?
                         handleClickDeactivate(props.vocab.id) :
@@ -89,7 +89,7 @@ export default function VocabListItem(props: Readonly<Props>) {
 
                 {props.vocab.createdBy === props.userId && props.vocab.id &&
                     <button
-                        className={"vocab-list-button"}
+                        className={"list-item-button"}
                         onClick={() => handleClickDelete(props.vocab.id)}
                         aria-label={`Delete ${props.vocab.word}`}>
                         delete

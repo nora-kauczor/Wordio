@@ -54,12 +54,10 @@
 }
 
 .list-backlog-mode {
-    /*width: 320px;*/
-    /*min-width: 260px;*/
-    /*margin: 10px;*/
-    /*padding: 0;*/
+    width: 80%;
+    display: flex;
     flex-wrap: wrap;
-    max-height: 300px;
+    justify-content: center;
 }
 
 
