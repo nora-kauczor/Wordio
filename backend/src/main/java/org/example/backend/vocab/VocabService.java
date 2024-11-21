@@ -61,7 +61,6 @@ public class VocabService {
         Language language = Language.getEnumByString(vocabDTO.language());
         Map<String, List<LocalDate>> datesPerUser = new HashMap<>();
         LocalDate today = ZonedDateTime.now().toLocalDate();
-        System.out.println(today.getClass().getName());
         List<LocalDate> dates = generateDates(today);
         datesPerUser.put(userName, dates);
         Vocab newVocab = new Vocab(null, vocabDTO.word(), vocabDTO.translation(),
