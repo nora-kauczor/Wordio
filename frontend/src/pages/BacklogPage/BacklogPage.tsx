@@ -31,7 +31,7 @@ export default function BacklogPage(props: Readonly<Props>) {
     }
 
     return (<div id={"backlog-page"} className={"page"} role={"main"}>
-        <div style={{height: "50px"}}/>
+        <div style={{height: "40px"}}/>
         <VocabList vocabs={props.vocabs}
                    calendarMode={false}
                    activateVocab={props.activateVocab}

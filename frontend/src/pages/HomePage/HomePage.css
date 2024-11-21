@@ -1,7 +1,8 @@
 #homepage {
-    height: 65vh;
+    height: 50vh;
     justify-content: flex-end;
 }
+
 #homepage-text-and-button {
     width: 70%;
     max-width: 300px;

@@ -13,6 +13,7 @@
     margin: 10px;
     padding: 20px;
     width: 15rem;
+    height: auto;
 }
 
 #text-wrapper {
@@ -22,7 +23,6 @@
     gap: 10px;
     margin: 0;
     padding: 0 20px 0 0;
-    height: 100%;
     line-height: 25px;
     word-wrap: break-word;
 }
@@ -42,7 +42,6 @@
     gap: 0;
     margin: 0;
     padding: 0;
-    height: 100%;
     word-wrap: break-word;
 }
 
@@ -63,12 +62,13 @@
     padding: 0;
     display: flex;
     flex-direction: column;
+    gap: 10px;
     right: 2px;
     justify-content: space-evenly;
 }
 
 .list-item-button {
-    height: 25%;
+    height: 30%;
 }
 
 .de_activate-button-non-editable-vocab {

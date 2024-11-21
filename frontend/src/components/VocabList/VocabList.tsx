@@ -69,11 +69,14 @@ export default function VocabList(props: Readonly<Props>) {
 
     return (<div id={"vocab-list"}>
 
-        <div id={"search-section"}>
+        <div id={"search-section"}
+        >
             <label htmlFor={"search-field"}>Search vocabulary by
                 translation</label>
             <div id={"search-section-input-and-button"}>
                 <input id={"input"}
+                       className={`${props.calendarMode ? "input-calendar-mode" :
+                           "input-backlog-mode"}`}
                        value={searchTerm}
                        onChange={handleChangeInput}/>
                 <button id={"reset-button"}
