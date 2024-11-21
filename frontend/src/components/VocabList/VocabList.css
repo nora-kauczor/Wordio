@@ -13,15 +13,13 @@
 }
 
 #search-section {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: space-between;*/
-    /*align-content: center;*/
-    /*width: 100%;*/
-    /*max-width: 300px;*/
-    /*gap: 10px;*/
-    /*padding: 0;*/
-    /*margin: 0 25px 0 20px;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    width: 100%;
+    max-width: 300px;
+    gap: 10px;
 }
 
 #search-section-input-and-button{
@@ -42,7 +40,6 @@
 }
 
 #list {
-    width:100%;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -57,8 +54,8 @@
 }
 
 .list-backlog-mode {
-    width: 320px;
-    min-width: 260px;
+    /*width: 320px;*/
+    /*min-width: 260px;*/
     /*margin: 10px;*/
     /*padding: 0;*/
     flex-wrap: wrap;

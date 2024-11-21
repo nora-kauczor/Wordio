@@ -1,20 +1,15 @@
 #day-popup {
-    width: 20rem;
+    height: 30rem;
+    width: 15rem;
     max-width: 500px;
-    height: 40rem;
-    /*width: 15rem;*/
-    /*max-width: 500px;*/
-    /*height: 500px;*/
     display: flex;
     flex-direction: column;
-    /*justify-content: flex-start;*/
     align-items: center;
     margin: 0;
-    /*padding: 20px 10px 20px 20px;*/
 }
 
-/*#date {*/
-/*    padding: 0;*/
-/*    margin: 5px 0 10px 0;*/
-/*}*/
+#date {
+    padding: 0;
+    margin: 10px 0 0 0;
+}
 
