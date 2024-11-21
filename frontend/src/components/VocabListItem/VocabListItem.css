@@ -15,11 +15,10 @@
 
 .list-item-backlog-mode {
     margin: 10px;
-    padding: 25px 20px 20px 20px;
-    width: 250px;
-    height: 110px;
-    min-width: 260px;
-    font-size: 20px;
+    padding: 30px 20px 20px 20px;
+    /*width: 270px;*/
+    height: 50px;
+
 }
 
 #text-wrapper {
@@ -27,7 +26,7 @@
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
-    padding: 0 15px 0 0;
+    padding: 0 20px 0 0;
     height: 100%;
     line-height: 25px;
     text-overflow: ellipsis;
@@ -36,7 +35,7 @@
 }
 
 .text-wrapper-backlog-mode{
-    width: 100%;
+    width: 200px;
 }
 .text-wrapper-calendar-mode{
     width: 100px;

@@ -18,8 +18,10 @@ export default function CalendarDay(props: Readonly<Props>) {
 
     return (<div id={"calendar-day-wrapper"} >
             {props.vocabIdsOfDate && <button id={"calendar-day"}
+                                             disabled={props.vocabIdsOfDate?.vocabIds?.length >
+                                                 0}
                                              className={props.vocabIdsOfDate?.vocabIds?.length >
-                                             0 ? 'dots' : 'no-dots'}
+                                             0 ? '' : 'empty-day'}
                                              onClick={() => props.vocabIdsOfDate &&
                                                  props.openDayPopUpAndPassItVocabs(
                                                      props.vocabIdsOfDate)}

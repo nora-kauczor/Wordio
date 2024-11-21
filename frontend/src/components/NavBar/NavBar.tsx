@@ -12,12 +12,6 @@ export default function NavBar(props: Readonly<Props>) {
     const navigate = useNavigate();
     const path = window.location.pathname
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>,
-                           path: string) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            navigate(path);
-        }
-    };
     return (<ul id={"navbar"}>
         <li onClick={() => navigate('/backlog')}
             className={`navbar-button ${path === '/backlog' && !props.useForm ?
