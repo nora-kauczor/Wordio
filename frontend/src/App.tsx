@@ -268,6 +268,11 @@ function App() {
         }
     }
 
+    function closeForm(){
+        setVocabToEdit(undefined)
+        setUseForm(false)
+    }
+
     function getInactiveVocabs() {
         return vocabs.filter(vocab => {
             if (!vocab.datesPerUser) {
@@ -294,12 +299,15 @@ function App() {
                 language={language}
                 setLanguage={setLanguage}/>
         {useForm && <div className={"overlay"}/>}
-        {useForm && <Form userId={userId} language={language}
+        {useForm && <Form userId={userId}
+                          language={language}
+                          vocabToEdit={vocabToEdit}
                           editVocab={editVocab}
                           editAndActivateVocab={editAndActivateVocab}
                           createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
-                          vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
+                          closeForm={closeForm}
+        />}
         {userId && <NavBar useForm={useForm} setUseForm={setUseForm}/>}
         <Routes>
             <Route path={"/login"}

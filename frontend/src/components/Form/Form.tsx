@@ -10,7 +10,7 @@ type Props = {
     editVocab: (vocab: Vocab) => void
     editAndActivateVocab: (vocab: Vocab) => void
     userId: string
-    setUseForm: React.Dispatch<React.SetStateAction<boolean>>
+    closeForm: () => void
 }
 
 export default function Form(props: Readonly<Props>) {
@@ -66,11 +66,15 @@ export default function Form(props: Readonly<Props>) {
         setInfoInput(value)
     }
 
+    const vocabIsAlreadyActive: undefined | boolean = props.vocabToEdit &&
+        props.vocabToEdit?.datesPerUser?.[props.userId] &&
+        props.vocabToEdit?.datesPerUser[props.userId].length > 0
+
     return (<div id={"form"} className={"pop-up"}
                  role={"dialog"} aria-labelledby={"form-title"}
                  aria-modal={"true"}>
         <button className={"close-button"}
-                onClick={() => props.setUseForm(false)}
+                onClick={props.closeForm}
                 aria-label={"Close form"}
         >✕
         </button>
@@ -102,10 +106,10 @@ export default function Form(props: Readonly<Props>) {
         <button className={"form-button"}
                 onClick={() => handleClick("submit")}>submit
         </button>
-        <button className={"form-button"}
-                                       onClick={() => handleClick(
-                                           "submit-and-activate")}
+        {!vocabIsAlreadyActive && <button className={"form-button"}
+                                          onClick={() => handleClick(
+                                              "submit-and-activate")}
         >submit and activate
-        </button>
+        </button>}
     </div>)
 }
