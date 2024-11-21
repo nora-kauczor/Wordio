@@ -32,6 +32,7 @@ function App() {
 
     useEffect(() => {
         getUserId()
+        setDisplayNewVocabsPopUp(false)
     }, []);
 
     useEffect(() => {
@@ -267,6 +268,11 @@ function App() {
         }
     }
 
+    function closeForm(){
+        setVocabToEdit(undefined)
+        setUseForm(false)
+    }
+
     function getInactiveVocabs() {
         return vocabs.filter(vocab => {
             if (!vocab.datesPerUser) {
@@ -293,12 +299,15 @@ function App() {
                 language={language}
                 setLanguage={setLanguage}/>
         {useForm && <div className={"overlay"}/>}
-        {useForm && <Form userId={userId} language={language}
+        {useForm && <Form userId={userId}
+                          language={language}
+                          vocabToEdit={vocabToEdit}
                           editVocab={editVocab}
                           editAndActivateVocab={editAndActivateVocab}
                           createVocab={createVocab}
                           createAndActivateVocab={createAndActivateVocab}
-                          vocabToEdit={vocabToEdit} setUseForm={setUseForm}/>}
+                          closeForm={closeForm}
+        />}
         {userId && <NavBar useForm={useForm} setUseForm={setUseForm}/>}
         <Routes>
             <Route path={"/login"}
@@ -320,6 +329,7 @@ function App() {
                            activateVocab={activateVocab}/>}/>
                 <Route path={"/calendar"} element={<CalendarPage
                     userId={userId}
+                    setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
                     setUseForm={setUseForm}
                     openForm={openForm}
                     vocabs={vocabs}
@@ -329,12 +339,13 @@ function App() {
                 <Route path={"/review"}
                        element={<ReviewPage
                            language={language}
-                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            vocabsToReview={vocabsToReview}
+                           removeVocabFromVocabsToReview={removeVocabFromVocabsToReview}
                            changeReviewDates={changeReviewDates}
                        />}/>
                 <Route path={"/backlog"}
                        element={<BacklogPage
+                           setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
                            vocabs={getInactiveVocabs()}
                            allVocabsActivated={getInactiveVocabs().length < 1}
                            deleteVocab={deleteVocab}
@@ -348,7 +359,6 @@ function App() {
                        element={<DisplayPage
                            vocabs={vocabs}
                            setDisplayNewVocabsPopUp={setDisplayNewVocabsPopUp}
-
                        />}/>
             </Route>
         </Routes>

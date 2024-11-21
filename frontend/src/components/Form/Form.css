@@ -8,6 +8,9 @@
     height: auto;
 }
 
+#form-header{
+    margin-bottom: 0;
+}
 
 #input-and-label-wrapper {
     margin: 10px;

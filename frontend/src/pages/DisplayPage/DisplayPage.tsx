@@ -28,7 +28,6 @@ if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
     function handleClick(){
         navigate("/")
         props.setDisplayNewVocabsPopUp(false)
-
     }
 
     return (<div id={"display-page"} className={"page"} role={"main"}>
@@ -38,7 +37,7 @@ if (!props.vocabs) return <p className={"loading-message"}>Loading...</p>
             <CardContainer displayedVocab={displayedVocab} displayWord={true}/>
             <button onClick={handleClick}
                     aria-label={"Go back to the homepage"}
-                    className={"back-button"}>Go back to Home
+                    className={"home-button"}>Home
             </button>
         </div>)
 }

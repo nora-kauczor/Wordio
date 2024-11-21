@@ -16,12 +16,14 @@ import {useNavigate} from "react-router-dom";
 
 type Props = {
     vocabs: Vocab[]
+    language: string
+    userId: string
     deactivateVocab: (id: string) => void
     deleteVocab: (id: string) => void
-    language: string
     openForm: (id: string) => void
     setUseForm: React.Dispatch<React.SetStateAction<boolean>>
-    userId: string
+    setDisplayNewVocabsPopUp: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
 export default function CalendarPage(props: Readonly<Props>) {
@@ -148,23 +150,26 @@ export default function CalendarPage(props: Readonly<Props>) {
         setDayOfDayPopUp("")
     }
 
+    function handleClick(){
+        navigate("/")
+        props.setDisplayNewVocabsPopUp(false)
+    }
+
     if (!month.yearMonthName) {
         return <p className={"loading-message"}>Loading...</p>
     }
 
     return (<div id={"calendar-page"} className={"page"} role={"main"}>
-        <div style={{height: "40px"}}/>
+        <div style={{height: "30px"}}/>
         <div id={"button-and-header-container"}>
             {month && <button
                 className={"calendar-button"}
                 onClick={() => changeMonth("previous")}
-                onKeyDown={() => changeMonth("previous")}
                 aria-label={"Previous month"}>◀︎
             </button>}
             {month && <h2>{month.yearMonthName}</h2>}
             {month && <button className={"calendar-button"}
                               onClick={() => changeMonth("next")}
-                              onKeyDown={() => changeMonth("next")}
                               aria-label={"Next month"}>▶︎
             </button>}
         </div>
@@ -183,12 +188,10 @@ export default function CalendarPage(props: Readonly<Props>) {
             deactivateVocab={props.deactivateVocab}
             deleteVocab={props.deleteVocab}
             userId={props.userId}/>}
-        <button className={"back-button"} id={"calendar-back-button"}
-                onClick={() => navigate("/")}
-                onKeyDown={() => navigate("/")}
-                aria-label={"Go back to the main page"}>
-            Go to homepage
+        <button onClick={handleClick}
+                aria-label={"Go back to the homepage"}
+                className={"home-button"}>Home
         </button>
-        <div style={{height: "40px"}}/>
+        <div style={{height: "10px"}}/>
     </div>)
 }

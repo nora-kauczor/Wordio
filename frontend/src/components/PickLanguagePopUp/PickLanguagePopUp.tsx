@@ -11,10 +11,6 @@ export default function PickLanguagePopUp(props: Readonly<Props>) {
         <article id={"language-pop-up-button-container"}>
             <button className={"language-pop-up-button"}
                     onClick={() => props.setLanguage("Spanish")}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key ===
-                            ' ') props.setLanguage("Spanish");
-                    }}
                     aria-label={"Select Spanish language"}
             ><p className={"language-icon"}>🇪🇸</p><p
                 className={"language-name"}>Spanish</p>
@@ -22,10 +18,6 @@ export default function PickLanguagePopUp(props: Readonly<Props>) {
             </button>
             <button className={"language-pop-up-button"}
                     onClick={() => props.setLanguage("French")}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key ===
-                            ' ') props.setLanguage("French");
-                    }}
                     aria-label={"Select French language"}
             >
 
@@ -34,10 +26,6 @@ export default function PickLanguagePopUp(props: Readonly<Props>) {
             </button>
             <button className={"language-pop-up-button"}
                     onClick={() => props.setLanguage("Italian")}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key ===
-                            ' ') props.setLanguage("Italian");
-                    }}
                     aria-label={"Select Italian language"}
             >
                 <p className={"language-icon"}>🇮🇹</p><p

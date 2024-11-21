@@ -66,9 +66,6 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
         <div id={"button-wrapper"}>
             <button className={"new-vocabs-button"}
                     onClick={handleClick}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') handleClick();
-                    }}
                     aria-label={"Enter new vocabulary"}
             >Enter new
                 vocab
@@ -76,10 +73,6 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
             {!props.allVocabsActivated &&
                 <button className={"new-vocabs-button"}
                         onClick={() => navigate("/backlog")}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') navigate(
-                                "/backlog");
-                        }}
                         aria-label={"Pick from backlog"}
                 >Pick
                     from backlog
@@ -87,10 +80,6 @@ export default function NewVocabsPopUp(props: Readonly<Props>) {
             {!props.allVocabsActivated &&
                 <button className={"new-vocabs-button"}
                         onClick={activateAndGoToDisplayPageWithRandomVocab}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key ===
-                                ' ') activateAndGoToDisplayPageWithRandomVocab();
-                        }}
                         aria-label={"Get random vocabulary"}
                 >Get random
                     vocab

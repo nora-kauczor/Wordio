@@ -40,15 +40,13 @@ export default function HomePage(props: Readonly<Props>) {
             {props.finishedReviewing && props.language && <button
                 className={"big-button"}
                 onClick={() => props.setDisplayNewVocabsPopUp(true)}
-                onKeyDown={(e) => e.key === 'Enter' &&
-                    props.setDisplayNewVocabsPopUp(true)}
                 aria-label={"Open new vocabulary popup"}
             >
                 New vocabulary</button>}
             {!props.finishedReviewing && props.language && <button
                 className={"big-button"}
                 onClick={() => navigate("/review")}
-                onKeyDown={(e) => e.key === 'Enter' && navigate("/review")}
+
                 aria-label={"Start vocabulary review"}
             >Review
             </button>}
