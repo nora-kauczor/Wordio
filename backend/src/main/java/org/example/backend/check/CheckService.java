@@ -32,7 +32,6 @@ public class CheckService {
                 .anyMatch(answer -> answer.equals(inputWithoutExtraSpaces.toLowerCase()));
     }
 
-
     public String getInputWithoutExtraSpaces(String userAnswer) {
         String trimmedInput = userAnswer.trim();
         StringBuilder result = new StringBuilder();
