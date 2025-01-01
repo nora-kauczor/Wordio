@@ -23,7 +23,6 @@ public class ReviewDayService {
     private final CalendarService calendarService;
 
     public ReviewDay getReviewDay(String languageString, String userId, LocalDate date) throws LanguageNotFoundException {
-        if (date.getDayOfMonth() == 1){clearReviewDayRepo();}
         Language language = Language.getEnumByString(languageString);
         List<String> idList = calendarService.getVocabIdsOfDateAsList (date, language, userId);
         Optional<ReviewDay> optionalReviewDay = Optional.ofNullable(reviewDayRepo.getByDayAndUserIdAndLanguage (date, userId, language));
@@ -64,7 +63,5 @@ public class ReviewDayService {
         return reviewDayRepo.save(updatedReviewDay);
     }
 
-    public void clearReviewDayRepo(){
-        reviewDayRepo.deleteAll();
-    }
+
 }
